@@ -1,0 +1,14 @@
+@media (max-width: 768px) {
+    #campania-telefonica-app {
+        padding: 1rem;
+    }
+
+    .hero-campania {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .lead-card__actions {
+        grid-template-columns: 1fr;
+    }
+}

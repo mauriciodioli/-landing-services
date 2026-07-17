@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon.png')}}">
+   
+    <title>DPIA - Acceso Repartidores</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* ============================================
+           ESTILOS DPIA - LOGIN
+           ============================================ */
+        :root {
+            --dpia-primary: #6C2BD9;
+            --dpia-secondary: #FF6B9D;
+            --dpia-dark: #1A1A2E;
+            --dpia-card: #2A2A4A;
+            --dpia-text: #FFFFFF;
+            --dpia-text-muted: #A0A0C0;
+            --dpia-gradient: linear-gradient(135deg, #6C2BD9, #FF6B9D);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--dpia-dark);
+            color: var(--dpia-text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: 
+                radial-gradient(ellipse at 10% 20%, rgba(108, 43, 217, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(255, 107, 157, 0.1) 0%, transparent 50%);
+        }
+
+        /* ===== LOGIN CONTAINER ===== */
+        .login-container {
+            width: 100%;
+            max-width: 440px;
+            padding: 20px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== LOGIN CARD ===== */
+        .login-card {
+            background: var(--dpia-card);
+            border: 1px solid rgba(108, 43, 217, 0.3);
+            border-radius: 24px;
+            padding: 40px 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 20%, rgba(108, 43, 217, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* ===== LOGO ===== */
+        .login-logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-logo i {
+            font-size: 3.5rem;
+            background: var(--dpia-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .login-logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-top: 8px;
+            background: var(--dpia-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .login-logo p {
+            color: var(--dpia-text-muted);
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        /* ===== FORM ===== */
+        .login-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-form .form-label {
+            color: var(--dpia-text-muted);
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .login-form .form-label i {
+            color: var(--dpia-secondary);
+            margin-right: 6px;
+            width: 18px;
+        }
+
+        .login-form .form-control {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(108, 43, 217, 0.3);
+            color: var(--dpia-text);
+            border-radius: 12px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .login-form .form-control:focus {
+            border-color: var(--dpia-secondary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .login-form .form-control::placeholder {
+            color: var(--dpia-text-muted);
+            opacity: 0.4;
+        }
+
+        /* ===== INPUT CON TOGGLE ===== */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper .form-control {
+            padding-right: 48px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--dpia-text-muted);
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: color 0.3s ease;
+            font-size: 1.1rem;
+            z-index: 10;
+        }
+
+        .password-toggle:hover {
+            color: var(--dpia-secondary);
+        }
+
+        .password-toggle:focus {
+            outline: none;
+        }
+
+        /* ===== BOTONES ===== */
+        .btn-dpia-primary {
+            background: var(--dpia-gradient);
+            border: none;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(108, 43, 217, 0.3);
+        }
+
+        .btn-dpia-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(108, 43, 217, 0.5);
+            color: white;
+        }
+
+        .btn-dpia-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-dpia-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-dpia-outline {
+            background: transparent;
+            border: 2px solid var(--dpia-secondary);
+            color: var(--dpia-secondary);
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-dpia-outline:hover {
+            background: var(--dpia-secondary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+        }
+
+        /* ===== LINKS ===== */
+        .login-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .login-links a {
+            color: var(--dpia-text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .login-links a:hover {
+            color: var(--dpia-secondary);
+        }
+
+        /* ===== DIVIDER ===== */
+        .divider-text {
+            display: flex;
+            align-items: center;
+            margin: 24px 0;
+            color: var(--dpia-text-muted);
+            font-size: 0.85rem;
+        }
+
+        .divider-text::before,
+        .divider-text::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid rgba(108, 43, 217, 0.2);
+        }
+
+        .divider-text::before {
+            margin-right: 16px;
+        }
+
+        .divider-text::after {
+            margin-left: 16px;
+        }
+
+        /* ===== ALERT ===== */
+        .alert-dpia {
+            background: rgba(108, 43, 217, 0.15);
+            border: 1px solid rgba(108, 43, 217, 0.3);
+            color: var(--dpia-text);
+            border-radius: 12px;
+            padding: 12px 16px;
+        }
+
+        .alert-dpia-danger {
+            background: rgba(231, 76, 60, 0.15);
+            border-color: rgba(231, 76, 60, 0.3);
+            color: #E74C3C;
+        }
+
+        .alert-dpia-success {
+            background: rgba(46, 204, 113, 0.15);
+            border-color: rgba(46, 204, 113, 0.3);
+            color: #2ECC71;
+        }
+
+        .alert-dpia-info {
+            background: rgba(52, 152, 219, 0.15);
+            border-color: rgba(52, 152, 219, 0.3);
+            color: #3498DB;
+        }
+
+        /* ===== REGISTRO (oculto inicialmente) ===== */
+        #formRegistro {
+            display: none;
+        }
+
+        /* ===== SPINNER ===== */
+        .spinner-border-sm {
+            width: 1.2rem;
+            height: 1.2rem;
+            border-width: 0.15rem;
+        }
+
+        /* ===== FOOTER ===== */
+        .login-footer {
+            text-align: center;
+            margin-top: 24px;
+            color: var(--dpia-text-muted);
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 576px) {
+            .login-card {
+                padding: 28px 20px;
+            }
+
+            .login-logo i {
+                font-size: 2.8rem;
+            }
+
+            .login-logo h1 {
+                font-size: 1.5rem;
+            }
+
+            .login-form .form-control {
+                padding: 10px 14px;
+                font-size: 0.95rem;
+            }
+
+            .btn-dpia-primary,
+            .btn-dpia-outline {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .login-container {
+                padding: 10px;
+            }
+
+            .login-card {
+                padding: 20px 16px;
+                border-radius: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-card">
+
+            <!-- ===== LOGO ===== -->
+            <div class="login-logo">
+                <i class="fas fa-motorcycle"></i>
+                <h1>DPIA Repartidores</h1>
+                <p>Accede a tu panel de control</p>
+            </div>
+
+            <!-- ===== ALERTA ===== -->
+            <div id="authAlert" class="alert-dpia d-none" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <span id="authAlertText">Mensaje de autenticación</span>
+            </div>
+
+            <!-- ===== FORMULARIO DE LOGIN ===== -->
+            <form id="formLogin" class="login-form" onsubmit="loginRepartidor(event)">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-envelope"></i>Correo Electrónico
+                    </label>
+                    <input 
+                        type="email" 
+                        class="form-control" 
+                        id="loginEmail" 
+                        placeholder="tu@email.com" 
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-lock"></i>Contraseña
+                    </label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            class="form-control" 
+                            id="loginPassword" 
+                            placeholder="••••••••" 
+                            required
+                            autocomplete="current-password"
+                            minlength="6"
+                        >
+                        <button 
+                            type="button" 
+                            class="password-toggle" 
+                            onclick="togglePasswordVisibility('loginPassword', this)"
+                            tabindex="-1"
+                            aria-label="Mostrar contraseña"
+                        >
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-dpia-primary" id="btnLogin">
+                    <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                </button>
+            </form>
+
+            <!-- ===== DIVIDER ===== -->
+            <div class="divider-text">o</div>
+
+            <!-- ===== BOTÓN REGISTRO ===== -->
+            <button 
+                type="button" 
+                class="btn-dpia-outline" 
+                onclick="toggleRegistro()"
+                id="btnToggleRegistro"
+            >
+                <i class="fas fa-user-plus me-2"></i>Crear cuenta nueva
+            </button>
+
+            <!-- ===== FORMULARIO DE REGISTRO ===== -->
+            <form id="formRegistro" class="login-form mt-3" onsubmit="registrarRepartidor(event)">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <label class="form-label">Nombre</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="regNombre" 
+                            placeholder="Nombre" 
+                            required
+                        >
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Apellido</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="regApellido" 
+                            placeholder="Apellido" 
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group mt-2">
+                    <label class="form-label">
+                        <i class="fas fa-phone"></i>Teléfono
+                    </label>
+                    <input 
+                        type="tel" 
+                        class="form-control" 
+                        id="regTelefono" 
+                        placeholder="+54 9 3445 977100" 
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-envelope"></i>Correo Electrónico
+                    </label>
+                    <input 
+                        type="email" 
+                        class="form-control" 
+                        id="regEmail" 
+                        placeholder="tu@email.com" 
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-lock"></i>Contraseña
+                    </label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            class="form-control" 
+                            id="regPassword" 
+                            placeholder="Mínimo 6 caracteres" 
+                            required
+                            minlength="6"
+                        >
+                        <button 
+                            type="button" 
+                            class="password-toggle" 
+                            onclick="togglePasswordVisibility('regPassword', this)"
+                            tabindex="-1"
+                            aria-label="Mostrar contraseña"
+                        >
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-dpia-primary" id="btnRegistro">
+                    <i class="fas fa-user-plus me-2"></i>Registrarse
+                </button>
+
+                <button 
+                    type="button" 
+                    class="btn-dpia-outline mt-2" 
+                    onclick="toggleRegistro()"
+                >
+                    <i class="fas fa-arrow-left me-2"></i>Volver al inicio
+                </button>
+            </form>
+
+            <!-- ===== LINKS ===== -->
+            <div class="login-links">
+                <a href="#" onclick="mostrarRecuperarPassword()">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <!-- ===== FOOTER ===== -->
+            <div class="login-footer">
+                &copy; 2026 DPIA - Todos los derechos reservados
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================ -->
+    <script>
+        // ============================================
+        // TOGGLE CONTRASEÑA
+        // ============================================
+        function togglePasswordVisibility(inputId, button) {
+            const input = document.getElementById(inputId);
+            const icon = button.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+                button.setAttribute('aria-label', 'Ocultar contraseña');
+            } else {
+                input.type = 'password';
+                icon.className = 'fas fa-eye';
+                button.setAttribute('aria-label', 'Mostrar contraseña');
+            }
+        }
+
+        // ============================================
+        // VARIABLES
+        // ============================================
+        let loginMode = 'login'; // 'login' | 'registro'
+
+        // ============================================
+        // TOGGLE REGISTRO
+        // ============================================
+        function toggleRegistro() {
+            const formLogin = document.getElementById('formLogin');
+            const formRegistro = document.getElementById('formRegistro');
+            const btnToggle = document.getElementById('btnToggleRegistro');
+            const authAlert = document.getElementById('authAlert');
+
+            // Ocultar alerta
+            authAlert.classList.add('d-none');
+
+            if (loginMode === 'login') {
+                formLogin.style.display = 'none';
+                formRegistro.style.display = 'block';
+                btnToggle.style.display = 'none';
+                loginMode = 'registro';
+            } else {
+                formLogin.style.display = 'block';
+                formRegistro.style.display = 'none';
+                btnToggle.style.display = 'block';
+                loginMode = 'login';
+            }
+        }
+
+        // ============================================
+        // MOSTRAR ALERTA
+        // ============================================
+        function mostrarAlerta(mensaje, tipo = 'info') {
+            const alert = document.getElementById('authAlert');
+            const text = document.getElementById('authAlertText');
+            
+            alert.className = `alert-dpia alert-dpia-${tipo}`;
+            text.textContent = mensaje;
+            alert.classList.remove('d-none');
+
+            // Auto-ocultar después de 5 segundos
+            clearTimeout(window.alertTimeout);
+            window.alertTimeout = setTimeout(() => {
+                alert.classList.add('d-none');
+            }, 5000);
+        }
+
+        // ============================================
+        // LOGIN
+        // ============================================
+        async function loginRepartidor(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const btnLogin = document.getElementById('btnLogin');
+
+            // Deshabilitar botón
+            btnLogin.disabled = true;
+            btnLogin.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Verificando...';
+
+            try {
+                const response = await fetch('/api/repartidor/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    mostrarAlerta('✅ ¡Bienvenido ' + data.repartidor.nombre + '!', 'success');
+                    
+                    // Redirigir al dashboard después de 1 segundo
+                    setTimeout(() => {
+                        window.location.href = '/repartidores/dashboard';
+                    }, 1000);
+                } else {
+                    mostrarAlerta(data.message || 'Error al iniciar sesión', 'danger');
+                }
+            } catch (error) {
+                mostrarAlerta('Error de conexión: ' + error.message, 'danger');
+            } finally {
+                // Restaurar botón
+                btnLogin.disabled = false;
+                btnLogin.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión';
+            }
+        }
+
+        // ============================================
+        // REGISTRO
+        // ============================================
+        async function registrarRepartidor(event) {
+            event.preventDefault();
+            
+            const nombre = document.getElementById('regNombre').value;
+            const apellido = document.getElementById('regApellido').value;
+            const telefono = document.getElementById('regTelefono').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const btnRegistro = document.getElementById('btnRegistro');
+
+            // Validar campos
+            if (!nombre || !apellido || !telefono || !email || !password) {
+                mostrarAlerta('Todos los campos son obligatorios', 'danger');
+                return;
+            }
+
+            if (password.length < 6) {
+                mostrarAlerta('La contraseña debe tener al menos 6 caracteres', 'danger');
+                return;
+            }
+
+            // Deshabilitar botón
+            btnRegistro.disabled = true;
+            btnRegistro.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Registrando...';
+
+            try {
+                const response = await fetch('/api/repartidor/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        nombre, 
+                        apellido, 
+                        telefono, 
+                        email, 
+                        password 
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    mostrarAlerta('✅ ¡Registro exitoso! Bienvenido ' + data.repartidor.nombre, 'success');
+                    
+                    // Redirigir al dashboard después de 1 segundo
+                    setTimeout(() => {
+                        window.location.href = '/repartidores/dashboard';
+                    }, 1000);
+                } else {
+                    mostrarAlerta(data.message || 'Error al registrarse', 'danger');
+                }
+            } catch (error) {
+                mostrarAlerta('Error de conexión: ' + error.message, 'danger');
+            } finally {
+                // Restaurar botón
+                btnRegistro.disabled = false;
+                btnRegistro.innerHTML = '<i class="fas fa-user-plus me-2"></i>Registrarse';
+            }
+        }
+
+        // ============================================
+        // RECUPERAR CONTRASEÑA
+        // ============================================
+        function mostrarRecuperarPassword() {
+            const email = document.getElementById('loginEmail').value;
+            
+            if (!email) {
+                mostrarAlerta('Por favor, ingresa tu correo electrónico para recuperar tu contraseña', 'info');
+                document.getElementById('loginEmail').focus();
+                return;
+            }
+
+            mostrarAlerta('📧 Se ha enviado un enlace de recuperación a ' + email, 'info');
+        }
+
+        // ============================================
+        // ENTER PARA ENVIAR FORM
+        // ============================================
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                const formLogin = document.getElementById('formLogin');
+                const formRegistro = document.getElementById('formRegistro');
+                
+                if (formLogin.style.display !== 'none' && document.activeElement.closest('#formLogin')) {
+                    formLogin.dispatchEvent(new Event('submit'));
+                } else if (formRegistro.style.display !== 'none' && document.activeElement.closest('#formRegistro')) {
+                    formRegistro.dispatchEvent(new Event('submit'));
+                }
+            }
+        });
+
+        // ============================================
+        // VERIFICAR SESIÓN AL CARGAR
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const response = await fetch('/api/repartidor/verificar_sesion');
+                const data = await response.json();
+                
+                if (data.success && data.repartidor) {
+                    // Ya está autenticado, redirigir al dashboard
+                    window.location.href = '/repartidores/dashboard';
+                }
+            } catch (error) {
+                // No hay sesión, mostrar login
+                console.log('No hay sesión activa');
+            }
+        });
+    </script>
+
+</body>
+</html>

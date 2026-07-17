@@ -1,0 +1,293 @@
+<section class="dpia-admin section">
+  <header class="dpia-header">
+    <div class="title">
+      <h2 data-i18n="title">Nuevo Popup</h2>
+      <p class="subtitle" data-i18n="subtitle">Crea, previsualiza y guarda una publicidad.</p>
+    </div>
+    <button id="btnOpenExtractor" class="btn" type="button">🧩 Generar link + imagen</button>
+
+    <div class="actions">
+      <select id="i18nSelect" aria-label="Language">
+        <option value="es">🇪🇸 ES</option>
+        <option value="en">🇬🇧 EN</option>
+        <option value="pl">🇵🇱 PL</option>
+      </select>
+      <button id="btnPreview" class="btn ghost">👀 <span data-i18n="preview">Previsualizar</span></button>
+      <button id="btnGuardar" class="btn primary">💾 <span data-i18n="save">Guardar</span></button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <form id="popupForm" class="card form">
+      <div class="fieldset">
+        <h3 data-i18n="context">Contexto de segmentación</h3>
+        <div class="row">
+          <label>
+            <span data-i18n="domain">Dominio</span>
+            <input name="dominio" value="Technologia" required placeholder="p. ej. Technologia">
+          </label>
+          <label>
+            <span data-i18n="category">Categoría</span>
+            <input name="categoria" value="wearables" required placeholder="p. ej. wearables">
+          </label>
+        </div>
+        <div class="row">
+          <label>
+            <span data-i18n="lang">Idioma</span>
+            <input name="lang" value="pl" required placeholder="es | en | pl">
+          </label>
+          <label>
+            <span data-i18n="zip">Código Postal</span>
+            <input name="cp" value="60-001" placeholder="Opcional">
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <label>
+          <span data-i18n="email">Correo electrónico</span>
+          <input name="email" type="email" required placeholder="usuario@dominio.com">
+        </label>
+      </div>
+
+
+      <div class="fieldset">
+        <h3 data-i18n="creative">Creatividad</h3>
+        <label>
+          <span data-i18n="titleLabel">Título</span>
+          <input name="title" value="Promo Reparación" required>
+        </label>
+        <label>
+          <span data-i18n="href">URL destino</span>
+          <input name="href" value="https://dpia.site" required placeholder="https://...">
+        </label>
+        <label>
+          <span data-i18n="image">Imagen (URL)</span>
+          <input name="image" required placeholder="https://.../banner.jpg">
+          <small class="hint" data-i18n="imageHint">Usa HTTPS o habilita img-src data: en tu CSP.</small>
+        </label>
+        <div class="row">
+          <label>
+            <span data-i18n="width">Ancho (px)</span>
+            <input name="width" type="number" value="800" min="100" required>
+          </label>
+          <label>
+            <span data-i18n="height">Alto (px)</span>
+            <input name="height" type="number" value="200" min="50" required>
+          </label>
+        </div>
+        <div class="row">
+          <label>
+            <span data-i18n="priority">Prioridad</span>
+            <input name="prioritario" type="number" value="10" min="0">
+          </label>
+          <label>
+            <span data-i18n="active">Activo</span>
+            <select name="activo">
+              <option value="1" selected data-i18n="yes">Sí</option>
+              <option value="0" data-i18n="no">No</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="fieldset compact">
+        <label class="switch">
+          <input type="checkbox" id="autoPreview" checked>
+          <span class="slider"></span>
+          <span class="switch-label" data-i18n="autoPreview">Previsualizar automáticamente</span>
+        </label>
+      </div>
+
+      <div id="formErrors" class="errors" hidden></div>
+    </form>
+
+    <div class="card preview">
+      <div class="preview-head">
+        <h3 data-i18n="previewPane">Preview</h3>
+        <div class="size" id="sizeBadge">800×200</div>
+      </div>
+      <div id="previewAnchor" class="dpia-popup-anchor" data-width="800" data-height="200">
+        <div class="placeholder" data-i18n="placeholder">Completa el formulario y previsualiza aquí.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="section">
+  <div class="card snippet-box" id="snippetBox" style="display:none">
+    <div class="snippet-box__head">
+      <h3 class="snippet-box__title" data-i18n="snippetTitle">Snippet de inserción</h3>
+      <div class="snippet-box__host">
+        <label class="snippet-box__host-label">
+          <span data-i18n="hostLabel">Host</span>
+          <select id="snippetHost" class="snippet-box__host-select">
+            <option value="auto" data-i18n="hostAuto">Origen del script (AUTO)</option>
+            <option value="http://127.0.0.1:8100" data-i18n="hostLocal">http://127.0.0.1:8100</option>
+            <option value="http://54.234.169.22:8100" data-i18n="hostIP">http://54.234.169.22:8100</option>
+            <option value="https://api.dpia.site" data-i18n="hostProd">https://api.dpia.site</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <p class="snippet-box__help" data-i18n="snippetHelp">
+      Pegá esto en la página donde quieras que aparezca el popup.
+    </p>
+
+    <div class="snippet">
+      <div class="snippet__row">
+        <strong data-i18n="scriptTag">«script»</strong>
+        <button id="copyScript" class="btn ghost" type="button">📋 <span data-i18n="copyScript">Copiar</span></button>
+      </div>
+      <pre class="snippet__pre"><code id="scriptSnippet"></code></pre>
+    </div>
+
+    <div class="snippet" style="margin-top:14px">
+      <div class="snippet__row">
+        <strong data-i18n="divTag">«div class="dpia-popup-anchor"»</strong>
+        <button id="copyDiv" class="btn ghost" type="button">📋 <span data-i18n="copyDiv">Copiar</span></button>
+      </div>
+      <pre class="snippet__pre"><code id="divSnippet"></code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- Modal de imagen -->
+<div id="modalImagen" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:9999;">
+  <img id="modalImgContenido" src="" alt="imagen ampliada" style="max-width:90vw; max-height:90vh; border-radius:8px; box-shadow:0 0 20px rgba(0,0,0,0.8);">
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Modal extractor multi-plataforma -->
+<div id="dpiaExtractorModal" class="dpia-modal" hidden>
+  <div class="dpia-modal__backdrop" data-close="1"></div>
+  <div class="dpia-modal__panel">
+    <div class="dpia-modal__head">
+      <h3>Extractor de enlaces</h3>
+      <button class="btn ghost" data-close="1">✖</button>
+    </div>
+
+    <div class="dpia-modal__body">
+      <div class="row">
+        <label style="flex:1">
+          <span>Plataforma</span>
+          <select id="exPlatform">
+            <option value="amazon" selected>Amazon</option>
+            <option value="aliexpress">AliExpress</option>
+            <option value="walmart">Walmart</option>
+            <option value="ebay">eBay</option>
+            <option value="allegro">Allegro (PL)</option>
+          </select>
+        </label>
+        <label style="width:180px">
+          <span>Marketplace</span>
+          <select id="exMarket">
+            <option value="ES" selected>ES</option>
+            <option value="IT">IT</option>
+            <option value="DE">DE/PL</option>
+            <option value="US">US</option>
+          </select>
+        </label>
+        <label style="width:200px">
+          <span>Tag / Partner ID</span>
+          <input id="exTag" placeholder="dpiaweb-21">
+        </label>
+        <label style="width:140px">
+          <span>Img (px)</span>
+          <input id="exImgSize" type="number" value="500" min="120" max="2000">
+        </label>
+      </div>
+
+      <label>
+        <span>URL original (pega aquí)</span>
+        <input id="exRawUrl" placeholder="Pega el enlace largo de producto">
+      </label>
+
+      <div class="row" style="gap:12px;margin-top:10px">
+        <button id="exConvert" class="btn primary" type="button">⚡ Convertir</button>
+        <button id="exApplyToForm" class="btn" type="button" disabled>⬇️ Rellenar formulario</button>
+      </div>
+
+      <div class="result">
+        <label>
+          <span>URL destino limpia</span>
+          <input id="exCleanUrl" readonly>
+        </label>
+        <label>
+          <span>URL imagen</span>
+          <input id="exImgUrl" readonly>
+        </label>
+        <label>
+          <span>Snippet &lt;a&gt;&lt;img&gt;</span>
+          <textarea id="exHtmlSnippet" rows="3" readonly></textarea>
+        </label>
+        <div style="margin-top:8px">
+          <a id="exPreviewLink" target="_blank" rel="noopener">
+            <img id="exPreviewImg" alt="preview" style="max-width:100%;border-radius:8px"/>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<link rel=   "stylesheet" href=" {{ url_for('static', filename='css/popup_form/popup_form.css') }}">
+<script src="{{ url_for('static', filename='js/popup_form/popup_form.js') }}"></script>
+<script src="{{ url_for('static', filename='js/popup_form/extractor.js') }}"></script>
+
+<script>
+
+// Este inline corre cuando ambos defer terminaron de cargar
+  window.addEventListener('DOMContentLoaded', function () {
+    const sel = document.getElementById('i18nSelect');
+    sel && sel.addEventListener('change', (e)=>{
+      window.DPIA.state.lang = e.target.value || 'es';
+      window.DPIA.applyI18n();
+      // refrescamos la preview si hace falta
+      window.DPIA.updatePreview(true);
+    });
+
+    // init
+    window.DPIA.applyI18n();
+    window.DPIA.updatePreview(true);
+  });
+
+
+</script>
+

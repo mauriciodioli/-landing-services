@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPIA CRM</title>
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+    <link rel="shortcut icon" href="/static/favicon.png">
+    <meta name="application-name" content="DPIA CRM">
+    <link rel="stylesheet" href="/static/css/campaniaTelefonica/cards.css">
+    <link rel="stylesheet" href="/static/css/campaniaTelefonica/mobile.css">
+</head>
+<body>
+    <main
+        id="campania-telefonica-app"
+        data-module="campania-telefonica"
+        data-sip-provider="{{ sip_provider }}"
+        data-sip-softphone="{{ sip_softphone }}"
+        data-sip-server="{{ sip_server }}">
+        <section class="hero-campania">
+            <div>
+                <div class="hero-campania__eyebrow-row">
+                    <p class="eyebrow">DPIA CRM telefonico</p>
+                    <a class="ghost-button hero-campania__tutorial-button" href="/admin/campania-telefonica/tutorial/" target="_blank" rel="noopener noreferrer">Tutorial para operadores</a>
+                </div>
+                <h1>Campanas telefonicas nacionales e internacionales</h1>
+                <p class="hero-copy">
+                    Gestiona leads importados desde Google Sheets, haz click-to-call SIP con {{ sip_softphone }}
+                    y registra estados sin pasar el audio por DPIA usando {{ sip_provider }}.
+                </p>
+            </div>
+            <div class="hero-actions">
+                <button class="ghost-button" type="button" id="campania-auto-call-toggle">Llamar todos</button>
+                <button class="primary-button" type="button" data-action="abrir-importador">Importar hoja</button>
+            </div>
+        </section>
+
+        <section class="campaign-dialer" id="campaign-dialer-panel" hidden>
+            <div>
+                <p class="eyebrow">Modo call center</p>
+                <h2>Marcacion secuencial asistida</h2>
+                <p id="campaign-dialer-status">Prepara la cola de contactos visibles para iniciar llamadas SIP una por una.</p>
+            </div>
+            <div class="campaign-dialer__actions">
+                <button class="ghost-button" type="button" id="campaign-dialer-refresh">Recargar cola</button>
+                <button class="primary-button" type="button" id="campaign-dialer-next">Llamar siguiente</button>
+                <button class="ghost-button" type="button" id="campaign-dialer-stop">Cerrar modo</button>
+            </div>
+        </section>
+
+        <section class="toolbar-campania">
+            <article class="toolbar-campania__campaign toolbar-campania__campaign--sip-status">
+                <strong>Estado SIP</strong>
+                <span>{{ sip_provider }} · {{ sip_ready and 'Listo' or 'Pendiente' }}</span>
+                <span>Servidor: {{ sip_server }}</span>
+                <span>Usuario: {{ sip_user }}</span>
+                <span>Caller ID: {{ sip_caller_id }}</span>
+                {% if sip_error %}
+                <span class="toolbar-campania__alert">{{ sip_error }}</span>
+                {% endif %}
+            </article>
+            <div class="toolbar-campania__campaign" id="campania-actual-resumen">
+                <strong>Campana actual</strong>
+                <span>Sin datos importados todavia.</span>
+            </div>
+            <div class="toolbar-campania__campaign" id="campania-usuario-activo">
+                <strong>Usuario activo</strong>
+                <span>No autenticado</span>
+            </div>
+            <label>
+                <span>Buscar lead</span>
+                <input id="campania-search" type="search" placeholder="Telefono, empresa, ciudad, email">
+            </label>
+            <label>
+                <span>Estado</span>
+                <select id="campania-status-filter">
+                    <option value="">Todos</option>
+                    {% for estado in estados %}
+                    <option value="{{ estado }}">{{ estado }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </section>
+
+        <section class="cards-grid" id="campania-cards-grid" data-empty-message="Importa una sheet para ver contactos reales.">
+            <article class="lead-card" data-phone="34934885936">
+                <div class="lead-card__header">
+                    <p class="lead-card__tag">Lead demo</p>
+                    <span class="lead-card__provider">{{ sip_provider }}</span>
+                </div>
+                <h2>Restaurante Tse Tse</h2>
+                <p class="lead-card__line">📞 +34934885936</p>
+                <p class="lead-card__line">📍 Barcelona</p>
+                <p class="lead-card__line">✉️ email@email.com</p>
+                <div class="lead-card__actions">
+                    <button
+                        class="action-button action-button--call btn-llamar-sip"
+                        type="button"
+                        onclick="llamarContacto('+34 934 88 59 36', { campaniaId: 1, usuarioId: 1 })">
+                        Llamar
+                    </button>
+                </div>
+                <label class="lead-card__field">
+                    <span>Estado</span>
+                    <select>
+                        {% for estado in estados %}
+                        <option value="{{ estado }}" {% if estado == "NUEVO" %}selected{% endif %}>{{ estado }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label class="lead-card__field">
+                    <span>Notas</span>
+                    <textarea rows="3" placeholder="Registrar resultado de la llamada"></textarea>
+                </label>
+            </article>
+        </section>
+
+        <section class="campania-pagination" id="campania-pagination" hidden>
+            <div class="campania-pagination__summary" id="campania-pagination-summary">Mostrando 0 de 0 contactos</div>
+            <div class="campania-pagination__controls">
+                <label class="campania-pagination__page-size">
+                    <span>Por pagina</span>
+                    <select id="campania-page-size">
+                        <option value="20" selected>20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </label>
+                <button class="ghost-button" type="button" id="campania-page-prev">Anterior</button>
+                <span class="campania-pagination__status" id="campania-page-status">Pagina 1</span>
+                <button class="ghost-button" type="button" id="campania-page-next">Siguiente</button>
+            </div>
+        </section>
+
+        <aside class="integration-notes">
+            <h3>Arquitectura SIP desacoplada</h3>
+            <p>DPIA administra campanas y leads. El click SIP abre {{ sip_softphone }}, y {{ sip_provider }} cursa la llamada.</p>
+            <p>Servidor SIP configurado: {{ sip_server }}</p>
+            <p>Estado actual de la conexion: {% if sip_ready %}lista para marcar{% else %}pendiente de completar credenciales o aprobacion del proveedor{% endif %}.</p>
+            <p>Las credenciales SIP no se exponen en el frontend ni se almacenan en esta capa.</p>
+        </aside>
+    </main>
+
+    {% include "campaniaTelefonica/modal_importar.html" %}
+
+    <script src="/static/js/campaniaTelefonica/importador.js?v=20260602a"></script>
+    <script src="/static/js/campaniaTelefonica/cards.js?v=20260601c"></script>
+    <script src="/static/js/campaniaTelefonica/filtros.js"></script>
+    <script src="/static/js/campaniaTelefonica/sip.js"></script>
+    <script src="/static/js/campaniaTelefonica/call_center.js"></script>
+</body>
+</html>

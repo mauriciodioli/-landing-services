@@ -1,0 +1,20 @@
+# Ignore venv folder
+/venv/
+
+
+
+# Ignore specific credentials files inside src/utils/
+/src/utils/pruebasheetpython.json
+/src/utils/credentials_module.json
+/src/utils/client_secrets.json
+/src/utils/settings.yml
+
+/src/.env
+# Ignore other sensitive files
+google-chrome-stable_current_amd64.deb
+
+# Ignore pycache files
+*.pyc
+
+# Ignore workspace file
+bot421.code-workspace

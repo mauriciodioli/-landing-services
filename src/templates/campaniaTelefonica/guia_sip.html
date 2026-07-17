@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia SIP {{ sip_softphone }} {{ sip_provider }}</title>
+    <link rel="stylesheet" href="/static/css/campaniaTelefonica/cards.css">
+</head>
+<body>
+    <main id="campania-telefonica-app" class="guide-layout">
+        <section class="hero-campania hero-campania--guide">
+            <div>
+                <p class="eyebrow">Guia operativa</p>
+                <h1>Configuracion SIP simple con {{ sip_softphone }} y {{ sip_provider }}</h1>
+                <p class="hero-copy">DPIA no cursa el audio ni almacena credenciales SIP. Solo inicia el enlace sip: y registra la gestion comercial.</p>
+            </div>
+        </section>
+
+        <section class="guide-card">
+            <h2>Paso 1. Crear cuenta {{ sip_provider }}</h2>
+            <ol>
+                <li>Registrar una cuenta en el portal de {{ sip_provider }}.</li>
+                <li>Validar el email corporativo del vendedor.</li>
+                <li>Cargar saldo para llamadas internacionales a Espana.</li>
+                <li>Entrar al panel SIP y habilitar una extension o credencial SIP.</li>
+            </ol>
+        </section>
+
+        <section class="guide-card">
+            <h2>Paso 2. Crear extension SIP</h2>
+            <p>Recoger y guardar de forma segura estos tres datos del proveedor:</p>
+            <ul>
+                <li>SIP user, por ejemplo {{ sip_user }}</li>
+                <li>SIP password, solo en gestor seguro o configuracion local del vendedor</li>
+                <li>SIP server, por ejemplo {{ sip_server }}</li>
+            </ul>
+        </section>
+
+        <section class="guide-card">
+            <h2>Paso 3. Instalar Zoiper</h2>
+            <ol>
+                <li>Windows: descargar e instalar Zoiper Desktop.</li>
+                <li>Android: instalar Zoiper desde la tienda oficial.</li>
+                <li>Aceptar permisos de microfono y notificaciones.</li>
+            </ol>
+        </section>
+
+        <section class="guide-card">
+            <h2>Paso 4. Configurar Zoiper</h2>
+            <ol>
+                <li>Abrir Zoiper y crear una cuenta SIP.</li>
+                <li>Ingresar usuario, password y host SIP.</li>
+                <li>Verificar que la cuenta quede registrada y en linea.</li>
+                <li>Configurar codec y dispositivo de audio segun el puesto de trabajo.</li>
+            </ol>
+        </section>
+
+        <section class="guide-card">
+            <h2>Paso 5. Probar llamada</h2>
+            <ol>
+                <li>Realizar una llamada de prueba a un numero de Espana.</li>
+                <li>Verificar audio de ida y vuelta.</li>
+                <li>Confirmar latencia, calidad y facturacion esperada.</li>
+            </ol>
+        </section>
+
+        <section class="guide-card">
+            <h2>Paso 6. Integrar con DPIA</h2>
+            <ol>
+                <li>Abrir la vista de campanas en DPIA.</li>
+                <li>Hacer click en el boton Llamar.</li>
+                <li>Comprobar que {{ sip_softphone }} capture el enlace sip:+34934885936.</li>
+                <li>Finalizar la llamada y actualizar estado, nota e historial del lead.</li>
+            </ol>
+        </section>
+
+        <section class="guide-card">
+            <h2>Estado de activacion</h2>
+            <p>Si {{ sip_provider }} todavia muestra la cuenta en revision o KYC pendiente, la conexion tecnica puede quedar preparada en DPIA, pero las llamadas reales no funcionaran hasta que el proveedor apruebe la cuenta.</p>
+        </section>
+
+        <section class="guide-card">
+            <h2>Seguridad</h2>
+            <ul>
+                <li>No exponer passwords SIP en HTML, JS ni respuestas JSON.</li>
+                <li>No almacenar credenciales del softphone en la base de datos de DPIA.</li>
+                <li>Asignar permisos por usuario antes de permitir importacion o actualizacion de estados.</li>
+                <li>Usar un gestor seguro o el propio softphone para almacenar las credenciales localmente.</li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos del Sheet</title>
+</head>
+<body>
+    <h1>Contenido del Sheet</h1>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Categoría</th>
+                <th>País</th>
+                <th>Fuente</th>
+                <th>Motivo de Tendencia</th>
+                <th>Precio Amazon</th>
+                <th>Precio eBay</th>
+                <th>Precio AliExpress</th>
+                <th>Proveedor Más Barato</th>
+                <th>Link Proveedor</th>
+                <th>Precio Venta Sugerido</th>
+                <th>Margen Estimado</th>
+                <th>Imagen</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+                <tr>
+                    <td>{{ row['Producto'] if row['Producto'] else 'No disponible' }}</td>
+                    <td>{{ row['Categoría'] if row['Categoría'] else 'No disponible' }}</td>
+                    <td>{{ row['País'] if row['País'] else 'No disponible' }}</td>
+                    <td>{{ row['Fuente'] if row['Fuente'] else 'No disponible' }}</td>
+                    <td>{{ row['Motivo de tendencia'] if row['Motivo de tendencia'] else 'No disponible' }}</td>
+                    <td>{{ row['precio_amazon'] if row['precio_amazon'] else 'No disponible' }}</td>
+                    <td>{{ row['precio_ebay'] if row['precio_ebay'] else 'No disponible' }}</td>
+                    <td>{{ row['precio_aliexpress'] if row['precio_aliexpress'] else 'No disponible' }}</td>
+                    <td>{{ row['proveedor_mas_barato'] if row['proveedor_mas_barato'] else 'No disponible' }}</td>
+                    <td><a href="{{ row['búsqueda_ebay'] if row['búsqueda_ebay'] else '#' }}" target="_blank">Proveedor</a></td>
+                    <td>{{ row['precio_venta_sugerido'] if row['precio_venta_sugerido'] else 'No disponible' }}</td>
+                    <td>{{ row['margen_estimado'] if row['margen_estimado'] else 'No disponible' }}</td>
+                    <td><img src="{{ row['imagen'] if row['imagen'] else 'default.jpg' }}" alt="Imagen" width="100"></td>
+                    <td>{{ row['fecha'] if row['fecha'] else 'Fecha no disponible' }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

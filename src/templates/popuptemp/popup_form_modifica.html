@@ -1,0 +1,164 @@
+<!-- Pestaña 3: gestionar por correo -->
+<section id="tab-gestionar" class="tab">
+  <h1 data-i18n="manageTitle">Mis Publicidades</h1>
+
+  <!-- Barra superior -->
+  <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
+    <input id="emailSearch" type="email"
+           placeholder="email@dominio.com" data-i18n="searchPlaceholder"
+           style="padding:8px; min-width:320px">
+    <button id="btnBuscar" class="btn primary">🔎 <span data-i18n="search">Buscar</span></button>
+    <button id="btnCrearNueva" class="btn ghost">➕ <span data-i18n="new">Nueva</span></button>
+  </div>
+
+  <!-- Filtros rápidos -->
+  <div class="filters-row" style="display:flex; gap:8px; align-items:center; margin:8px 0;">
+    <input id="filterQ" class="input" placeholder="Buscar en título..." style="min-width:240px" />
+    <input id="filterCP" class="input" placeholder="CP (ej. 60-001 o 60-*)" style="width:140px" />
+
+    <select id="filterEstado" class="input">
+      <option value="">Estado (todos)</option>
+      <option value="activo">Activo</option>
+      <option value="pausado">Pausado</option>
+      <option value="baja">Baja</option>
+    </select>
+
+    <select id="filterIdioma" class="input">
+      <option value="">Idioma (todos)</option>
+      <option value="es">ES</option>
+      <option value="it">IT</option>
+      <option value="pl">PL</option>
+      <option value="de">DE</option>
+    </select>
+
+    <label style="display:flex; align-items:center; gap:6px">
+      <input type="checkbox" id="filterImg" />
+      Con imagen
+    </label>
+
+    <select id="filterOrder" class="input">
+      <option value="updated_desc">Orden: últimos primero</option>
+      <option value="titulo_asc">Título A→Z</option>
+      <option value="titulo_desc">Título Z→A</option>
+      <option value="id_desc">ID ↓</option>
+      <option value="id_asc">ID ↑</option>
+    </select>
+
+    <button id="btnClearFilters" class="btn ghost">Limpiar</button>
+    <span id="countBadge" style="margin-left:auto; opacity:.8"></span>
+  </div>
+
+  <!-- Tabla -->
+  <table id="tablaPopups" style="width:100%; border-collapse:collapse;">
+    <thead>
+      <tr>
+        <th data-i18n="thId">ID</th>
+        <th data-i18n="thTitle">Título</th>
+        <th data-i18n="thLang">Idioma</th>
+        <th data-i18n="thZip">CP</th>
+        <th data-i18n="thScope">Ámbito</th>
+        <th data-i18n="thCategory">Categoría</th>
+        <th data-i18n="thStatus">Estado</th>
+        <th>Imagen</th>
+        <th data-i18n="thActions">Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- Paginador -->
+  <div id="paginator" style="display:flex; gap:8px; align-items:center; margin-top:10px">
+    <button id="pgPrev" class="btn ghost">« Anterior</button>
+    <span id="pgInfo"></span>
+    <button id="pgNext" class="btn ghost">Siguiente »</button>
+
+    <span style="margin-left:12px">/ pág. size</span>
+    <select id="pgSize">
+      <option value="25">25</option>
+      <option value="50" selected>50</option>
+      <option value="100">100</option>
+    </select>
+  </div>
+
+  <div id="emptyMsg" style="display:none; padding:16px; color:#9CA3AF;" data-i18n="emptyMsg">
+    No hay publicaciones para este usuario.
+  </div>
+</section>
+
+<!-- Modal editar -->
+<div id="editModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); align-items:center; justify-content:center; z-index:9999;">
+  <div style="background:#0b1220; color:#E5E7EB; width:600px; max-width:90vw; border-radius:14px; padding:16px;">
+    <h3 style="margin-top:0">
+      <span data-i18n="editPopup">Editar Popup</span> <span id="editId"></span>
+    </h3>
+    <form id="editForm" class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <label><span data-i18n="lblTitle">Título</span><input name="titulo"></label>
+      <label><span data-i18n="lblLink">Link destino</span><input name="link"></label>
+      <label><span data-i18n="lblImage">Imagen URL</span><input name="imagen_url"></label>
+      <label><span data-i18n="lblLang">Idioma</span><input name="idioma"></label>
+      <label><span data-i18n="lblZip">Código Postal</span><input name="codigo_postal"></label>
+      <label><span data-i18n="lblPriority">Prioridad</span><input name="prioritario" type="number" min="0"></label>
+      <label><span data-i18n="lblWidth">Ancho</span><input name="medida_ancho" type="number" min="50"></label>
+      <label><span data-i18n="lblHeight">Alto</span><input name="medida_alto" type="number" min="30"></label>
+      <label><span data-i18n="lblStatus">Estado</span>
+        <select name="estado">
+          <option value="activo">activo</option>
+          <option value="pausado">pausado</option>
+          <option value="baja">baja</option>
+        </select>
+      </label>
+      <label><span data-i18n="lblScopeId">Ámbito (ID)</span><input name="dominio_id" type="number" min="1"></label>
+      <label><span data-i18n="lblCategoryId">Categoría (ID)</span><input name="categoria_id" type="number" min="1"></label>
+    </form>
+    <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px;">
+      <button id="btnCerrarModal" class="btn ghost" data-i18n="cancel">Cancelar</button>
+      <button id="btnGuardarModal" class="btn primary">💾 <span data-i18n="saveChanges">Guardar cambios</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- Panel de snippet (oculto hasta elegir un registro) -->
+<section id="snippetPanelMP" class="card snippet-box" style="display:none; margin-top:16px;">
+  <div class="snippet-box__head">
+    <h3 class="snippet-box__title" data-i18n="snippetTitle">Snippet de inserción</h3>
+    <div class="snippet-box__head-row" style="display:flex; gap:12px; align-items:center;">
+      <label class="snippet-box__host-label">
+        <span data-i18n="hostLabel">Host</span>
+        <select id="snippetHostMP" class="snippet-box__host-select">
+          <option value="auto" data-i18n="hostAuto">Origen del script (AUTO)</option>
+          <option value="http://127.0.0.1:8100" data-i18n="hostLocal">http://127.0.0.1:8100</option>
+          <option value="http://54.234.169.22:8100" data-i18n="hostIP">http://54.234.169.22:8100</option>
+          <option value="https://api.dpia.site" data-i18n="hostProd">https://api.dpia.site</option>
+        </select>
+      </label>
+
+      <label class="snippet-box__mode-label">
+        <span data-i18n="modeLabel">Modo</span>
+        <select id="snippetModeMP">
+          <option value="text" data-i18n="modeText">Por nombres…</option>
+          <option value="id" data-i18n="modeId">Por IDs…</option>
+        </select>
+      </label>
+
+      <button id="copyScriptMP" class="btn ghost" type="button">📋 <span data-i18n="copyScript">Copiar &lt;script&gt;</span></button>
+      <button id="copyDivMP" class="btn ghost" type="button">📋 <span data-i18n="copyDiv">Copiar &lt;div&gt;</span></button>
+    </div>
+  </div>
+
+  <div class="snippet">
+    <pre class="snippet__pre"><code id="scriptSnippetMP"></code></pre>
+  </div>
+  <div class="snippet" style="margin-top:14px;">
+    <pre class="snippet__pre"><code id="divSnippetMP"></code></pre>
+  </div>
+</section>
+
+<!-- Modal de imagen ampliada (re-uso del existente) -->
+<div id="modalImagen" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:9999;">
+  <img id="modalImgContenido" src="" alt="imagen ampliada" style="max-width:90vw; max-height:90vh; border-radius:8px; box-shadow:0 0 20px rgba(0,0,0,0.8);">
+</div>
+
+<!-- i18n y assets -->
+<script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/popup_form/popup_form_modifica.css') }}">
+<script src="{{ url_for('static', filename='js/popup_form/popup_form_modifica.js') }}"></script>

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon.png')}}">
+   
+    <title>DPIA - Repartidores</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- ✅ Dashboard CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/repartidores/dashboard.css') }}">
+</head>
+<body>
+
+    <!-- ============================================ -->
+    <!-- NAVBAR -->
+    <!-- ============================================ -->
+    <nav class="navbar navbar-expand-lg navbar-dpia navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="https://dpia.site" onclick="handleBrandClick(event)" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-motorcycle me-2"></i>DPIA Repartidores
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+               <!-- dashboard.html - Navbar -->
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" onclick="showSection('dashboard')">
+                                <i class="fas fa-chart-pie me-1"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('historial')">
+                                <i class="fas fa-history me-1"></i>Historial
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('analisis')">
+                                <i class="fas fa-chart-line me-1"></i>Análisis
+                            </a>
+                        </li>
+                        
+                        <!-- ✅ Botón Cuenta - solo visible cuando está logueado -->
+                        <li class="nav-item ms-lg-2" id="navCuenta" style="display: none;">
+                            <button class="btn btn-dpia-outline btn-sm" onclick="abrirConfiguracion()">
+                                <i class="fas fa-cog me-1"></i>Cuenta
+                            </button>
+                        </li>
+                        
+                        <!-- Botón de autenticación -->
+                        <li class="nav-item ms-lg-2">
+                            <a href="{{ url_for('repartos.repartidores_login') }}" class="btn btn-dpia-primary btn-sm" id="btnAuth">
+                                <i class="fas fa-user me-1"></i> 
+                                <span id="authText">
+                                    {% if repartidor %}
+                                        {{ repartidor.nombre }} {{ repartidor.apellido or '' }}
+                                    {% else %}
+                                        Iniciar Sesión
+                                    {% endif %}
+                                </span>
+                            </a>
+                        </li>
+                        
+                        <!-- Botón de logout -->
+                        <li class="nav-item ms-lg-2">
+                            <button class="btn btn-dpia-outline btn-sm" onclick="logout()" 
+                                    style="display: {% if repartidor %}block{% else %}none{% endif %};" 
+                                    id="btnLogout">
+                                <i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión
+                            </button>
+                        </li>
+                    </ul>
+            </div>
+        </div>
+    </nav>
+<!-- ============================================ -->
+<!-- MODAL DE CONFIGURACIÓN DE CUENTA -->
+<!-- ============================================ -->
+<div class="modal fade" id="modalConfiguracion" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content modal-content-dpia">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-cog me-2"></i>Configuración de Cuenta
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Estado de carga -->
+                <div id="configLoading" class="text-center py-4">
+                    <div class="spinner-border text-secondary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <p class="mt-2 text-muted">Cargando datos...</p>
+                </div>
+
+                <!-- Formulario de configuración -->
+                <form id="formConfiguracion" style="display: none;" onsubmit="guardarConfiguracion(event)">
+                    <!-- Datos personales -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                <i class="fas fa-user me-1"></i>Nombre
+                            </label>
+                            <input type="text" class="form-control" id="configNombre" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                <i class="fas fa-user me-1"></i>Apellido
+                            </label>
+                            <input type="text" class="form-control" id="configApellido">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                <i class="fas fa-envelope me-1"></i>Email
+                            </label>
+                            <input type="email" class="form-control" id="configEmail" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                <i class="fas fa-phone me-1"></i>Teléfono
+                            </label>
+                            <input type="tel" class="form-control" id="configTelefono" required>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" style="border-color: rgba(108, 43, 217, 0.3);">
+
+                    <!-- Configuración del repartidor -->
+                    <h6 class="text-secondary mb-3">
+                        <i class="fas fa-truck me-2"></i>Configuración de Repartidor
+                    </h6>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                <i class="fas fa-motorcycle me-1"></i>Vehículo
+                            </label>
+                            <select class="form-control" id="configVehiculo">
+                                <option value="">Seleccionar...</option>
+                                <option value="bici">🚲 Bicicleta</option>
+                                <option value="moto">🏍️ Moto</option>
+                                <option value="auto">🚗 Auto</option>
+                                <option value="furgoneta">🚐 Furgoneta</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                <i class="fas fa-id-card me-1"></i>Patente
+                            </label>
+                            <input type="text" class="form-control" id="configPatente" placeholder="ABC 123">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                <i class="fas fa-ruler-combined me-1"></i>Radio de Trabajo (km)
+                            </label>
+                            <input type="number" class="form-control" id="configRadio" min="1" max="50" step="0.5">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                <i class="fas fa-star me-1"></i>Puntuación
+                            </label>
+                            <div class="form-control" style="background: transparent; border: none; color: var(--dpia-secondary);">
+                                <span id="configPuntuacionDisplay">5.0</span>
+                                <i class="fas fa-star ms-1"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="configDisponible" style="background-color: var(--dpia-primary);">
+                                <label class="form-check-label" for="configDisponible">
+                                    <i class="fas fa-check-circle me-1"></i>Disponible para recibir pedidos
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="configActivo" style="background-color: var(--dpia-primary);">
+                                <label class="form-check-label" for="configActivo">
+                                    <i class="fas fa-user-check me-1"></i>Cuenta Activa
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-dpia-primary flex-grow-1">
+                            <i class="fas fa-save me-2"></i>Guardar Cambios
+                        </button>
+                        <button type="button" class="btn btn-dpia-outline" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>Cancelar
+                        </button>
+                    </div>
+
+                    <!-- Mensaje de respuesta -->
+                    <div id="configAlert" class="mt-3 d-none">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <span id="configAlertText"></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- ===== BIENVENIDA CON NOMBRE ===== -->
+    <div class="container py-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="section-title">
+                    👋 <span>
+                        {% if repartidor %}
+                            Bienvenido, {{ repartidor.nombre }} {{ repartidor.apellido or '' }}
+                        {% else %}
+                            Bienvenido, Repartidor
+                        {% endif %}
+                    </span>
+                </h1>
+                <p class="text-muted">
+                    {% if repartidor %}
+                        Has iniciado sesión como <strong>{{ repartidor.email }}</strong>
+                    {% else %}
+                        Inicia sesión para gestionar tus pedidos, visualizar tu rendimiento y comisiones.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CONTENIDO PRINCIPAL -->
+    <!-- ============================================ -->
+    <div class="container py-4">
+
+        <!-- ===== SECCIÓN DASHBOARD ===== -->
+        <div id="seccion-dashboard">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h1 class="section-title">📊 <span>Dashboard</span></h1>
+                    <p class="text-muted">Resumen de tu actividad como repartidor.</p>
+                </div>
+            </div>
+
+            <!-- Estadísticas rápidas -->
+            <div class="row g-4 mb-4">
+                <div class="col-6 col-md-3">
+                    <div class="card-dpia text-center">
+                        <div class="stat-number" id="totalPedidos">0</div>
+                        <div class="stat-label">Pedidos Totales</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card-dpia text-center">
+                        <div class="stat-number" id="pedidosHoy">0</div>
+                        <div class="stat-label">Pedidos Hoy</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card-dpia text-center">
+                        <div class="stat-number" id="comisiones">$0</div>
+                        <div class="stat-label">Comisiones</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card-dpia text-center">
+                        <div class="stat-number" id="rating">⭐ 5.0</div>
+                        <div class="stat-label">Calificación</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pedidos activos -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card-dpia">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-truck me-2"></i>Pedidos Activos
+                            </h5>
+                            <span class="badge-dpia" id="pedidosActivosCount">0 activos</span>
+                        </div>
+                        <!-- Filtros de estado -->
+                        <div class="d-flex gap-2 mb-3">
+                            <div class="btn-group" role="group" aria-label="Filtros de pedidos" id="filtrosPedidos">
+                                <button type="button" class="btn btn-sm btn-outline-light active" data-filter="todos">Todos</button>
+                                <button type="button" class="btn btn-sm btn-outline-light" data-filter="pendiente">Pendiente</button>
+                                <button type="button" class="btn btn-sm btn-outline-light" data-filter="en_curso">En curso</button>
+                                <button type="button" class="btn btn-sm btn-outline-light" data-filter="completado">Entregado</button>
+                            </div>
+                        </div>
+                        <div id="pedidosActivosList">
+                            <div class="empty-state">
+                                <i class="fas fa-box-open"></i>
+                                <p>No hay pedidos activos en este momento</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECCIÓN HISTORIAL ===== -->
+        <div id="seccion-historial" style="display: none;">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h1 class="section-title">📋 <span>Historial de Pedidos</span></h1>
+                    <p class="text-muted">Todos tus pedidos completados y en proceso.</p>
+                </div>
+            </div>
+
+            <div class="card-dpia">
+                <div class="table-responsive">
+                    <table class="table table-dpia">
+                        <thead>
+                            <tr>
+                                <th>ID Pedido</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Total</th>
+                                <th>Comisión</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historialPedidos">
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    <i class="fas fa-inbox me-2"></i>No hay pedidos en el historial
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECCIÓN ANÁLISIS ===== -->
+        <div id="seccion-analisis" style="display: none;">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h1 class="section-title">📊 <span>Análisis y Comisiones</span></h1>
+                    <p class="text-muted">Visualiza tu rendimiento y ganancias.</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Comisiones por mes -->
+                <div class="col-md-6">
+                    <div class="card-dpia">
+                        <h5 class="card-title">
+                            <i class="fas fa-coins me-2"></i>Comisiones por Mes
+                        </h5>
+                        <div id="comisionesMes">
+                            <div class="empty-state" style="padding: 30px 20px;">
+                                <i class="fas fa-chart-bar"></i>
+                                <p>No hay datos disponibles</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rendimiento -->
+                <div class="col-md-6">
+                    <div class="card-dpia">
+                        <h5 class="card-title">
+                            <i class="fas fa-tachometer-alt me-2"></i>Rendimiento
+                        </h5>
+                        <div id="rendimientoStats">
+                            <div class="empty-state" style="padding: 30px 20px;">
+                                <i class="fas fa-chart-line"></i>
+                                <p>No hay datos disponibles</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen de ganancias -->
+                <div class="col-12">
+                    <div class="card-dpia">
+                        <h5 class="card-title">
+                            <i class="fas fa-wallet me-2"></i>Resumen de Ganancias
+                        </h5>
+                        <div class="row g-3 mt-2">
+                            <div class="col-6 col-md-3">
+                                <div class="p-3" style="background: rgba(108, 43, 217, 0.1); border-radius: 12px;">
+                                    <small class="text-muted">Total Ganado</small>
+                                    <h4 class="text-success" id="totalGanado">$0</h4>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="p-3" style="background: rgba(255, 107, 157, 0.1); border-radius: 12px;">
+                                    <small class="text-muted">Promedio/Pedido</small>
+                                    <h4 class="text-info" id="promedioPedido">$0</h4>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="p-3" style="background: rgba(46, 204, 113, 0.1); border-radius: 12px;">
+                                    <small class="text-muted">Pedidos Completados</small>
+                                    <h4 class="text-warning" id="pedidosCompletados">0</h4>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="p-3" style="background: rgba(243, 156, 18, 0.1); border-radius: 12px;">
+                                    <small class="text-muted">Tasa de Éxito</small>
+                                    <h4 class="text-success" id="tasaExito">0%</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL DE AUTENTICACIÓN -->
+    <!-- ============================================ -->
+    <div class="modal fade" id="modalAuth" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-content-dpia">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-motorcycle me-2"></i>Acceso Repartidor
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Estado de autenticación -->
+                    <div id="authStatus" class="alert alert-info d-none">
+                        <i class="fas fa-spinner fa-spin me-2"></i>
+                        <span id="authStatusText">Verificando...</span>
+                    </div>
+
+                    <!-- Formulario de login -->
+                    <form id="formLogin" onsubmit="loginRepartidor(event)">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-envelope me-1"></i>Email
+                            </label>
+                            <input type="email" class="form-control" id="loginEmail" 
+                                   placeholder="tu@email.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-lock me-1"></i>Contraseña
+                            </label>
+                            <input type="password" class="form-control" id="loginPassword" 
+                                   placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-dpia-primary w-100">
+                            <i class="fas fa-sign-in-alt me-2"></i>Ingresar
+                        </button>
+                    </form>
+
+                    <!-- Formulario de registro -->
+                    <hr class="my-4" style="border-color: rgba(108, 43, 217, 0.3);">
+                    <p class="text-center text-muted small">
+                        ¿No tienes cuenta? 
+                        <a href="#" class="text-white" onclick="toggleRegistro()">Regístrate aquí</a>
+                    </p>
+
+                    <form id="formRegistro" onsubmit="registrarRepartidor(event)" style="display: none;">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="regNombre" placeholder="Nombre" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Apellido</label>
+                                <input type="text" class="form-control" id="regApellido" placeholder="Apellido" required>
+                            </div>
+                        </div>
+                        <div class="mb-2 mt-2">
+                            <label class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="regTelefono" placeholder="+54 9 3445 977100" required>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="regEmail" placeholder="tu@email.com" required>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="regPassword" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-dpia-primary w-100">
+                            <i class="fas fa-user-plus me-2"></i>Registrarse
+                        </button>
+                        <button type="button" class="btn btn-dpia-outline w-100 mt-2" onclick="toggleRegistro()">
+                            <i class="fas fa-arrow-left me-2"></i>Volver al inicio
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+            <!-- Modal para agregar comentario a pedido (rename a delivery-modal-comentario) -->
+            <div class="modal fade" id="delivery-modal-comentario" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content modal-content-dpia">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><i class="fas fa-comment-dots me-2"></i> <span id="delivery-modal-comentario-titulo">Agregar comentario</span></h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-muted mb-2 small">Repartidor: <strong><span id="delivery-modal-comentario-repartidor-id">-</span></strong> · Pedido: <strong><span id="delivery-modal-comentario-pedido-id-visible">-</span></strong></p>
+                            <div class="mb-3">
+                                <label class="form-label">Comentario</label>
+                                <textarea id="delivery-modal-comentario-text" class="form-control" rows="4" placeholder="Escribe un comentario sobre el pedido..."></textarea>
+                            </div>
+                            <input type="hidden" id="delivery-modal-comentario-pedido-id" value="">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dpia-outline" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-dpia-primary" id="delivery-modal-comentario-guardar">Guardar comentario</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- ✅ Cargar dashboard.js -->
+    <script src="{{ url_for('static', filename='js/repartidores/dashboard.js') }}"></script>
+
+    <!-- Manejo de clic en la marca: si estamos en webview, notificar a la app; si no, navegar a dpia.site -->
+    <script>
+    function isInWebView() {
+        try {
+            if (window.ReactNativeWebView && typeof window.ReactNativeWebView.postMessage === 'function') return true;
+            if (window.cordova || window.Capacitor) return true;
+            if (window.webkit && window.webkit.messageHandlers) return true;
+            if (navigator.userAgent && /\bwv\b/.test(navigator.userAgent)) return true;
+        } catch (e) {}
+        return false;
+    }
+
+    function handleBrandClick(e) {
+        if (!isInWebView()) return; // allow normal navigation in browsers
+        e.preventDefault();
+        // Try app messaging patterns
+        try {
+            if (window.ReactNativeWebView && typeof window.ReactNativeWebView.postMessage === 'function') {
+                window.ReactNativeWebView.postMessage(JSON.stringify({type: 'navigate', to: 'home'}));
+                return;
+            }
+
+            if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+                // Capacitor: try to open URL scheme
+                window.Capacitor.Plugins.App.openUrl({url: 'dpia://home'});
+                return;
+            }
+
+            if (window.webkit && window.webkit.messageHandlers) {
+                for (var h in window.webkit.messageHandlers) {
+                    try {
+                        window.webkit.messageHandlers[h].postMessage({action: 'navigate', to: 'home'});
+                        return;
+                    } catch (err) {}
+                }
+            }
+        } catch (err) {
+            console.error('App messaging failed', err);
+        }
+
+        // Fallback: try custom URL scheme to open the native app
+        window.location.href = 'dpia://home';
+    }
+    </script>
+
+</body>
+</html>

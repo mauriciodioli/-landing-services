@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial Operadores | DPIA CRM</title>
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+    <link rel="shortcut icon" href="/static/favicon.png">
+    <meta name="application-name" content="DPIA CRM">
+    <link rel="stylesheet" href="/static/css/campaniaTelefonica/cards.css">
+    <link rel="stylesheet" href="/static/css/campaniaTelefonica/mobile.css">
+</head>
+<body>
+    <main id="campania-telefonica-app" class="tutorial-layout">
+        <section class="tutorial-hero">
+            <div>
+                <p class="eyebrow">DPIA CRM telefonico</p>
+                <h1>Tutorial simple para operadores</h1>
+                <p class="hero-copy">Esta guia explica el flujo normal de trabajo paso a paso. No hace falta conocimiento tecnico. Solo sigue el orden y usa los botones indicados.</p>
+            </div>
+            <div class="tutorial-hero__actions">
+                <a class="primary-button" href="/admin/campania-telefonica/ui/">Volver al sistema</a>
+                <a class="ghost-button" href="#pasos-principales">Ir a los pasos</a>
+            </div>
+        </section>
+
+        <section class="tutorial-flow-strip">
+            <div class="tutorial-flow-step tutorial-flow-step--step-1">
+                <span class="tutorial-flow-step__number">1</span>
+                <strong>Entrar</strong>
+                <p>Abre DPIA CRM.</p>
+            </div>
+            <div class="tutorial-flow-step tutorial-flow-step--step-2">
+                <span class="tutorial-flow-step__number">2</span>
+                <strong>Validar acceso</strong>
+                <p>Correo y password.</p>
+            </div>
+            <div class="tutorial-flow-step tutorial-flow-step--step-3">
+                <span class="tutorial-flow-step__number">3</span>
+                <strong>Importar sheet</strong>
+                <p>Completa la hoja.</p>
+            </div>
+            <div class="tutorial-flow-step tutorial-flow-step--step-4">
+                <span class="tutorial-flow-step__number">4</span>
+                <strong>Trabajar contactos</strong>
+                <p>Llamar, anotar, cambiar estado.</p>
+            </div>
+            <div class="tutorial-flow-step tutorial-flow-step--step-5">
+                <span class="tutorial-flow-step__number">5</span>
+                <strong>Eliminar si ya no sirve</strong>
+                <p>Desde Historial sheets.</p>
+            </div>
+        </section>
+
+        <section class="tutorial-grid" id="pasos-principales">
+            <article class="tutorial-card tutorial-card--step-1">
+                <h2>1. Entrar al sistema</h2>
+                <p>Abre DPIA CRM. Si ves contactos y tu usuario arriba, puedes seguir. Si no, primero debes validarte.</p>
+                <div class="tutorial-action-hint">
+                    <span class="tutorial-chip">Boton</span>
+                    <strong>Importar hoja</strong>
+                </div>
+                <ol>
+                    <li>Haz clic en <strong>Importar hoja</strong>.</li>
+                    <li>Escribe tu correo electronico.</li>
+                    <li>Escribe tu password.</li>
+                    <li>Haz clic en <strong>Validar acceso</strong>.</li>
+                </ol>
+            </article>
+
+            <article class="tutorial-card tutorial-card--step-2">
+                <h2>2. Confirmar que ya entraste</h2>
+                <p>Cuando el acceso es correcto, el sistema muestra tu correo y tu ID en la caja <strong>Usuario activo</strong>.</p>
+                <div class="tutorial-action-hint tutorial-action-hint--soft">
+                    <span class="tutorial-chip">Revisa</span>
+                    <strong>Usuario activo</strong>
+                </div>
+                <ul>
+                    <li>Si no aparece tu usuario, no importes nada todavia.</li>
+                    <li>Si el sistema restaura tu sesion automaticamente, no necesitas volver a poner password.</li>
+                </ul>
+            </article>
+
+            <article class="tutorial-card tutorial-card--step-3">
+                <h2>3. Cargar una sheet</h2>
+                <p>Dentro del modal <strong>Importar hoja</strong> completa los datos de la hoja que vas a trabajar.</p>
+                <div class="tutorial-fields-preview">
+                    <span>Sheet ID</span>
+                    <span>Nombre visible</span>
+                    <span>Hoja / Tab</span>
+                    <span>Nombre de campana</span>
+                    <span>Cantidad de registros</span>
+                </div>
+                <div class="tutorial-highlight tutorial-highlight--example">
+                    <strong>Ejemplo real</strong>
+                    <p><strong>URL de Google Sheets:</strong> https://docs.google.com/spreadsheets/d/19Lp1RF2M2y2xTrW66B1WAI5xGmJAVCYoApR7nMVwqCI/edit?gid=825138536#gid=825138536</p>
+                    <p><strong>Sheet ID:</strong> 19Lp1RF2M2y2xTrW66B1WAI5xGmJAVCYoApR7nMVwqCI</p>
+                    <p><strong>Nombre visible:</strong> PSICOLOGOS (3616)</p>
+                    <p><strong>Hoja / Tab:</strong> Mauricio</p>
+                </div>
+                <p>El <strong>Sheet ID</strong> es el texto largo que aparece en la URL entre <strong>/d/</strong> y <strong>/edit</strong>.</p>
+                <p>El <strong>Nombre visible</strong> puede ser el nombre con el que quieres reconocer esa hoja dentro del sistema. Normalmente puedes usar el nombre general del archivo, por ejemplo <strong>PSICOLOGOS (3616)</strong>.</p>
+                <p>La <strong>Hoja / Tab</strong> es el nombre de la pestaña interna dentro del Google Sheet. En este ejemplo, la pestaña es <strong>Mauricio</strong>.</p>
+                <div class="tutorial-modal-list">
+                    <div class="tutorial-modal-list__item">
+                        <div>
+                            <strong>Pega el Sheet ID</strong>
+                            <p>Se obtiene desde la URL de Google Sheets.</p>
+                        </div>
+                        <button class="ghost-button" type="button" data-tutorial-dialog-open="sheet-id">Ver ejemplo</button>
+                    </div>
+                    <div class="tutorial-modal-list__item">
+                        <div>
+                            <strong>Escribe un Nombre visible</strong>
+                            <p>Es el nombre con el que reconocerás esa hoja dentro de DPIA CRM.</p>
+                        </div>
+                        <button class="ghost-button" type="button" data-tutorial-dialog-open="nombre-visible">Ver ejemplo</button>
+                    </div>
+                    <div class="tutorial-modal-list__item">
+                        <div>
+                            <strong>Escribe la Hoja / Tab</strong>
+                            <p>Es el nombre de la pestaña interna dentro del archivo de Google Sheets.</p>
+                        </div>
+                        <button class="ghost-button" type="button" data-tutorial-dialog-open="hoja-tab">Ver ejemplo</button>
+                    </div>
+                    <div class="tutorial-modal-list__item">
+                        <div>
+                            <strong>Escribe un Nombre de campana</strong>
+                            <p>Es el nombre interno para trabajar esa carga dentro del sistema.</p>
+                        </div>
+                        <button class="ghost-button" type="button" data-tutorial-dialog-open="nombre-campania">Ver ejemplo</button>
+                    </div>
+                    <div class="tutorial-modal-list__item">
+                        <div>
+                            <strong>Indica cuantos registros quieres cargar</strong>
+                            <p>Puedes limitar la cantidad para trabajar por bloques.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="tutorial-card tutorial-card--step-4">
+                <h2>4. Revisar antes de importar</h2>
+                <p>Si quieres comprobar que la hoja fue reconocida correctamente, usa <strong>Analizar headers</strong>.</p>
+                <div class="tutorial-action-hint">
+                    <span class="tutorial-chip">Botones</span>
+                    <strong>Analizar headers</strong>
+                    <strong>Importar sheet</strong>
+                </div>
+                <ul>
+                    <li>Esto sirve para revisar columnas como telefono, empresa, ciudad y email.</li>
+                    <li>Si todo se ve bien, usa <strong>Importar sheet</strong>.</li>
+                </ul>
+            </article>
+
+            <article class="tutorial-card tutorial-card--step-5">
+                <h2>5. Trabajar los contactos</h2>
+                <p>Cuando termina la importacion, aparecen las tarjetas de los contactos.</p>
+                <div class="tutorial-fields-preview tutorial-fields-preview--compact">
+                    <span>Buscar lead</span>
+                    <span>Estado</span>
+                    <span>Anterior</span>
+                    <span>Siguiente</span>
+                </div>
+                <ul>
+                    <li>Usa <strong>Buscar lead</strong> para encontrar empresas o telefonos.</li>
+                    <li>Usa el filtro <strong>Estado</strong> para ordenar tu trabajo.</li>
+                    <li>Usa <strong>Anterior</strong> y <strong>Siguiente</strong> para pasar de pagina.</li>
+                </ul>
+            </article>
+
+            <article class="tutorial-card tutorial-card--step-6">
+                <h2>6. Llamar o contactar</h2>
+                <p>En cada tarjeta, el boton <strong>Llamar</strong> abre un menu con acciones disponibles.</p>
+                <div class="tutorial-fields-preview tutorial-fields-preview--compact">
+                    <span>VoIP</span>
+                    <span>WhatsApp</span>
+                    <span>Enviar email</span>
+                </div>
+                <ul>
+                    <li><strong>VoIP</strong> para llamar con el softphone.</li>
+                    <li><strong>WhatsApp</strong> para abrir el chat.</li>
+                    <li><strong>Enviar email</strong> para compartir o abrir el correo.</li>
+                </ul>
+            </article>
+
+            <article class="tutorial-card tutorial-card--step-7">
+                <h2>7. Cambiar estado y guardar notas</h2>
+                <p>Despues de cada gestion, actualiza el estado del contacto y deja una nota breve.</p>
+                <ul>
+                    <li>Ejemplos: <strong>LLAMADO</strong>, <strong>PENDIENTE</strong>, <strong>EXITOSO</strong>, <strong>NO_RESPONDE</strong>.</li>
+                    <li>La nota ayuda a que el siguiente operador entienda que paso.</li>
+                </ul>
+            </article>
+
+            <article class="tutorial-card tutorial-card--step-8">
+                <h2>8. Usar historial de sheets</h2>
+                <p>Si ya cargaste una sheet antes, no hace falta escribir todo otra vez.</p>
+                <div class="tutorial-action-hint tutorial-action-hint--soft">
+                    <span class="tutorial-chip">Boton</span>
+                    <strong>Historial sheets</strong>
+                </div>
+                <ol>
+                    <li>Abre <strong>Importar hoja</strong>.</li>
+                    <li>Haz clic en <strong>Historial sheets</strong>.</li>
+                    <li>Usa <strong>Usar esta sheet</strong> para rellenar el formulario automaticamente.</li>
+                </ol>
+            </article>
+
+            <article class="tutorial-card tutorial-card--step-9">
+                <h2>9. Eliminar una sheet importada</h2>
+                <p>Si una campaña ya no sirve, puedes borrarla desde el historial.</p>
+                <div class="tutorial-action-hint tutorial-action-hint--danger">
+                    <span class="tutorial-chip">Boton</span>
+                    <strong>Eliminar</strong>
+                </div>
+                <ol>
+                    <li>Abre <strong>Historial sheets</strong>.</li>
+                    <li>Busca la campaña correcta.</li>
+                    <li>Haz clic en <strong>Eliminar</strong>.</li>
+                    <li>Confirma la accion.</li>
+                </ol>
+                <p>Cuando el sistema esta borrando, el boton muestra <strong>Eliminando...</strong> con una ruedita.</p>
+            </article>
+        </section>
+
+        <section class="tutorial-highlight">
+            <strong>Consejo importante</strong>
+            <p>Antes de importar o borrar una campaña, revisa siempre el cuadro <strong>Usuario activo</strong>. Cada operador solo debe trabajar sus propias sheets y sus propias campañas.</p>
+        </section>
+
+        <section class="tutorial-grid">
+            <article class="tutorial-card tutorial-card--soft-info">
+                <h3>Errores comunes</h3>
+                <ul>
+                    <li>Importar sin validar acceso.</li>
+                    <li>Escribir mal la pestaña o tab de la sheet.</li>
+                    <li>Borrar una campaña sin revisar el nombre antes.</li>
+                </ul>
+            </article>
+
+            <article class="tutorial-card tutorial-card--soft-info">
+                <h3>Regla simple de trabajo</h3>
+                <p>Primero entra, luego valida, despues importa, luego trabaja los contactos y al final elimina solo lo que ya no necesitas.</p>
+            </article>
+        </section>
+    </main>
+
+    <dialog class="tutorial-dialog" data-tutorial-dialog="sheet-id">
+        <div class="tutorial-dialog__header">
+            <h3>Como obtener el Sheet ID</h3>
+            <button class="ghost-button" type="button" data-tutorial-dialog-close>Cerrar</button>
+        </div>
+        <div class="tutorial-dialog__content">
+            <p><strong>URL de ejemplo:</strong></p>
+            <p class="tutorial-dialog__code">https://docs.google.com/spreadsheets/d/19Lp1RF2M2y2xTrW66B1WAI5xGmJAVCYoApR7nMVwqCI/edit?gid=825138536#gid=825138536</p>
+            <div class="tutorial-url-breakdown" aria-label="Ejemplo visual de donde sale el Sheet ID">
+                <span class="tutorial-url-breakdown__part">https://docs.google.com/spreadsheets</span>
+                <span class="tutorial-url-breakdown__part">/d/</span>
+                <span class="tutorial-url-breakdown__part tutorial-url-breakdown__part--highlight">19Lp1RF2M2y2xTrW66B1WAI5xGmJAVCYoApR7nMVwqCI</span>
+                <span class="tutorial-url-breakdown__part">/edit?gid=825138536#gid=825138536</span>
+            </div>
+            <p>El <strong>Sheet ID</strong> es el texto largo que aparece entre <strong>/d/</strong> y <strong>/edit</strong>.</p>
+            <p><strong>Debes copiar esto:</strong></p>
+            <p class="tutorial-dialog__code">19Lp1RF2M2y2xTrW66B1WAI5xGmJAVCYoApR7nMVwqCI</p>
+            <p class="tutorial-dialog__tip">Lo marcado en azul es exactamente lo que debes pegar en el campo <strong>Sheet ID</strong>.</p>
+        </div>
+    </dialog>
+
+    <dialog class="tutorial-dialog" data-tutorial-dialog="nombre-visible">
+        <div class="tutorial-dialog__header">
+            <h3>Como llenar el Nombre visible</h3>
+            <button class="ghost-button" type="button" data-tutorial-dialog-close>Cerrar</button>
+        </div>
+        <div class="tutorial-dialog__content">
+            <p>El <strong>Nombre visible</strong> es el nombre con el que verás esta sheet dentro de DPIA CRM.</p>
+            <p>Con tu ejemplo, el nombre recomendado es:</p>
+            <p class="tutorial-dialog__code">PSICOLOGOS (3616)</p>
+            <p>Usa el nombre general del archivo o un nombre que el operador reconozca rápido.</p>
+        </div>
+    </dialog>
+
+    <dialog class="tutorial-dialog" data-tutorial-dialog="hoja-tab">
+        <div class="tutorial-dialog__header">
+            <h3>Como llenar la Hoja / Tab</h3>
+            <button class="ghost-button" type="button" data-tutorial-dialog-close>Cerrar</button>
+        </div>
+        <div class="tutorial-dialog__content">
+            <p>La <strong>Hoja / Tab</strong> es la pestaña interna dentro del archivo de Google Sheets.</p>
+            <p>En este ejemplo, la pestaña que debes escribir es:</p>
+            <p class="tutorial-dialog__code">Mauricio</p>
+            <p>Debes escribir exactamente el nombre de la pestaña, respetando espacios y letras visibles.</p>
+        </div>
+    </dialog>
+
+    <dialog class="tutorial-dialog" data-tutorial-dialog="nombre-campania">
+        <div class="tutorial-dialog__header">
+            <h3>Como llenar el Nombre de campana</h3>
+            <button class="ghost-button" type="button" data-tutorial-dialog-close>Cerrar</button>
+        </div>
+        <div class="tutorial-dialog__content">
+            <p>El <strong>Nombre de campana</strong> es el nombre interno que verás en DPIA CRM para trabajar esta carga.</p>
+            <p>Un ejemplo claro con tus datos seria:</p>
+            <p class="tutorial-dialog__code">PSICOLOGOS (3616) - Mauricio</p>
+            <p>Usa un nombre corto, claro y facil de reconocer por el operador.</p>
+        </div>
+    </dialog>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('[data-tutorial-dialog-open]').forEach(function (buttonNode) {
+                buttonNode.addEventListener('click', function () {
+                    const dialogKey = buttonNode.getAttribute('data-tutorial-dialog-open');
+                    const dialogNode = document.querySelector('[data-tutorial-dialog="' + dialogKey + '"]');
+                    if (dialogNode && typeof dialogNode.showModal === 'function') {
+                        dialogNode.showModal();
+                    }
+                });
+            });
+
+            document.querySelectorAll('[data-tutorial-dialog-close]').forEach(function (buttonNode) {
+                buttonNode.addEventListener('click', function () {
+                    const dialogNode = buttonNode.closest('dialog');
+                    if (dialogNode) {
+                        dialogNode.close();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.tutorial-dialog').forEach(function (dialogNode) {
+                dialogNode.addEventListener('click', function (event) {
+                    const rect = dialogNode.getBoundingClientRect();
+                    const isInside = (
+                        event.clientX >= rect.left &&
+                        event.clientX <= rect.right &&
+                        event.clientY >= rect.top &&
+                        event.clientY <= rect.bottom
+                    );
+
+                    if (!isInside) {
+                        dialogNode.close();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

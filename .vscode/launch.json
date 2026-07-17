@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Flask",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "src/app",  // Aquí se coloca el nombre de tu archivo Python sin extensión
+                "FLASK_ENV": "development",  // Configuración de entorno, puede ser "production" si estás en producción
+                "FLASK_DEBUG": "1",
+                "FLASK_RUN_HOST": "127.0.0.1",  // Dirección local del servidor
+                "FLASK_RUN_PORT": "8100"  // Puerto en el que Flask correrá
+            },
+            "args": [
+                "run"
+            ],
+            "jinja": true,  // Habilitar soporte de Jinja para plantillas
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}",  // Esto asegura que VS Code use el directorio de tu proyecto
+            "console": "integratedTerminal"  // Usar la terminal integrada de VS Code
+        }
+    ]
+}

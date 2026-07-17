@@ -1,0 +1,90 @@
+<section class="campania-modal" id="campania-telefonica-modal-importar" hidden>
+    <div class="campania-modal__backdrop" data-action="cerrar-importador"></div>
+    <div class="campania-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="campania-modal-title">
+        <div class="campania-modal__header">
+            <div>
+                <p class="eyebrow">Importacion Google Sheets</p>
+                <h2 id="campania-modal-title">Importar hoja dinamica</h2>
+            </div>
+            <div class="campania-modal__header-actions">
+                <button class="ghost-button" type="button" data-action="abrir-historial-sheet">Historial sheets</button>
+                <button class="ghost-button" type="button" data-action="cerrar-importador">Cerrar</button>
+            </div>
+        </div>
+
+        <form id="campania-importador-form" class="campania-modal__form">
+            <section class="campania-modal__auth" aria-labelledby="campania-auth-title">
+                <div>
+                    <p class="eyebrow">Acceso importador</p>
+                    <h3 id="campania-auth-title">Login del operador</h3>
+                    <p>Identificate con correo electronico y password. El sistema resuelve automaticamente el ID real del usuario en base de datos.</p>
+                </div>
+                <p class="campania-modal__auth-status" id="campania-importador-auth-status">Debes validar acceso antes de analizar o importar la hoja.</p>
+            </section>
+
+            <label>
+                <span>Correo electronico</span>
+                <input type="email" name="correo_electronico" placeholder="operador@dpia.site" autocomplete="username" required>
+            </label>
+            <label>
+                <span>Password</span>
+                <div class="campania-password-field">
+                    <input type="password" name="password" placeholder="Ingresa tu password" autocomplete="current-password" required>
+                    <button class="ghost-button campania-password-toggle" type="button" data-action="toggle-password-visibility" aria-pressed="false">Mostrar</button>
+                </div>
+            </label>
+            <label>
+                <span>Usuario ID en base de datos</span>
+                <input type="number" name="usuario_creador_id" min="1" placeholder="Se completa al autenticar" readonly>
+            </label>
+
+            <div class="campania-modal__auth-actions">
+                <button class="ghost-button" type="button" data-action="autenticar-importador">Validar acceso</button>
+            </div>
+
+            <label>
+                <span>Sheet ID</span>
+                <input type="text" name="sheet_id" placeholder="1abc..." required>
+            </label>
+            <label>
+                <span>Nombre visible de la sheet</span>
+                <input type="text" name="sheet_name" placeholder="Campana Espana Junio">
+            </label>
+            <label>
+                <span>Hoja / Tab</span>
+                <input type="text" name="sheet_tab" placeholder="Hoja 1" required>
+            </label>
+            <label>
+                <span>Nombre de campana</span>
+                <input type="text" name="nombre" placeholder="Campana restaurantes Barcelona">
+            </label>
+            <label>
+                <span>Cantidad de registros</span>
+                <input type="number" name="cantidad_registros" min="1" placeholder="100">
+            </label>
+
+            <div class="campania-modal__actions">
+                <button class="ghost-button" type="button" data-action="analizar-sheet" disabled>Analizar headers</button>
+                <button class="primary-button" type="submit" data-action="submit-importar-sheet">
+                    <span class="button-spinner" aria-hidden="true"></span>
+                    <span class="button-label">Importar sheet</span>
+                </button>
+            </div>
+        </form>
+
+        <pre id="campania-importador-resultado" class="campania-modal__resultado" hidden></pre>
+
+        <section class="campania-history-modal" id="campania-history-modal" hidden>
+            <div class="campania-history-modal__panel">
+                <div class="campania-history-modal__header">
+                    <div>
+                        <p class="eyebrow">Historial local</p>
+                        <h3>Sheets cargadas recientemente</h3>
+                    </div>
+                    <button class="ghost-button" type="button" data-action="cerrar-historial-sheet">Cerrar</button>
+                </div>
+                <div class="campania-history-modal__content" id="campania-history-list"></div>
+            </div>
+        </section>
+    </div>
+</section>

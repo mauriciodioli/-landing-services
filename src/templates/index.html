@@ -8,20 +8,20 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="DPIA Solutions | Del problema a una mejora concreta">
   <meta property="og:description" content="Diagnóstico, auditoría, priorización e implementación para pymes, startups y empresas industriales.">
-  <meta property="og:image" content="assets/hero-b2b.png">
+  <meta property="og:image" content="{{ url_for('static', filename='b2b/hero-b2b.png', _external=True) }}">
   <meta property="og:locale" content="es_ES">
   <title>DPIA Solutions | Procesos, tecnología y comercialización</title>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"DPIA Solutions","description":"Consultoría técnico-comercial de procesos, tecnología, automatización, IA y comercialización.","areaServed":["Italia","Unión Europea","Remoto"],"email":"info@dpia.site","telephone":"+39 344 597 7100"}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='b2b/landing.css') }}">
 </head>
 <body>
   <header class="topbar">
     <button class="menu-trigger" id="menuTrigger" aria-expanded="false" aria-controls="sideMenu"><span>Menú</span><i></i><i></i><i></i></button>
     <a class="brand" href="#inicio" aria-label="DPIA Solutions inicio"><span>DPIA</span><small>SOLUTIONS</small></a>
-    <nav class="desktop-nav" aria-label="Navegación principal"><a href="#problemas">Problemas</a><a href="#metodo">Método</a><a href="#ofertas">Servicios</a><a href="experiencia.html">Experiencia</a></nav><a class="top-cta" href="https://wa.me/393445977100?text=Hola%2C%20quiero%20analizar%20una%20oportunidad%20de%20mejora%20en%20mi%20empresa." target="_blank" rel="noopener">Conversación inicial <span>↗</span></a>
+    <nav class="desktop-nav" aria-label="Navegación principal"><a href="#problemas">Problemas</a><a href="#metodo">Método</a><a href="#ofertas">Servicios</a><a href="/experiencia">Experiencia</a></nav><a class="top-cta" href="https://wa.me/393445977100?text=Hola%2C%20quiero%20analizar%20una%20oportunidad%20de%20mejora%20en%20mi%20empresa." target="_blank" rel="noopener">Conversación inicial <span>↗</span></a>
   </header>
 
   <aside class="side-menu" id="sideMenu" aria-hidden="true">
@@ -30,16 +30,16 @@
       <div class="drawer-item"><button class="drawer-toggle" aria-expanded="false">Servicios y ofertas <span>›</span></button><div class="drawer-sub"><a href="#ofertas">Diagnóstico de oportunidades</a><a href="#ofertas">Auditoría técnico-comercial</a><a href="#ofertas">Sprint de implementación</a><a href="#ofertas">Acompañamiento mensual</a></div></div>
       <div class="drawer-item"><button class="drawer-toggle" aria-expanded="false">Áreas de intervención <span>›</span></button><div class="drawer-sub"><a href="#industrial">Monitorización industrial</a><a href="#fullstack">Desarrollo full stack</a><a href="#marketing">Mercadotecnia técnica</a></div></div>
       <div class="drawer-item"><button class="drawer-toggle" aria-expanded="false">Método DPIA <span>›</span></button><div class="drawer-sub"><a href="#metodo">Diagnóstico</a><a href="#metodo">Auditoría</a><a href="#metodo">Priorización</a><a href="#metodo">Implementación</a></div></div>
-      <div class="drawer-item"><button class="drawer-toggle" aria-expanded="false">Conocé DPIA <span>›</span></button><div class="drawer-sub"><a href="#equipo">Equipo</a><a href="experiencia.html">Experiencia</a><a href="#inversion">Justificación de inversión</a></div></div>
+      <div class="drawer-item"><button class="drawer-toggle" aria-expanded="false">Conocé DPIA <span>›</span></button><div class="drawer-sub"><a href="#equipo">Equipo</a><a href="/experiencia">Experiencia</a><a href="#inversion">Justificación de inversión</a></div></div>
       <a class="drawer-direct" href="#contacto">Contacto <span>›</span></a>
     </nav>
-    <div class="side-card side-card--visual"><div class="side-card-image"><img src="assets/operations-b2b.png" alt="Operación industrial conectada"></div><div><span>Conversación inicial</span><h3>Empecemos por el problema, no por la tecnología.</h3><a href="#contacto">Hablar con DPIA →</a></div></div>
+    <div class="side-card side-card--visual"><div class="side-card-image"><img src="{{ url_for('static', filename='b2b/operations-b2b.png') }}" alt="Operación industrial conectada"></div><div><span>Conversación inicial</span><h3>Empecemos por el problema, no por la tecnología.</h3><a href="#contacto">Hablar con DPIA →</a></div></div>
   </aside>
   <div class="scrim" id="scrim"></div>
 
   <main>
     <section class="hero" id="inicio">
-      <img src="assets/hero-b2b.png" alt="Análisis de procesos, datos y operación empresarial">
+      <img src="{{ url_for('static', filename='b2b/hero-b2b.png') }}" alt="Análisis de procesos, datos y operación empresarial">
       <div class="hero-shade"></div><div class="hero-copy"><span class="eyebrow eyebrow--light">PROCESOS · TECNOLOGÍA · COMERCIALIZACIÓN</span><h1>Convertimos problemas operativos y comerciales en mejoras concretas.</h1><p>Analizamos procesos, tecnología y comunicación para identificar dónde tu empresa pierde tiempo, dinero u oportunidades antes de que inviertas en la solución equivocada.</p><div class="hero-actions"><a class="button button--light" href="https://wa.me/393445977100?text=Hola%2C%20quiero%20analizar%20una%20oportunidad%20de%20mejora%20en%20mi%20empresa." target="_blank" rel="noopener">Solicitar conversación inicial</a><a class="text-link text-link--light" href="#metodo">Conocer el método DPIA <span>→</span></a></div><p class="hero-capabilities">Procesos · Tecnología · Automatización · IA aplicada · UX · Comercialización</p></div>
     </section>
 
@@ -47,8 +47,8 @@
     <section class="problem-grid section-shell"><article><b>01</b><h3>Procesos manuales</h3><p>Consumen horas, generan errores y vuelven el crecimiento dependiente de más carga administrativa.</p></article><article><b>02</b><h3>Sistemas desconectados</h3><p>CRM, ERP, pagos y plataformas aisladas reducen velocidad, control y trazabilidad.</p></article><article><b>03</b><h3>Datos desaprovechados</h3><p>La información existe, pero no ayuda a decidir ni anticipar problemas.</p></article><article><b>04</b><h3>Plataformas frágiles</h3><p>Mantener, integrar o escalar cuesta más de lo que debería y bloquea nuevas oportunidades.</p></article><article><b>05</b><h3>IA sin caso de uso</h3><p>Invertir sin objetivos, datos y control claros aumenta el riesgo y desperdicia presupuesto.</p></article><article><b>06</b><h3>Valor difícil de explicar</h3><p>Un buen producto pierde ventas cuando el mercado no comprende rápido por qué debería elegirlo.</p></article></section>
 
     <section class="visual-portfolio section-shell" aria-label="Soluciones DPIA en contexto">
-      <article class="visual-feature"><img src="assets/operations-b2b.png" alt="Operación logística e industrial conectada"><div class="visual-overlay"><span>PROCESOS Y DATOS</span><h2>Ver la operación completa permite decidir qué mejorar primero.</h2><a href="#industrial">Explorar sistemas industriales →</a></div></article>
-      <article class="visual-tile"><img src="assets/strategy-b2b.png" alt="Equipo analizando indicadores y prioridades"><div class="visual-overlay"><span>DIAGNÓSTICO</span><h3>Claridad antes de invertir</h3><a href="#ofertas">Conocer las ofertas →</a></div></article>
+      <article class="visual-feature"><img src="{{ url_for('static', filename='b2b/operations-b2b.png') }}" alt="Operación logística e industrial conectada"><div class="visual-overlay"><span>PROCESOS Y DATOS</span><h2>Ver la operación completa permite decidir qué mejorar primero.</h2><a href="#industrial">Explorar sistemas industriales →</a></div></article>
+      <article class="visual-tile"><img src="{{ url_for('static', filename='b2b/strategy-b2b.png') }}" alt="Equipo analizando indicadores y prioridades"><div class="visual-overlay"><span>DIAGNÓSTICO</span><h3>Claridad antes de invertir</h3><a href="#ofertas">Conocer las ofertas →</a></div></article>
       <article class="visual-tile visual-tile--navy"><div><span>IMPLEMENTACIÓN</span><h3>Del roadmap a una mejora funcional.</h3><p>Automatización, integración, datos, IA, UX o comercialización según el problema real.</p><a href="#metodo">Ver el método →</a></div></article>
     </section>
 
@@ -72,7 +72,7 @@
 
     <section class="team section-shell" id="equipo"><div class="section-heading"><span class="eyebrow">CAPACIDADES COMPLEMENTARIAS</span><h2>Experiencia sénior, técnica y comercial.</h2></div><div class="team-grid"><article><span>TECNOLOGÍA · ARQUITECTURA · IMPLEMENTACIÓN</span><h3>Mauricio Dioli</h3><p>Ingeniero informático con más de 20 años de experiencia en software, embedded, automatización, backend, datos, IA e integración industrial.</p><small>Python · C/C++ · Java · APIs · SQL · Docker · AWS · PLC · IoT · datos en tiempo real</small></article><article><span>COMERCIALIZACIÓN · UX · ADOPCIÓN</span><h3>Claudia Larios</h3><p>Especialista en posicionamiento, comunicación, experiencia de usuario, conversión y adopción de soluciones digitales.</p><small>Propuesta de valor · marketing digital · UX · contenidos · conversión · capacitación</small></article></div></section>
 
-    <section class="experience" id="experiencia"><div class="experience-hero"><img src="assets/operations-b2b.png" alt="Sistemas industriales, logística y datos conectados"><div><span>EXPERIENCIA TÉCNICA APLICADA</span><strong>Industria · plataformas · datos</strong></div></div><div class="section-shell"><div class="section-heading light"><span class="eyebrow eyebrow--light">EXPERIENCIA APLICADA</span><h2>De la industria al cloud.</h2></div><div class="experience-grid"><article><b>GERVASI AUTOMATIZZAZIONE</b><p>Sistemas de control, adquisición de datos, monitorización y mejora de procesos para maquinaria industrial en condiciones reales.</p></article><article><b>DPIA.SITE</b><p>Plataforma internacional end-to-end con backend, microservicios, pagos, IA, WebSockets y despliegue cloud.</p></article><article><b>INTI</b><p>Sistemas embedded, procesamiento de datos, computación de alto rendimiento e investigación industrial y aeroespacial.</p></article></div><a class="experience-page-link" href="experiencia.html">Ver experiencia visual <span>↗</span></a><p class="confidential">Los detalles y resultados específicos se comparten durante la conversación cuando las condiciones de confidencialidad lo permiten.</p></div></section>
+    <section class="experience" id="experiencia"><div class="experience-hero"><img src="{{ url_for('static', filename='b2b/operations-b2b.png') }}" alt="Sistemas industriales, logística y datos conectados"><div><span>EXPERIENCIA TÉCNICA APLICADA</span><strong>Industria · plataformas · datos</strong></div></div><div class="section-shell"><div class="section-heading light"><span class="eyebrow eyebrow--light">EXPERIENCIA APLICADA</span><h2>De la industria al cloud.</h2></div><div class="experience-grid"><article><b>GERVASI AUTOMATIZZAZIONE</b><p>Sistemas de control, adquisición de datos, monitorización y mejora de procesos para maquinaria industrial en condiciones reales.</p></article><article><b>DPIA.SITE</b><p>Plataforma internacional end-to-end con backend, microservicios, pagos, IA, WebSockets y despliegue cloud.</p></article><article><b>INTI</b><p>Sistemas embedded, procesamiento de datos, computación de alto rendimiento e investigación industrial y aeroespacial.</p></article></div><a class="experience-page-link" href="/experiencia">Ver experiencia visual <span>↗</span></a><p class="confidential">Los detalles y resultados específicos se comparten durante la conversación cuando las condiciones de confidencialidad lo permiten.</p></div></section>
 
     <section class="investment section-shell" id="inversion"><div><span class="eyebrow">JUSTIFICACIÓN DE LA INVERSIÓN</span><h2>Una mejora debe poder justificarse.</h2><p>Evaluamos horas recuperables, errores evitables, tiempos de respuesta, oportunidades perdidas, duplicación de datos, riesgos y capacidad liberada.</p></div><aside><strong>20 h</strong><span>semanales</span><p>son más de <b>80 horas mensuales</b>. Antes de automatizar, calculamos el costo actual, el esfuerzo y el tiempo estimado de recuperación.</p></aside></section>
 
@@ -81,7 +81,7 @@
 
   <footer><div class="footer-main section-shell"><div><a class="brand brand--footer" href="#inicio"><span>DPIA</span><small>SOLUTIONS</small></a><p>Procesos · Tecnología · Comercialización</p></div><div><h3>Navegación</h3><a href="#ofertas">Servicios</a><a href="#metodo">Método</a><a href="#equipo">Equipo</a></div><div><h3>Contacto</h3><a href="mailto:info@dpia.site">info@dpia.site</a><a href="https://wa.me/393445977100" target="_blank" rel="noopener">WhatsApp ↗</a></div><div><h3>Idioma</h3><div class="language-switch"><button class="active" aria-label="Español">ES</button><button aria-label="Italiano" title="Próximamente">IT</button><button aria-label="English" title="Coming soon">EN</button></div></div></div><div class="footer-bottom section-shell"><span>© <span id="year"></span> DPIA Solutions</span><div><a href="#">Política de privacidad</a></div></div></footer>
   <a class="whatsapp-float" href="https://wa.me/393445977100?text=Hola%2C%20quiero%20analizar%20una%20oportunidad%20de%20mejora%20en%20mi%20empresa." target="_blank" rel="noopener" aria-label="Hablar con DPIA por WhatsApp">WA</a>
-  <script src="script.js"></script>
+  <script src="{{ url_for('static', filename='b2b/landing.js') }}"></script>
 </body>
 </html>
 

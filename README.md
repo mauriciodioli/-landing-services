@@ -1,62 +1,28 @@
-# Landing Services — Servicios Personal &amp; DPIA
+# DPIA Solutions — Landing page
 
-Estructura de landing pages para **Servicios Personal** y **DPIA** (Evaluación de Impacto en Protección de Datos).
+Landing estática profesional para DPIA Solutions, creada con HTML5, CSS y JavaScript sin dependencias de framework.
 
-## Páginas
+## Vista local
 
-| Archivo | Descripción |
-|---|---|
-| `index.html` | Landing principal con hero, catálogo de servicios, sección DPIA, proceso y contacto |
-| `servicios-personal.html` | Página detallada de todos los servicios de asesoría personal |
-| `dpia.html` | Página detallada de DPIA: qué es, cuándo es obligatoria, proceso, precios y FAQ |
+Abrí `index.html` directamente o ejecutá un servidor local:
 
-## Estructura del proyecto
-
-```
-.
-├── index.html                  # Landing principal
-├── servicios-personal.html     # Página de Servicios Personal
-├── dpia.html                   # Página de DPIA
-├── css/
-│   ├── styles.css              # Estilos globales (reset, navbar, hero, secciones, footer)
-│   └── pages.css               # Estilos específicos de páginas internas
-├── js/
-│   └── main.js                 # JS: menú móvil, accordion, formulario, animaciones
-└── assets/
-    └── images/                 # Imágenes del proyecto
+```powershell
+python -m http.server 8080
 ```
 
-## Características
+Luego visitá `http://localhost:8080`.
 
-- **Diseño responsive** — funciona en móvil, tablet y escritorio
-- **Navbar fija** con menú hamburguesa en móvil
-- **Hero** con badge, título, descripción y botones CTA
-- **Barra de estadísticas** con contadores animados
-- **Sección Servicios Personal** con 6 tarjetas de servicio
-- **Sección DPIA** con features y fases del proceso
-- **Sección Proceso** con pasos numerados
-- **Sección Contacto** con formulario funcional
-- **Página Servicios Personal** con tarjetas detalladas, timeline y precios
-- **Página DPIA** con marco normativo, cuándo es obligatoria, proceso, matriz de riesgo, precios y FAQ con accordion
-- **Footer** con columnas de navegación y año dinámico
+## Publicar en GitHub Pages
 
-## Uso
+1. Subí `index.html`, `styles.css`, `script.js` y la carpeta `assets/` a la rama principal.
+2. En GitHub abrí **Settings > Pages**.
+3. Elegí **Deploy from a branch**, rama `main`, carpeta `/ (root)`.
+4. Guardá y esperá que GitHub muestre la URL pública.
 
-Abre `index.html` en cualquier navegador moderno. No requiere servidor ni dependencias.
+## Versión Flask
 
-## Servicios cubiertos
+La misma landing está integrada en `src/templates/index.html`; sus recursos se encuentran en `src/static/b2b/`.
 
-### Servicios Personal
-- Gestión Documental
-- Orientación Profesional
-- Asesoría Legal Básica
-- Planificación Financiera
-- Privacidad Digital
-- Acompañamiento Continuo
+## Idiomas
 
-### DPIA (Evaluación de Impacto en Protección de Datos)
-- Marco normativo (RGPD / LOPDGDD)
-- Proceso en 5 fases
-- Análisis de riesgo con matriz probabilidad × impacto
-- Tres niveles de servicio: Básica, Completa, Empresarial
-- FAQ con las preguntas más habituales
+El selector ES/IT/EN está preparado visualmente. Español es la versión activa; las traducciones se incorporarán en archivos separados.

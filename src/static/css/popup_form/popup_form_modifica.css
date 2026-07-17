@@ -1,0 +1,13 @@
+.mini-img {
+    width: 40px;
+    height: auto;
+    border-radius: 4px;
+    transition: transform 0.2s ease-in-out;
+    cursor: zoom-in;
+  }
+
+  .mini-img:hover {
+    transform: scale(2.5);
+    position: relative;
+    z-index: 1000;
+  }
