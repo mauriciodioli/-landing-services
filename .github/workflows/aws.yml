@@ -68,7 +68,7 @@ jobs:
         script: |
           docker pull docker.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
      
-          docker run -d --name ${{ env.DEPLOYMENT_VERSION }} --network red_app -p 8100:8100 --restart always docker.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+          docker run -d --name ${{ env.DEPLOYMENT_VERSION }} --network red_app -p 8300:8300 --restart always docker.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
 
 
     - name: Wait until container is running (remote)
@@ -107,3 +107,4 @@ jobs:
                    apt update &&  apt-get install -y vim nano
                    "
           
+
