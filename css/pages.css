@@ -1,0 +1,330 @@
+/* =========================================================
+   Landing Services — Estilos específicos de páginas internas
+   ========================================================= */
+
+/* ---------- Servicios Personal — Cards de Servicio ---------- */
+.service-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.75rem;
+}
+
+.service-detail-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: calc(var(--radius) * 1.5);
+  overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.service-detail-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.service-detail-card__header {
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  background: linear-gradient(135deg, #f0f7ff 0%, #e8f2fc 100%);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.service-detail-card__icon {
+  width: 48px; height: 48px;
+  background: var(--color-secondary);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: var(--color-white);
+  flex-shrink: 0;
+}
+
+.service-detail-card__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.service-detail-card__category {
+  font-size: .75rem;
+  color: var(--color-muted);
+  margin-top: .15rem;
+}
+
+.service-detail-card__body {
+  padding: 1.5rem;
+}
+
+.service-detail-card__desc {
+  font-size: .9rem;
+  color: var(--color-muted);
+  margin-bottom: 1.25rem;
+  line-height: 1.7;
+}
+
+.service-detail-card__features {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin-bottom: 1.5rem;
+}
+
+.service-detail-card__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  font-size: .85rem;
+  color: var(--color-text);
+}
+
+.service-detail-card__feature::before {
+  content: '✓';
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  background: #d1fae5;
+  color: var(--color-dpia);
+  border-radius: 50%;
+  font-size: .65rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: .1rem;
+}
+
+/* ---------- DPIA — Checklist ---------- */
+.dpia-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.dpia-checklist__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(255,255,255,.06);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--color-accent);
+}
+
+.dpia-checklist__item--done {
+  border-left-color: #6ee7b7;
+}
+
+.dpia-checklist__check {
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  border-radius: 4px;
+  border: 2px solid rgba(255,255,255,.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .7rem;
+  margin-top: .1rem;
+}
+
+.dpia-checklist__item--done .dpia-checklist__check {
+  background: #6ee7b7;
+  border-color: #6ee7b7;
+  color: #064e3b;
+}
+
+.dpia-checklist__text strong {
+  display: block;
+  font-size: .9rem;
+  font-weight: 700;
+  margin-bottom: .2rem;
+}
+
+.dpia-checklist__text p {
+  font-size: .8rem;
+  opacity: .8;
+}
+
+/* ---------- DPIA — Risk Matrix ---------- */
+.risk-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .75rem;
+}
+
+.risk-cell {
+  padding: .75rem 1rem;
+  border-radius: var(--radius);
+  text-align: center;
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.risk-cell--low     { background: #d1fae5; color: #064e3b; }
+.risk-cell--medium  { background: #fef3c7; color: #78350f; }
+.risk-cell--high    { background: #fee2e2; color: #7f1d1d; }
+.risk-cell--label   { background: transparent; color: rgba(255,255,255,.7); font-weight: 600; font-size: .75rem; }
+
+/* ---------- Timeline (Proceso DPIA) ---------- */
+.timeline {
+  position: relative;
+  padding-left: 2.5rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: .65rem; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--color-border);
+}
+
+.timeline__item {
+  position: relative;
+  padding-bottom: 2rem;
+}
+
+.timeline__item:last-child { padding-bottom: 0; }
+
+.timeline__dot {
+  position: absolute;
+  left: -2rem;
+  top: .25rem;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  color: var(--color-white);
+  font-size: .7rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--color-bg);
+}
+
+.timeline__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: .35rem;
+}
+
+.timeline__desc {
+  font-size: .875rem;
+  color: var(--color-muted);
+  line-height: 1.65;
+}
+
+/* ---------- Pricing / Packages ---------- */
+.pricing__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.pricing-card {
+  background: var(--color-white);
+  border: 2px solid var(--color-border);
+  border-radius: calc(var(--radius) * 2);
+  padding: 2rem;
+  position: relative;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.pricing-card--featured {
+  border-color: var(--color-secondary);
+  box-shadow: var(--shadow-md);
+}
+
+.pricing-card__badge {
+  position: absolute;
+  top: -13px; left: 50%; transform: translateX(-50%);
+  background: var(--color-secondary);
+  color: var(--color-white);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: .25rem .9rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.pricing-card__name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: .25rem;
+}
+
+.pricing-card__desc {
+  font-size: .85rem;
+  color: var(--color-muted);
+  margin-bottom: 1.25rem;
+}
+
+.pricing-card__price {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+
+.pricing-card__price sub {
+  font-size: 1rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.pricing-card__features {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  margin-bottom: 1.75rem;
+}
+
+.pricing-card__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  font-size: .875rem;
+  color: var(--color-text);
+}
+
+.pricing-card__feature--no { color: var(--color-muted); }
+
+.pricing-card__feature::before {
+  content: '✓';
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #d1fae5;
+  color: var(--color-dpia);
+  font-size: .65rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pricing-card__feature--no::before {
+  content: '×';
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ---------- Two-column grids (inner pages) ---------- */
+@media (max-width: 960px) {
+  .two-col-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
