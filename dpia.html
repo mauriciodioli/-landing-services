@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Evaluación de Impacto en la Protección de Datos (DPIA): metodología, proceso, cuándo es obligatoria, precios y preguntas frecuentes." />
+  <title>DPIA — Evaluación de Impacto en Protección de Datos — Landing Services</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar" role="banner">
+    <div class="container">
+      <nav class="navbar__inner" aria-label="Navegación principal">
+
+        <a href="index.html" class="navbar__logo" aria-label="Inicio">
+          LS <span>Services</span>
+        </a>
+
+        <ul class="navbar__menu" id="navMenu" role="list">
+          <li><a href="index.html#servicios" class="navbar__link">Servicios</a></li>
+          <li><a href="index.html#dpia"      class="navbar__link">DPIA</a></li>
+          <li><a href="index.html#proceso"   class="navbar__link">Proceso</a></li>
+          <li><a href="index.html#contacto"  class="navbar__link">Contacto</a></li>
+          <li>
+            <a href="servicios-personal.html" class="navbar__link">Servicios Personal</a>
+          </li>
+          <li>
+            <a href="dpia.html" class="navbar__link navbar__link--active">DPIA Detalle</a>
+          </li>
+        </ul>
+
+        <button
+          class="navbar__toggle"
+          id="navToggle"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          aria-controls="navMenu"
+        >
+          <span></span><span></span><span></span>
+        </button>
+
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===== PAGE HERO ===== -->
+    <section
+      class="page-hero"
+      style="background:linear-gradient(135deg,#1a4a35 0%,#2e5d4b 100%);"
+      aria-labelledby="dpiaPageTitle"
+    >
+      <div class="container">
+        <span class="tag" style="background:rgba(255,255,255,.15);color:white;border:1px solid rgba(255,255,255,.3);">
+          DPIA
+        </span>
+        <h1 class="page-hero__title" id="dpiaPageTitle">
+          Evaluación de Impacto en la<br>Protección de Datos
+        </h1>
+        <p class="page-hero__subtitle">
+          Cumple con el RGPD y la LOPDGDD. Identificamos riesgos, definimos
+          salvaguardas y documentamos el proceso completo para tu organización.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== BREADCRUMB ===== -->
+    <nav class="breadcrumb" aria-label="Ruta de navegación">
+      <div class="container">
+        <ol>
+          <li><a href="index.html">Inicio</a></li>
+          <li aria-current="page">DPIA</li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- ===== QUÉ ES UNA DPIA ===== -->
+    <section class="section" id="que-es" aria-labelledby="queEsTitle">
+      <div class="container">
+        <span class="tag tag--dpia">Marco normativo</span>
+        <h2 class="section-title" id="queEsTitle">¿Qué es una DPIA?</h2>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:start;" class="two-col-grid">
+          <div>
+            <p style="margin-bottom:1.25rem; color:var(--color-muted); line-height:1.75;">
+              Una <strong style="color:var(--color-primary);">Evaluación de Impacto en la Protección de Datos</strong>
+              (DPIA, por sus siglas en inglés: Data Protection Impact Assessment)
+              es un proceso sistemático que permite identificar y minimizar los
+              riesgos que un tratamiento de datos personales puede suponer para
+              los derechos y libertades de las personas físicas.
+            </p>
+            <p style="margin-bottom:1.25rem; color:var(--color-muted); line-height:1.75;">
+              El artículo 35 del <strong style="color:var(--color-primary);">Reglamento General de Protección de
+              Datos (RGPD)</strong> obliga a realizarla cuando un tipo de tratamiento
+              conlleve probablemente un alto riesgo para los derechos y libertades
+              de las personas físicas.
+            </p>
+            <p style="color:var(--color-muted); line-height:1.75;">
+              La DPIA no es un simple formulario; es una herramienta de gestión
+              del riesgo que, bien ejecutada, protege tanto a los interesados
+              como a la propia organización responsable del tratamiento.
+            </p>
+          </div>
+
+          <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:1.75rem;">
+            <h3 style="color:var(--color-dpia); font-size:1rem; font-weight:700; margin-bottom:1rem;">
+              📋 Elementos clave de una DPIA
+            </h3>
+            <ul style="display:flex; flex-direction:column; gap:.75rem; list-style:none;">
+              <li style="display:flex; gap:.75rem; font-size:.9rem; color:var(--color-text);">
+                <span style="color:var(--color-dpia); font-weight:700; flex-shrink:0;">01.</span>
+                Descripción sistemática de las operaciones de tratamiento
+              </li>
+              <li style="display:flex; gap:.75rem; font-size:.9rem; color:var(--color-text);">
+                <span style="color:var(--color-dpia); font-weight:700; flex-shrink:0;">02.</span>
+                Evaluación de la necesidad y proporcionalidad del tratamiento
+              </li>
+              <li style="display:flex; gap:.75rem; font-size:.9rem; color:var(--color-text);">
+                <span style="color:var(--color-dpia); font-weight:700; flex-shrink:0;">03.</span>
+                Gestión de los riesgos para los derechos y libertades
+              </li>
+              <li style="display:flex; gap:.75rem; font-size:.9rem; color:var(--color-text);">
+                <span style="color:var(--color-dpia); font-weight:700; flex-shrink:0;">04.</span>
+                Medidas para abordar los riesgos identificados
+              </li>
+              <li style="display:flex; gap:.75rem; font-size:.9rem; color:var(--color-text);">
+                <span style="color:var(--color-dpia); font-weight:700; flex-shrink:0;">05.</span>
+                Consulta al Delegado de Protección de Datos (DPD), si existe
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== CUÁNDO ES OBLIGATORIA ===== -->
+    <section class="section section--gray" id="cuando" aria-labelledby="cuandoTitle">
+      <div class="container">
+        <span class="tag tag--dpia">Obligatoriedad</span>
+        <h2 class="section-title" id="cuandoTitle">¿Cuándo es obligatoria una DPIA?</h2>
+        <p class="section-subtitle">
+          El RGPD (art. 35) exige realizarla especialmente en los supuestos de
+          alto riesgo. La AEPD también ha publicado listas de tratamientos que
+          requieren DPIA en España.
+        </p>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.25rem;">
+
+          <div style="background:white; border:1px solid var(--color-border); border-radius:10px; padding:1.5rem; border-top:3px solid var(--color-dpia);">
+            <div style="font-size:1.5rem; margin-bottom:.75rem;" aria-hidden="true">🔬</div>
+            <h3 style="font-size:.95rem; font-weight:700; color:var(--color-primary); margin-bottom:.5rem;">
+              Evaluación o puntuación sistemática
+            </h3>
+            <p style="font-size:.85rem; color:var(--color-muted);">
+              Perfilado, scoring crediticio, análisis de comportamiento, predicciones
+              con efectos jurídicos o significativos sobre personas.
+            </p>
+          </div>
+
+          <div style="background:white; border:1px solid var(--color-border); border-radius:10px; padding:1.5rem; border-top:3px solid var(--color-dpia);">
+            <div style="font-size:1.5rem; margin-bottom:.75rem;" aria-hidden="true">⚡</div>
+            <h3 style="font-size:.95rem; font-weight:700; color:var(--color-primary); margin-bottom:.5rem;">
+              Decisiones automatizadas con efectos jurídicos
+            </h3>
+            <p style="font-size:.85rem; color:var(--color-muted);">
+              Tratamientos automatizados que produzcan decisiones con efectos
+              jurídicos o similares sobre personas.
+            </p>
+          </div>
+
+          <div style="background:white; border:1px solid var(--color-border); border-radius:10px; padding:1.5rem; border-top:3px solid var(--color-dpia);">
+            <div style="font-size:1.5rem; margin-bottom:.75rem;" aria-hidden="true">🗺️</div>
+            <h3 style="font-size:.95rem; font-weight:700; color:var(--color-primary); margin-bottom:.5rem;">
+              Vigilancia sistemática a gran escala
+            </h3>
+            <p style="font-size:.85rem; color:var(--color-muted);">
+              Observación, monitoreo o control de zonas de acceso público,
+              incluida la recogida de datos a través de redes.
+            </p>
+          </div>
+
+          <div style="background:white; border:1px solid var(--color-border); border-radius:10px; padding:1.5rem; border-top:3px solid var(--color-dpia);">
+            <div style="font-size:1.5rem; margin-bottom:.75rem;" aria-hidden="true">🏥</div>
+            <h3 style="font-size:.95rem; font-weight:700; color:var(--color-primary); margin-bottom:.5rem;">
+              Datos especialmente sensibles a gran escala
+            </h3>
+            <p style="font-size:.85rem; color:var(--color-muted);">
+              Tratamiento a gran escala de categorías especiales (salud, origen
+              racial, creencias, etc.) o datos de condenas penales.
+            </p>
+          </div>
+
+          <div style="background:white; border:1px solid var(--color-border); border-radius:10px; padding:1.5rem; border-top:3px solid var(--color-dpia);">
+            <div style="font-size:1.5rem; margin-bottom:.75rem;" aria-hidden="true">🔗</div>
+            <h3 style="font-size:.95rem; font-weight:700; color:var(--color-primary); margin-bottom:.5rem;">
+              Combinación o cotejo de datos
+            </h3>
+            <p style="font-size:.85rem; color:var(--color-muted);">
+              Cruce de datos procedentes de distintas fuentes más allá de las
+              expectativas razonables del interesado.
+            </p>
+          </div>
+
+          <div style="background:white; border:1px solid var(--color-border); border-radius:10px; padding:1.5rem; border-top:3px solid var(--color-dpia);">
+            <div style="font-size:1.5rem; margin-bottom:.75rem;" aria-hidden="true">👶</div>
+            <h3 style="font-size:.95rem; font-weight:700; color:var(--color-primary); margin-bottom:.5rem;">
+              Datos de personas vulnerables
+            </h3>
+            <p style="font-size:.85rem; color:var(--color-muted);">
+              Tratamiento de datos de niños, empleados, pacientes u otros colectivos
+              con desequilibrio de poder respecto al responsable.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROCESO DPIA ===== -->
+    <section class="dpia-section" id="proceso" aria-labelledby="procesoDPIATitle">
+      <div class="container">
+        <span class="tag tag--dpia">Metodología</span>
+        <h2 class="section-title" id="procesoDPIATitle">Nuestro proceso DPIA</h2>
+        <p class="section-subtitle">
+          Una metodología probada que combina el rigor normativo con un enfoque
+          práctico y orientado a la organización.
+        </p>
+
+        <div class="dpia__layout">
+
+          <div class="dpia__content">
+            <div class="dpia__feature-list">
+
+              <div class="dpia__feature">
+                <div class="dpia__feature-icon" aria-hidden="true">📅</div>
+                <div class="dpia__feature-text">
+                  <strong>Reunión de inicio (kickoff)</strong>
+                  <p>Presentamos la metodología, recopilamos información del tratamiento y establecemos el equipo de trabajo y el calendario.</p>
+                </div>
+              </div>
+
+              <div class="dpia__feature">
+                <div class="dpia__feature-icon" aria-hidden="true">🗂️</div>
+                <div class="dpia__feature-text">
+                  <strong>Inventario de flujos de datos</strong>
+                  <p>Mapeamos todos los flujos de información: origen, destino, formato, transferencias internacionales y encargados de tratamiento.</p>
+                </div>
+              </div>
+
+              <div class="dpia__feature">
+                <div class="dpia__feature-icon" aria-hidden="true">📊</div>
+                <div class="dpia__feature-text">
+                  <strong>Análisis de riesgo estructurado</strong>
+                  <p>Aplicamos una matriz de riesgo (probabilidad × impacto) para cada escenario identificado, usando metodologías alineadas con la AEPD y la CNIL.</p>
+                </div>
+              </div>
+
+              <div class="dpia__feature">
+                <div class="dpia__feature-icon" aria-hidden="true">✅</div>
+                <div class="dpia__feature-text">
+                  <strong>Plan de tratamiento del riesgo</strong>
+                  <p>Para cada riesgo inaceptable definimos medidas concretas, responsables, plazos y cómo verificar su implantación.</p>
+                </div>
+              </div>
+
+            </div>
+
+            <a href="index.html#contacto" class="btn btn--dpia" style="background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);">
+              Solicitar DPIA ahora →
+            </a>
+          </div>
+
+          <div class="dpia__visual" aria-label="Checklist de la DPIA">
+            <h3 style="color:rgba(255,255,255,.9); font-size:.85rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; margin-bottom:1.25rem;">
+              Checklist del proceso
+            </h3>
+            <div class="dpia-checklist">
+              <div class="dpia-checklist__item dpia-checklist__item--done">
+                <div class="dpia-checklist__check" aria-hidden="true">✓</div>
+                <div class="dpia-checklist__text">
+                  <strong>Descripción del tratamiento</strong>
+                  <p>Finalidad, tipos de datos, categorías de interesados, destinatarios y plazos de conservación</p>
+                </div>
+              </div>
+              <div class="dpia-checklist__item dpia-checklist__item--done">
+                <div class="dpia-checklist__check" aria-hidden="true">✓</div>
+                <div class="dpia-checklist__text">
+                  <strong>Evaluación de necesidad y proporcionalidad</strong>
+                  <p>Base jurídica, limitación de la finalidad, minimización de datos, exactitud, derechos de los interesados</p>
+                </div>
+              </div>
+              <div class="dpia-checklist__item">
+                <div class="dpia-checklist__check" aria-hidden="true"></div>
+                <div class="dpia-checklist__text">
+                  <strong>Identificación de amenazas y riesgos</strong>
+                  <p>Acceso ilegítimo, modificación no deseada, desaparición de datos</p>
+                </div>
+              </div>
+              <div class="dpia-checklist__item">
+                <div class="dpia-checklist__check" aria-hidden="true"></div>
+                <div class="dpia-checklist__text">
+                  <strong>Medidas de mitigación</strong>
+                  <p>Controles técnicos y organizativos, cifrado, seudonimización, acceso con privilegios mínimos</p>
+                </div>
+              </div>
+              <div class="dpia-checklist__item">
+                <div class="dpia-checklist__check" aria-hidden="true"></div>
+                <div class="dpia-checklist__text">
+                  <strong>Consulta previa (si procede)</strong>
+                  <p>Comunicación a la autoridad de control cuando los riesgos residuales siguen siendo altos</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ANÁLISIS DE RIESGO ===== -->
+    <section class="section section--gray" aria-labelledby="riesgoTitle">
+      <div class="container">
+        <span class="tag tag--dpia">Gestión del riesgo</span>
+        <h2 class="section-title" id="riesgoTitle">Cómo evaluamos el riesgo</h2>
+        <p class="section-subtitle">
+          Utilizamos una matriz de riesgo bidimensional (probabilidad × impacto)
+          para determinar el nivel de riesgo de cada escenario identificado.
+        </p>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:start;" class="two-col-grid">
+
+          <div>
+            <h3 style="font-size:1rem; font-weight:700; color:var(--color-primary); margin-bottom:1rem;">
+              Escenarios de riesgo típicos
+            </h3>
+            <div class="timeline">
+              <div class="timeline__item">
+                <div class="timeline__dot" style="background:var(--color-dpia);">A</div>
+                <h4 class="timeline__title">Acceso ilegítimo a datos personales</h4>
+                <p class="timeline__desc">
+                  Brechas de seguridad, accesos no autorizados internos o externos,
+                  robo de credenciales y exfiltración de información.
+                </p>
+              </div>
+              <div class="timeline__item">
+                <div class="timeline__dot" style="background:var(--color-dpia);">M</div>
+                <h4 class="timeline__title">Modificación no deseada de datos</h4>
+                <p class="timeline__desc">
+                  Alteración deliberada o accidental de registros que compromete la
+                  exactitud e integridad de la información personal.
+                </p>
+              </div>
+              <div class="timeline__item">
+                <div class="timeline__dot" style="background:var(--color-dpia);">D</div>
+                <h4 class="timeline__title">Desaparición o destrucción de datos</h4>
+                <p class="timeline__desc">
+                  Pérdida de disponibilidad por fallos técnicos, ataques ransomware,
+                  eliminación accidental o desastres naturales.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 style="font-size:1rem; font-weight:700; color:var(--color-primary); margin-bottom:1rem;">
+              Matriz de riesgo (Probabilidad × Impacto)
+            </h3>
+            <div style="overflow-x:auto;">
+              <table style="width:100%; border-collapse:collapse; font-size:.82rem;">
+                <thead>
+                  <tr>
+                    <th style="padding:.6rem .75rem; background:var(--color-primary); color:white; text-align:left; border-radius:6px 0 0 0;">
+                      Prob. \ Impacto
+                    </th>
+                    <th style="padding:.6rem .75rem; background:var(--color-primary); color:white; text-align:center;">Bajo</th>
+                    <th style="padding:.6rem .75rem; background:var(--color-primary); color:white; text-align:center;">Medio</th>
+                    <th style="padding:.6rem .75rem; background:var(--color-primary); color:white; text-align:center; border-radius:0 6px 0 0;">Alto</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="padding:.6rem .75rem; font-weight:600; background:#f8fafc; border:1px solid var(--color-border);">Alta</td>
+                    <td style="padding:.6rem .75rem; text-align:center; background:#fef3c7; border:1px solid var(--color-border); font-weight:700; color:#78350f;">Medio</td>
+                    <td style="padding:.6rem .75rem; text-align:center; background:#fee2e2; border:1px solid var(--color-border); font-weight:700; color:#7f1d1d;">Alto</td>
+                    <td style="padding:.6rem .75rem; text-align:center; background:#fee2e2; border:1px solid var(--color-border); font-weight:700; color:#7f1d1d;">Crítico</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:.6rem .75rem; font-weight:600; background:#f8fafc; border:1px solid var(--color-border);">Media</td>
+                    <td style="padding:.6rem .75rem; text-align:center; background:#d1fae5; border:1px solid var(--color-border); font-weight:700; color:#064e3b;">Bajo</td>
+                    <td style="padding:.6rem .75rem; text-align:center; background:#fef3c7; border:1px solid var(--color-border); font-weight:700; color:#78350f;">Medio</td>
+                    <td style="padding:.6rem .75rem; text-align:center; background:#fee2e2; border:1px solid var(--color-border); font-weight:700; color:#7f1d1d;">Alto</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:.6rem .75rem; font-weight:600; background:#f8fafc; border:1px solid var(--color-border);">Baja</td>
+                    <td style="padding:.6rem .75rem; text-align:center; background:#d1fae5; border:1px solid var(--color-border); font-weight:700; color:#064e3b;">Muy bajo</td>
+                    <td style="padding:.6rem .75rem; text-align:center; background:#d1fae5; border:1px solid var(--color-border); font-weight:700; color:#064e3b;">Bajo</td>
+                    <td style="padding:.6rem .75rem; text-align:center; background:#fef3c7; border:1px solid var(--color-border); font-weight:700; color:#78350f;">Medio</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="font-size:.8rem; color:var(--color-muted); margin-top:.75rem;">
+              Los riesgos <strong>Alto</strong> y <strong>Crítico</strong> requieren
+              medidas de mitigación obligatorias antes de iniciar el tratamiento.
+              Si el riesgo residual sigue siendo alto, se debe consultar a la
+              autoridad de control.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRECIOS DPIA ===== -->
+    <section class="section" id="precios" aria-labelledby="preciosDPIATitle">
+      <div class="container">
+        <span class="tag tag--dpia">Tarifas</span>
+        <h2 class="section-title" id="preciosDPIATitle">Precios DPIA</h2>
+        <p class="section-subtitle">
+          Precios transparentes en función de la complejidad del tratamiento
+          y el tamaño de la organización.
+        </p>
+
+        <div class="pricing__grid">
+
+          <div class="pricing-card">
+            <h3 class="pricing-card__name">DPIA Básica</h3>
+            <p class="pricing-card__desc">Para un tratamiento de complejidad reducida.</p>
+            <div class="pricing-card__price"><sub>desde </sub>490€</div>
+            <ul class="pricing-card__features">
+              <li class="pricing-card__feature">1 tratamiento de datos</li>
+              <li class="pricing-card__feature">Descripción y análisis de necesidad</li>
+              <li class="pricing-card__feature">Identificación de riesgos</li>
+              <li class="pricing-card__feature">Informe DPIA en PDF</li>
+              <li class="pricing-card__feature--no">Plan de mitigación detallado</li>
+              <li class="pricing-card__feature--no">Seguimiento de implantación</li>
+            </ul>
+            <a href="index.html#contacto" class="btn btn--ghost" style="width:100%;justify-content:center;">
+              Solicitar
+            </a>
+          </div>
+
+          <div class="pricing-card pricing-card--featured">
+            <div class="pricing-card__badge" style="background:var(--color-dpia);">Recomendada</div>
+            <h3 class="pricing-card__name">DPIA Completa</h3>
+            <p class="pricing-card__desc">Solución integral para la mayoría de organizaciones.</p>
+            <div class="pricing-card__price"><sub>desde </sub>990€</div>
+            <ul class="pricing-card__features">
+              <li class="pricing-card__feature">Hasta 5 tratamientos de datos</li>
+              <li class="pricing-card__feature">Análisis completo de necesidad</li>
+              <li class="pricing-card__feature">Matriz de riesgos detallada</li>
+              <li class="pricing-card__feature">Plan de mitigación con responsables</li>
+              <li class="pricing-card__feature">Informe DPIA completo</li>
+              <li class="pricing-card__feature">1 sesión de seguimiento (3 meses)</li>
+            </ul>
+            <a href="index.html#contacto" class="btn btn--dpia" style="width:100%;justify-content:center;">
+              Solicitar
+            </a>
+          </div>
+
+          <div class="pricing-card">
+            <h3 class="pricing-card__name">DPIA Empresarial</h3>
+            <p class="pricing-card__desc">Para organizaciones con múltiples tratamientos complejos.</p>
+            <div class="pricing-card__price">A medida</div>
+            <ul class="pricing-card__features">
+              <li class="pricing-card__feature">Tratamientos ilimitados</li>
+              <li class="pricing-card__feature">Integración con el registro de actividades</li>
+              <li class="pricing-card__feature">Coordinación con DPD interno</li>
+              <li class="pricing-card__feature">Revisión anual incluida</li>
+              <li class="pricing-card__feature">Formación al equipo interno</li>
+              <li class="pricing-card__feature">Soporte prioritario 12 meses</li>
+            </ul>
+            <a href="index.html#contacto" class="btn btn--ghost" style="width:100%;justify-content:center;">
+              Solicitar presupuesto
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="section section--gray" id="faq" aria-labelledby="faqTitle">
+      <div class="container">
+        <span class="tag tag--dpia">FAQ</span>
+        <h2 class="section-title" id="faqTitle">Preguntas frecuentes</h2>
+        <p class="section-subtitle">
+          Las dudas más habituales sobre las DPIAs respondidas de forma clara y concisa.
+        </p>
+
+        <div class="accordion" role="list" style="max-width:780px;">
+
+          <div class="accordion__item" role="listitem">
+            <button class="accordion__btn" aria-expanded="false">
+              ¿Cuánto tiempo tarda en realizarse una DPIA?
+              <span class="accordion__icon" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion__body">
+              El tiempo depende de la complejidad del tratamiento y de la
+              disponibilidad de información por parte de la organización. Una
+              DPIA básica puede completarse en 2–3 semanas, mientras que una
+              DPIA completa o empresarial puede requerir entre 4 y 8 semanas.
+            </div>
+          </div>
+
+          <div class="accordion__item" role="listitem">
+            <button class="accordion__btn" aria-expanded="false">
+              ¿Qué ocurre si no realizamos la DPIA y es obligatoria?
+              <span class="accordion__icon" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion__body">
+              La omisión de una DPIA cuando es preceptiva constituye una
+              infracción del RGPD. La AEPD puede imponer multas de hasta
+              10 millones de euros o el 2 % del volumen de negocio global
+              anual, la cantidad que sea mayor. Además, puede dañar
+              significativamente la reputación de la organización.
+            </div>
+          </div>
+
+          <div class="accordion__item" role="listitem">
+            <button class="accordion__btn" aria-expanded="false">
+              ¿Necesitamos un Delegado de Protección de Datos (DPD) para hacer la DPIA?
+              <span class="accordion__icon" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion__body">
+              No es estrictamente necesario tener un DPD designado para realizar
+              una DPIA. Sin embargo, si la organización tiene un DPD, el RGPD
+              exige que sea consultado durante el proceso. Si no disponéis de
+              DPD, podemos asumir ese rol como servicio complementario o
+              simplemente ejecutar la DPIA dentro del mandato del responsable.
+            </div>
+          </div>
+
+          <div class="accordion__item" role="listitem">
+            <button class="accordion__btn" aria-expanded="false">
+              ¿Hay que publicar la DPIA o solo conservarla internamente?
+              <span class="accordion__icon" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion__body">
+              El RGPD no obliga a publicar la DPIA. Sí exige que sea documentada
+              y que esté disponible para la autoridad de control cuando la
+              solicite. No obstante, es una buena práctica publicar al menos
+              un resumen ejecutivo para demostrar transparencia frente a los
+              interesados.
+            </div>
+          </div>
+
+          <div class="accordion__item" role="listitem">
+            <button class="accordion__btn" aria-expanded="false">
+              ¿Cuándo hay que actualizar la DPIA?
+              <span class="accordion__icon" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion__body">
+              La DPIA debe revisarse cuando se produzca un cambio en el
+              tratamiento que pueda conllevar un nuevo riesgo: nuevos tipos de
+              datos, nuevos destinatarios, cambio de finalidad, nueva tecnología
+              implicada, etc. También es recomendable una revisión periódica
+              (al menos anual) para verificar que los controles siguen siendo
+              eficaces y que el contexto no ha variado significativamente.
+            </div>
+          </div>
+
+          <div class="accordion__item" role="listitem">
+            <button class="accordion__btn" aria-expanded="false">
+              ¿En qué se diferencia la DPIA del Registro de Actividades de Tratamiento (RAT)?
+              <span class="accordion__icon" aria-hidden="true">▾</span>
+            </button>
+            <div class="accordion__body">
+              El RAT (art. 30 RGPD) es un inventario de todos los tratamientos
+              que realiza la organización y se exige a casi todos los responsables.
+              La DPIA es un análisis en profundidad que se aplica únicamente a
+              los tratamientos de alto riesgo. El RAT es el punto de partida
+              para identificar qué tratamientos necesitan DPIA.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="cta-section" style="background:var(--color-dpia);" aria-labelledby="ctaDPIATitle">
+      <div class="container">
+        <h2 class="section-title" id="ctaDPIATitle">
+          ¿Tu organización necesita una DPIA?
+        </h2>
+        <p class="section-subtitle">
+          Cuéntanos tu caso y te diremos si es obligatoria y cuál es el
+          alcance recomendado. Primera consulta sin coste.
+        </p>
+        <div class="cta-section__actions">
+          <a href="index.html#contacto" class="btn btn--outline">Consulta gratuita</a>
+          <a href="servicios-personal.html" class="btn btn--primary" style="background:white;color:var(--color-dpia);">
+            Ver Servicios Personal
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand-name">LS Services</div>
+          <p class="footer__brand-desc">
+            Servicios profesionales de asesoría personal y protección de datos.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer__col-title">Servicios Personal</h4>
+          <ul class="footer__links">
+            <li><a href="servicios-personal.html#gestion-documental"      class="footer__link">Gestión Documental</a></li>
+            <li><a href="servicios-personal.html#orientacion-profesional"  class="footer__link">Orientación Profesional</a></li>
+            <li><a href="servicios-personal.html#asesoria-legal"           class="footer__link">Asesoría Legal</a></li>
+            <li><a href="servicios-personal.html#planificacion-financiera" class="footer__link">Planificación Financiera</a></li>
+            <li><a href="servicios-personal.html#privacidad-digital"       class="footer__link">Privacidad Digital</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">DPIA</h4>
+          <ul class="footer__links">
+            <li><a href="#que-es"  class="footer__link">¿Qué es una DPIA?</a></li>
+            <li><a href="#cuando"  class="footer__link">¿Cuándo es obligatoria?</a></li>
+            <li><a href="#proceso" class="footer__link">Proceso</a></li>
+            <li><a href="#precios" class="footer__link">Precios</a></li>
+            <li><a href="#faq"     class="footer__link">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">Empresa</h4>
+          <ul class="footer__links">
+            <li><a href="index.html"          class="footer__link">Inicio</a></li>
+            <li><a href="index.html#contacto" class="footer__link">Contacto</a></li>
+            <li><a href="#"                   class="footer__link">Política de privacidad</a></li>
+            <li><a href="#"                   class="footer__link">Aviso legal</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© <span id="currentYear"></span> LS Services. Todos los derechos reservados.</span>
+        <span>Cumplimiento RGPD · LOPDGDD</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

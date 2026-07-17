@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Servicios de asesoría personal: gestión documental, orientación profesional, asesoría legal, planificación financiera y privacidad digital." />
+  <title>Servicios Personal — Landing Services</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar" role="banner">
+    <div class="container">
+      <nav class="navbar__inner" aria-label="Navegación principal">
+
+        <a href="index.html" class="navbar__logo" aria-label="Inicio">
+          LS <span>Services</span>
+        </a>
+
+        <ul class="navbar__menu" id="navMenu" role="list">
+          <li><a href="index.html#servicios" class="navbar__link">Servicios</a></li>
+          <li><a href="index.html#dpia"      class="navbar__link">DPIA</a></li>
+          <li><a href="index.html#proceso"   class="navbar__link">Proceso</a></li>
+          <li><a href="index.html#contacto"  class="navbar__link">Contacto</a></li>
+          <li>
+            <a href="servicios-personal.html" class="navbar__link navbar__link--active">
+              Servicios Personal
+            </a>
+          </li>
+          <li><a href="dpia.html" class="navbar__link">DPIA Detalle</a></li>
+        </ul>
+
+        <button
+          class="navbar__toggle"
+          id="navToggle"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          aria-controls="navMenu"
+        >
+          <span></span><span></span><span></span>
+        </button>
+
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===== PAGE HERO ===== -->
+    <section class="page-hero" aria-labelledby="pageTitle">
+      <div class="container">
+        <span class="tag" style="background:rgba(255,255,255,.15);color:white;border:1px solid rgba(255,255,255,.3);">
+          Servicios Personal
+        </span>
+        <h1 class="page-hero__title" id="pageTitle">
+          Asesoría personalizada para cada etapa de tu vida
+        </h1>
+        <p class="page-hero__subtitle">
+          Desde la organización de tus documentos hasta la planificación de tu
+          futuro financiero, te acompañamos en todo el proceso.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== BREADCRUMB ===== -->
+    <nav class="breadcrumb" aria-label="Ruta de navegación">
+      <div class="container">
+        <ol>
+          <li><a href="index.html">Inicio</a></li>
+          <li aria-current="page">Servicios Personal</li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- ===== INTRO ===== -->
+    <section class="section" aria-labelledby="introTitle">
+      <div class="container">
+        <span class="tag tag--primary">Nuestro enfoque</span>
+        <h2 class="section-title" id="introTitle">¿Qué son los Servicios Personal?</h2>
+        <p class="section-subtitle" style="max-width:700px;">
+          Los Servicios Personal son un conjunto de prestaciones diseñadas para
+          ayudar a las personas a gestionar aspectos clave de su vida diaria:
+          documentación, carrera profesional, orientación legal, finanzas e
+          identidad digital. Trabajamos de forma personalizada, adaptándonos a
+          las circunstancias únicas de cada cliente.
+        </p>
+
+        <div class="service-detail-grid">
+
+          <!-- Gestión Documental -->
+          <article class="service-detail-card" id="gestion-documental">
+            <div class="service-detail-card__header">
+              <div class="service-detail-card__icon" aria-hidden="true">📋</div>
+              <div>
+                <h3 class="service-detail-card__title">Gestión Documental</h3>
+                <div class="service-detail-card__category">Organización y custodia</div>
+              </div>
+            </div>
+            <div class="service-detail-card__body">
+              <p class="service-detail-card__desc">
+                Organizamos, digitalizamos y gestionamos tus documentos personales
+                de forma segura. Desde contratos y facturas hasta expedientes
+                académicos o de salud.
+              </p>
+              <ul class="service-detail-card__features">
+                <li class="service-detail-card__feature">Clasificación y archivo digital</li>
+                <li class="service-detail-card__feature">Digitalización de documentos físicos</li>
+                <li class="service-detail-card__feature">Alertas de vencimiento y renovación</li>
+                <li class="service-detail-card__feature">Acceso seguro en la nube</li>
+                <li class="service-detail-card__feature">Destrucción certificada de originales</li>
+              </ul>
+              <a href="index.html#contacto" class="btn btn--primary">Solicitar servicio</a>
+            </div>
+          </article>
+
+          <!-- Orientación Profesional -->
+          <article class="service-detail-card" id="orientacion-profesional">
+            <div class="service-detail-card__header">
+              <div class="service-detail-card__icon" aria-hidden="true">🎓</div>
+              <div>
+                <h3 class="service-detail-card__title">Orientación Profesional</h3>
+                <div class="service-detail-card__category">Carrera y empleo</div>
+              </div>
+            </div>
+            <div class="service-detail-card__body">
+              <p class="service-detail-card__desc">
+                Te ayudamos a definir tu camino profesional y a encontrar las
+                oportunidades que mejor encajan con tus habilidades y objetivos.
+              </p>
+              <ul class="service-detail-card__features">
+                <li class="service-detail-card__feature">Elaboración y optimización de currículum</li>
+                <li class="service-detail-card__feature">Preparación para entrevistas</li>
+                <li class="service-detail-card__feature">Estrategia de búsqueda de empleo</li>
+                <li class="service-detail-card__feature">Perfil en LinkedIn y redes profesionales</li>
+                <li class="service-detail-card__feature">Coaching de carrera</li>
+              </ul>
+              <a href="index.html#contacto" class="btn btn--primary">Solicitar servicio</a>
+            </div>
+          </article>
+
+          <!-- Asesoría Legal -->
+          <article class="service-detail-card" id="asesoria-legal">
+            <div class="service-detail-card__header">
+              <div class="service-detail-card__icon" aria-hidden="true">⚖️</div>
+              <div>
+                <h3 class="service-detail-card__title">Asesoría Legal Básica</h3>
+                <div class="service-detail-card__category">Trámites y derechos</div>
+              </div>
+            </div>
+            <div class="service-detail-card__body">
+              <p class="service-detail-card__desc">
+                Orientación clara sobre tus derechos y los procedimientos
+                administrativos y civiles más habituales, sin necesidad de
+                acudir directamente a un juzgado.
+              </p>
+              <ul class="service-detail-card__features">
+                <li class="service-detail-card__feature">Información sobre trámites administrativos</li>
+                <li class="service-detail-card__feature">Derechos del consumidor</li>
+                <li class="service-detail-card__feature">Revisión básica de contratos</li>
+                <li class="service-detail-card__feature">Orientación en herencias y sucesiones</li>
+                <li class="service-detail-card__feature">Derivación a abogado especialista si es necesario</li>
+              </ul>
+              <a href="index.html#contacto" class="btn btn--primary">Solicitar servicio</a>
+            </div>
+          </article>
+
+          <!-- Planificación Financiera -->
+          <article class="service-detail-card" id="planificacion-financiera">
+            <div class="service-detail-card__header">
+              <div class="service-detail-card__icon" aria-hidden="true">💰</div>
+              <div>
+                <h3 class="service-detail-card__title">Planificación Financiera</h3>
+                <div class="service-detail-card__category">Finanzas personales</div>
+              </div>
+            </div>
+            <div class="service-detail-card__body">
+              <p class="service-detail-card__desc">
+                Analizamos tu situación financiera actual y diseñamos un plan de
+                acción para alcanzar la estabilidad económica y tus metas a largo plazo.
+              </p>
+              <ul class="service-detail-card__features">
+                <li class="service-detail-card__feature">Diagnóstico de ingresos y gastos</li>
+                <li class="service-detail-card__feature">Plan de ahorro personalizado</li>
+                <li class="service-detail-card__feature">Estrategias para reducir deudas</li>
+                <li class="service-detail-card__feature">Introducción a la inversión responsable</li>
+                <li class="service-detail-card__feature">Planificación de la jubilación</li>
+              </ul>
+              <a href="index.html#contacto" class="btn btn--primary">Solicitar servicio</a>
+            </div>
+          </article>
+
+          <!-- Privacidad Digital -->
+          <article class="service-detail-card" id="privacidad-digital">
+            <div class="service-detail-card__header">
+              <div class="service-detail-card__icon" aria-hidden="true">🔒</div>
+              <div>
+                <h3 class="service-detail-card__title">Privacidad Digital</h3>
+                <div class="service-detail-card__category">Identidad y seguridad online</div>
+              </div>
+            </div>
+            <div class="service-detail-card__body">
+              <p class="service-detail-card__desc">
+                Auditamos tu huella digital y te proporcionamos recomendaciones
+                prácticas para proteger tu identidad, datos personales y reputación
+                en internet.
+              </p>
+              <ul class="service-detail-card__features">
+                <li class="service-detail-card__feature">Auditoría de huella digital</li>
+                <li class="service-detail-card__feature">Configuración de privacidad en RRSS</li>
+                <li class="service-detail-card__feature">Gestión de contraseñas seguras</li>
+                <li class="service-detail-card__feature">Detección de datos expuestos</li>
+                <li class="service-detail-card__feature">Guía de buenas prácticas digitales</li>
+              </ul>
+              <a href="index.html#contacto" class="btn btn--primary">Solicitar servicio</a>
+            </div>
+          </article>
+
+          <!-- Acompañamiento Continuo -->
+          <article class="service-detail-card" id="acompanamiento">
+            <div class="service-detail-card__header">
+              <div class="service-detail-card__icon" aria-hidden="true">📞</div>
+              <div>
+                <h3 class="service-detail-card__title">Acompañamiento Continuo</h3>
+                <div class="service-detail-card__category">Seguimiento mensual</div>
+              </div>
+            </div>
+            <div class="service-detail-card__body">
+              <p class="service-detail-card__desc">
+                Plan de seguimiento periódico con sesiones de revisión y ajuste
+                para garantizar el avance sostenido hacia tus objetivos en todos
+                los ámbitos.
+              </p>
+              <ul class="service-detail-card__features">
+                <li class="service-detail-card__feature">Sesiones mensuales de seguimiento</li>
+                <li class="service-detail-card__feature">Acceso por email y teléfono</li>
+                <li class="service-detail-card__feature">Revisión de metas y KPIs personales</li>
+                <li class="service-detail-card__feature">Ajuste del plan según evolución</li>
+                <li class="service-detail-card__feature">Informes de progreso trimestrales</li>
+              </ul>
+              <a href="index.html#contacto" class="btn btn--primary">Solicitar servicio</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROCESO ===== -->
+    <section class="section section--gray" aria-labelledby="procesoTitle">
+      <div class="container">
+        <span class="tag tag--primary">Metodología</span>
+        <h2 class="section-title" id="procesoTitle">Cómo prestamos los servicios</h2>
+        <p class="section-subtitle">
+          Un proceso estructurado para garantizar que cada servicio se adapta
+          a tu situación particular y genera el máximo valor.
+        </p>
+
+        <div class="timeline">
+          <div class="timeline__item">
+            <div class="timeline__dot">1</div>
+            <h3 class="timeline__title">Consulta inicial gratuita</h3>
+            <p class="timeline__desc">
+              Una sesión de 30 minutos donde entendemos tu situación, necesidades
+              y objetivos. Sin coste ni compromiso. Puedes hacerla por videollamada
+              o de forma presencial.
+            </p>
+          </div>
+          <div class="timeline__item">
+            <div class="timeline__dot">2</div>
+            <h3 class="timeline__title">Diagnóstico personalizado</h3>
+            <p class="timeline__desc">
+              En base a la consulta inicial, elaboramos un diagnóstico detallado
+              que identifica las áreas de mejora y las acciones prioritarias
+              para tu caso concreto.
+            </p>
+          </div>
+          <div class="timeline__item">
+            <div class="timeline__dot">3</div>
+            <h3 class="timeline__title">Propuesta y acuerdo</h3>
+            <p class="timeline__desc">
+              Te presentamos una propuesta clara con el alcance del servicio,
+              los entregables, plazos y precio. Solo comenzamos cuando estás
+              completamente de acuerdo.
+            </p>
+          </div>
+          <div class="timeline__item">
+            <div class="timeline__dot">4</div>
+            <h3 class="timeline__title">Prestación del servicio</h3>
+            <p class="timeline__desc">
+              Ejecutamos el servicio según lo acordado, manteniendo comunicación
+              constante contigo para que estés informado en todo momento del
+              avance y cualquier incidencia.
+            </p>
+          </div>
+          <div class="timeline__item">
+            <div class="timeline__dot">5</div>
+            <h3 class="timeline__title">Entrega y seguimiento</h3>
+            <p class="timeline__desc">
+              Entregamos los resultados y ofrecemos un período de seguimiento
+              para resolver dudas y asegurar que el servicio ha cumplido
+              con todas las expectativas.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRECIOS ===== -->
+    <section class="section" aria-labelledby="preciosTitle">
+      <div class="container">
+        <span class="tag tag--primary">Tarifas</span>
+        <h2 class="section-title" id="preciosTitle">Planes y precios</h2>
+        <p class="section-subtitle">
+          Elige el plan que mejor se adapta a tus necesidades. Todos incluyen
+          consulta inicial gratuita y sin permanencia.
+        </p>
+
+        <div class="pricing__grid">
+
+          <div class="pricing-card">
+            <h3 class="pricing-card__name">Básico</h3>
+            <p class="pricing-card__desc">Para gestiones puntuales y consultas específicas.</p>
+            <div class="pricing-card__price"><sub>desde </sub>49€</div>
+            <ul class="pricing-card__features">
+              <li class="pricing-card__feature">Consulta inicial gratuita</li>
+              <li class="pricing-card__feature">1 servicio a elegir</li>
+              <li class="pricing-card__feature">Soporte por email</li>
+              <li class="pricing-card__feature--no">Sesiones de seguimiento</li>
+              <li class="pricing-card__feature--no">Informe de progreso</li>
+            </ul>
+            <a href="index.html#contacto" class="btn btn--ghost" style="width:100%;justify-content:center;">
+              Solicitar
+            </a>
+          </div>
+
+          <div class="pricing-card pricing-card--featured">
+            <div class="pricing-card__badge">Más popular</div>
+            <h3 class="pricing-card__name">Completo</h3>
+            <p class="pricing-card__desc">Cobertura integral con seguimiento mensual.</p>
+            <div class="pricing-card__price"><sub>desde </sub>149€<sub style="font-size:.8rem">/mes</sub></div>
+            <ul class="pricing-card__features">
+              <li class="pricing-card__feature">Consulta inicial gratuita</li>
+              <li class="pricing-card__feature">Todos los servicios incluidos</li>
+              <li class="pricing-card__feature">Soporte prioritario</li>
+              <li class="pricing-card__feature">2 sesiones de seguimiento/mes</li>
+              <li class="pricing-card__feature">Informe de progreso mensual</li>
+            </ul>
+            <a href="index.html#contacto" class="btn btn--primary" style="width:100%;justify-content:center;">
+              Solicitar
+            </a>
+          </div>
+
+          <div class="pricing-card">
+            <h3 class="pricing-card__name">Empresas</h3>
+            <p class="pricing-card__desc">Para organizaciones que quieren cuidar a sus empleados.</p>
+            <div class="pricing-card__price">A medida</div>
+            <ul class="pricing-card__features">
+              <li class="pricing-card__feature">Programa personalizado</li>
+              <li class="pricing-card__feature">Cobertura para varios empleados</li>
+              <li class="pricing-card__feature">Gestor de cuenta dedicado</li>
+              <li class="pricing-card__feature">Talleres y formación in-company</li>
+              <li class="pricing-card__feature">Reporting ejecutivo</li>
+            </ul>
+            <a href="index.html#contacto" class="btn btn--ghost" style="width:100%;justify-content:center;">
+              Solicitar presupuesto
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="cta-section" aria-labelledby="ctaSPTitle">
+      <div class="container">
+        <h2 class="section-title" id="ctaSPTitle">
+          Empieza con una consulta gratuita
+        </h2>
+        <p class="section-subtitle">
+          Sin compromiso. Sin coste. Solo una conversación para conocer cómo
+          podemos ayudarte.
+        </p>
+        <div class="cta-section__actions">
+          <a href="index.html#contacto" class="btn btn--outline">Solicitar consulta</a>
+          <a href="dpia.html" class="btn btn--primary" style="background:white;color:var(--color-secondary);">
+            Explorar DPIA
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand-name">LS Services</div>
+          <p class="footer__brand-desc">
+            Servicios profesionales de asesoría personal y protección de datos.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer__col-title">Servicios Personal</h4>
+          <ul class="footer__links">
+            <li><a href="#gestion-documental"      class="footer__link">Gestión Documental</a></li>
+            <li><a href="#orientacion-profesional"  class="footer__link">Orientación Profesional</a></li>
+            <li><a href="#asesoria-legal"           class="footer__link">Asesoría Legal</a></li>
+            <li><a href="#planificacion-financiera" class="footer__link">Planificación Financiera</a></li>
+            <li><a href="#privacidad-digital"       class="footer__link">Privacidad Digital</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">DPIA</h4>
+          <ul class="footer__links">
+            <li><a href="dpia.html#que-es"  class="footer__link">¿Qué es una DPIA?</a></li>
+            <li><a href="dpia.html#proceso" class="footer__link">Proceso</a></li>
+            <li><a href="dpia.html#precios" class="footer__link">Precios</a></li>
+            <li><a href="dpia.html#faq"     class="footer__link">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">Empresa</h4>
+          <ul class="footer__links">
+            <li><a href="index.html"          class="footer__link">Inicio</a></li>
+            <li><a href="index.html#contacto" class="footer__link">Contacto</a></li>
+            <li><a href="#"                   class="footer__link">Política de privacidad</a></li>
+            <li><a href="#"                   class="footer__link">Aviso legal</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© <span id="currentYear"></span> LS Services. Todos los derechos reservados.</span>
+        <span>Hecho con ♥ para proteger tu privacidad</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
