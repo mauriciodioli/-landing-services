@@ -18,3 +18,5 @@
 
 /* Hamburger icon: stack the three bars vertically. */
 .menu-trigger{position:relative;padding-right:66px}.menu-trigger i{position:absolute;right:30px;margin:0}.menu-trigger i:nth-of-type(1){transform:translateY(-6px)}.menu-trigger i:nth-of-type(2){transform:translateY(0)}.menu-trigger i:nth-of-type(3){transform:translateY(6px)}@media(max-width:680px){.menu-trigger{padding-right:0}.menu-trigger i{right:18px}}
+
+.whatsapp-float{overflow:hidden;background:#fff;padding:2px}.whatsapp-float img{width:100%;height:100%;object-fit:cover;border-radius:50%}
