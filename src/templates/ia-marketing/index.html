@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Inmersión práctica en inteligencia artificial aplicada al marketing, los procesos y las decisiones de negocio.">
+  <meta name="theme-color" content="#070a13">
+  <title>Inmersión IA | Marketing y negocios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='ia-marketing/styles.css') }}">
+</head>
+<body>
+  <header>
+    <a class="logo" href="#inicio"><span>MD</span><strong>Mauricio Dioli<small>INMERSIÓN IA</small></strong></a>
+    <a class="header-link" href="#registro">Quiero participar</a>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-collage" aria-hidden="true"></div>
+      <div class="glow glow-one"></div><div class="glow glow-two"></div>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <div class="tag">INMERSIÓN PRÁCTICA · PARA TODO PÚBLICO</div>
+          <h1>Usá la inteligencia artificial para hacer crecer tu <span>marketing y tu negocio.</span></h1>
+          <p>Aprendé a crear contenido, analizar información, conocer mejor a tus clientes y automatizar tareas. Sin tecnicismos y con ejercicios aplicados a situaciones reales.</p>
+          <ul>
+            <li>Clases claras y orientadas a resultados</li>
+            <li>No necesitás experiencia previa</li>
+            <li>Te llevás un plan aplicable a tu actividad</li>
+          </ul>
+          <a class="button" href="#registro">Reservar mi lugar <b>→</b></a>
+        </div>
+
+        <div class="hero-photo">
+          <img src="{{ url_for('static', filename='ia-marketing/assets/mauricio-dioli-profesional-v3.png') }}" alt="Mauricio Dioli, instructor de la inmersión en IA">
+          <div><small>FACILITADOR</small><strong>Mauricio Dioli</strong><span>Ingeniero informático · IA y procesos</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="benefits shell">
+      <div class="section-title"><span>QUÉ VAS A LOGRAR</span><h2>Menos tareas repetitivas.<br>Más tiempo para decidir y crear.</h2></div>
+      <div class="benefit-grid">
+        <article><b>01</b><h3>Crear mejor contenido</h3><p>Generá ideas, textos, campañas y propuestas adaptadas a distintos públicos.</p></article>
+        <article><b>02</b><h3>Conocer a tus clientes</h3><p>Organizá datos, detectá patrones y construí mensajes más relevantes.</p></article>
+        <article><b>03</b><h3>Automatizar procesos</h3><p>Reducí tareas manuales y diseñá flujos simples para trabajar con mayor eficiencia.</p></article>
+        <article><b>04</b><h3>Tomar mejores decisiones</h3><p>Convertí información dispersa en indicadores claros y acciones concretas.</p></article>
+      </div>
+    </section>
+
+    <section class="program" id="programa">
+      <div class="shell program-inner">
+        <div class="program-copy">
+          <span>EL PROGRAMA</span>
+          <h2>Una inmersión directa, simple y aplicable.</h2>
+          <p>No se trata de aprender herramientas de memoria. Vas a entender cómo usar la IA con criterio para resolver problemas concretos de marketing y negocio.</p>
+          <a href="#registro">Recibir información <b>→</b></a>
+        </div>
+        <div class="topics">
+          <article><b>01</b><div><h3>IA sin complicaciones</h3><p>Qué puede hacer, qué no y cómo obtener mejores resultados.</p></div></article>
+          <article><b>02</b><div><h3>Contenido y comunicación</h3><p>Ideas, publicaciones, campañas, ofertas y mensajes comerciales.</p></div></article>
+          <article><b>03</b><div><h3>Clientes y oportunidades</h3><p>Segmentación, comportamiento y propuestas más personalizadas.</p></div></article>
+          <article><b>04</b><div><h3>Datos que ayudan a decidir</h3><p>Indicadores y tableros sencillos para entender qué está funcionando.</p></div></article>
+          <article><b>05</b><div><h3>Procesos más inteligentes</h3><p>Cómo ordenar, simplificar y automatizar tareas de tu actividad.</p></div></article>
+          <article><b>06</b><div><h3>Tu plan de aplicación</h3><p>Elegí un caso real y convertí lo aprendido en próximos pasos.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="result shell">
+      <div class="result-card">
+        <span>RESULTADO FINAL</span>
+        <h2>Te vas con una estrategia de IA lista para poner en marcha.</h2>
+        <p>Durante la inmersión vas a trabajar sobre un caso propio: una campaña, un proceso comercial, la comunicación con clientes o una tarea que quieras mejorar.</p>
+        <div class="result-items"><div><b>✓</b> Objetivo definido</div><div><b>✓</b> Proceso simplificado</div><div><b>✓</b> Herramientas seleccionadas</div><div><b>✓</b> Indicadores de resultado</div><div><b>✓</b> Plan de acción</div></div>
+      </div>
+    </section>
+
+    <section class="instructor">
+      <div class="shell instructor-inner">
+        <div class="instructor-photo"><img src="{{ url_for('static', filename='ia-marketing/assets/mauricio-dioli-profesional-v3.png') }}" alt="Retrato profesional de Mauricio Dioli"></div>
+        <div class="instructor-copy">
+          <span>SOBRE EL INSTRUCTOR</span>
+          <h2>Experiencia técnica, mirada de negocio y explicaciones simples.</h2>
+          <p>Soy Mauricio Dioli, ingeniero informático con más de veinte años de experiencia transformando necesidades reales en soluciones digitales.</p>
+          <p>Trabajé en análisis y mejora de procesos, sistemas empresariales, datos, automatización e inteligencia artificial. Mi objetivo es ayudarte a entender estas tecnologías y utilizarlas con sentido práctico.</p>
+          <div class="numbers"><div><strong>20+</strong><small>años de experiencia</small></div><div><strong>360°</strong><small>procesos, datos e IA</small></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="registration shell" id="registro">
+      <div class="registration-copy"><span>PRÓXIMA EDICIÓN</span><h2>¿Querés aprender a aplicar IA en tu actividad?</h2><p>Dejanos tus datos y te enviaremos fechas, modalidad y condiciones de participación.</p></div>
+      <form id="registrationForm" data-endpoint="{{ ia_registration_endpoint|default('', true)|e }}" novalidate>
+        <label>Nombre y apellido *<input name="name" type="text" autocomplete="name" placeholder="Tu nombre" required minlength="2"><small class="field-error"></small></label>
+        <label>Correo electrónico *<input name="email" type="email" autocomplete="email" placeholder="tu@email.com" required><small class="field-error"></small></label>
+        <label>Teléfono / WhatsApp<input name="phone" type="tel" autocomplete="tel" placeholder="+39 000 000 0000"><small class="field-error"></small></label>
+        <label>¿A qué te dedicás? *<select name="profile" required><option value="">Seleccioná una opción</option><option value="emprendedor">Emprendedor/a</option><option value="marketing">Marketing y comunicación</option><option value="profesional">Profesional independiente</option><option value="empresa">Empresa u organización</option><option value="estudiante">Estudiante</option></select><small class="field-error"></small></label>
+        <label class="consent"><input name="consent" type="checkbox" value="true" required><span>Acepto recibir información sobre esta inmersión y futuras ediciones. *</span></label>
+        <button type="submit"><span class="button-label">Quiero recibir información</span><b>→</b></button>
+        <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+  </main>
+
+  <section class="closing"><div class="closing-bg" aria-hidden="true"></div><div class="shell closing-inner"><span>EL PRÓXIMO PASO</span><h2>La IA no reemplaza tu experiencia.<br>La hace llegar más lejos.</h2><p>Empezá a aplicarla con criterio, objetivos claros y un plan que tenga sentido para tu actividad.</p><a class="button" href="#registro">Quiero participar <b>→</b></a></div></section>
+  <footer><div class="shell"><a class="logo" href="#inicio"><span>MD</span><strong>Mauricio Dioli<small>INMERSIÓN IA</small></strong></a><p>Inteligencia artificial aplicada al marketing y los negocios.</p><small>© <span id="year"></span> Mauricio Dioli</small></div></footer>
+  <script src="{{ url_for('static', filename='ia-marketing/app.js') }}"></script>
+</body>
+</html>
+
+
+
+

@@ -36,11 +36,38 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 
 
+def _is_ia_marketing_host():
+    """Permite servir la landing IA desde uno o varios subdominios."""
+    configured_hosts = os.getenv(
+        "IA_MARKETING_HOSTS",
+        "ia.dpia.site,marketing.dpia.site",
+    )
+    allowed_hosts = {
+        host.strip().lower()
+        for host in configured_hosts.split(",")
+        if host.strip()
+    }
+    request_host = request.host.split(":", 1)[0].lower()
+    return request_host in allowed_hosts
+
+
 @conexion_externa.route("/")
 def index():
-    
-    # Aquí puedes realizar cualquier lógica adicional que necesites
+    if _is_ia_marketing_host():
+        return render_template(
+            "ia-marketing/index.html",
+            ia_registration_endpoint=os.getenv("IA_REGISTRATION_ENDPOINT", ""),
+        )
     return render_template("index.html")
+
+
+@conexion_externa.route("/inmersion-ia")
+def inmersion_ia():
+    """Ruta directa para previsualización y proxies con reescritura de path."""
+    return render_template(
+        "ia-marketing/index.html",
+        ia_registration_endpoint=os.getenv("IA_REGISTRATION_ENDPOINT", ""),
+    )
 
 
 @conexion_externa.route("/experiencia")
@@ -51,7 +78,7 @@ def experiencia():
 
 @conexion_externa.route("/resultado_carga_directo_sheet", methods=["POST"])
 def resultado_carga():
-    
+
     sheetId = '1munTyxoLc5px45cz4cO_lLRrqyFsOwjTUh8xDPOiHOg'
     sheet_name = request.form.get("sheet_name")  # recibe del AJAX
     sheet = autenticar_y_abrir_sheet(sheetId, sheet_name)
@@ -60,7 +87,7 @@ def resultado_carga():
         data = sheet.get_all_records()
         completar_publicaciones(data)
         print("Contenido del Sheet:")
-       
+
 
     # Podés devolver solo un mensaje si es AJAX
     return "Datos cargados correctamente", 200
@@ -78,7 +105,7 @@ def carga_publicacion_en_db():
 
     try:
         completar_publicaciones([fila])  # debe recibir una lista
-        
+
         ruta = os.path.join(BASE_DIR, "static", "downloads", archivoRelacionado)
         print(f"[DEBUG] Verificando ruta: {ruta} - ¿Existe?: {ruta}", flush=True)
 
@@ -94,7 +121,7 @@ def carga_publicacion_en_db():
 def validar_publicacion_en_json(path_json, nombre_producto):
     """
     Marca como 'TRUE' el campo 'validado' de la publicación cuyo 'Producto' coincida.
-    
+
     Args:
         path_json (str): Ruta al archivo JSON
         nombre_producto (str): Nombre exacto del producto a validar
