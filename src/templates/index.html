@@ -22,7 +22,20 @@
   <header class="topbar">
     <button class="menu-trigger" id="menuTrigger" aria-expanded="false" aria-controls="sideMenu"><span data-i18n="menu">Menú</span><i></i><i></i><i></i></button>
     <a class="brand" href="https://dpia.site/" aria-label="DPIA Solutions inicio"><img class="brand-mark" src="{{ url_for('static', filename='b2b/dpia-symbol.png') }}" alt="" aria-hidden="true"><span>DPIA</span><small>SOLUTIONS</small></a>
-    <nav class="desktop-nav" aria-label="Navegación principal"><a href="#problemas" data-i18n="problems">Problemas</a><a href="#metodo" data-i18n="method">Método</a><a href="#ofertas" data-i18n="services">Servicios</a><a href="/experiencia" data-i18n="experience">Experiencia</a></nav><a class="top-cta" href="https://wa.me/393445977100?text=Hola%2C%20quiero%20analizar%20una%20oportunidad%20de%20mejora%20en%20mi%20empresa." target="_blank" rel="noopener"><span data-i18n="initialConversation">Conversación inicial</span> <span>↗</span></a>
+    <nav class="desktop-nav" aria-label="Navegación principal">
+      <a href="#problemas" data-i18n="problems">Problemas</a>
+      <a href="#metodo" data-i18n="method">Método</a>
+      <a href="#ofertas" data-i18n="services">Servicios</a>
+      <div class="desktop-courses">
+        <button type="button" aria-haspopup="true"><span data-i18n="onlineCourses">Cursos online</span> <span aria-hidden="true">⌄</span></button>
+        <div class="desktop-courses-menu">
+          <a href="https://marketing.dpia.site/" data-i18n="courseMarketing">IA y sistemas automáticos</a>
+          <a href="https://procesos.dpia.site/" data-i18n="courseProcesses">IA para procesos y decisiones</a>
+          <a href="https://masterclass.dpia.site/" data-i18n="courseMasterclass">Del mundo físico a la IA</a>
+        </div>
+      </div>
+      <a href="/experiencia" data-i18n="experience">Experiencia</a>
+    </nav><a class="top-cta" href="https://wa.me/393445977100?text=Hola%2C%20quiero%20analizar%20una%20oportunidad%20de%20mejora%20en%20mi%20empresa." target="_blank" rel="noopener"><span data-i18n="initialConversation">Conversación inicial</span> <span>↗</span></a>
   </header>
 
   <aside class="side-menu" id="sideMenu" aria-hidden="true">
@@ -31,6 +44,7 @@
       <div class="drawer-item"><button class="drawer-toggle" aria-expanded="false">Servicios y ofertas <span>›</span></button><div class="drawer-sub"><a href="#ofertas">Diagnóstico de oportunidades</a><a href="#ofertas">Auditoría técnico-comercial</a><a href="#ofertas">Sprint de implementación</a><a href="#ofertas">Acompañamiento mensual</a></div></div>
       <div class="drawer-item"><button class="drawer-toggle" aria-expanded="false">Áreas de intervención <span>›</span></button><div class="drawer-sub"><a href="#industrial">Monitorización industrial</a><a href="#fullstack">Desarrollo full stack</a><a href="#marketing">Mercadotecnia técnica</a></div></div>
       <div class="drawer-item"><button class="drawer-toggle" aria-expanded="false">Método DPIA <span>›</span></button><div class="drawer-sub"><a href="#metodo">Diagnóstico</a><a href="#metodo">Auditoría</a><a href="#metodo">Priorización</a><a href="#metodo">Implementación</a></div></div>
+      <div class="drawer-item"><button class="drawer-toggle" aria-expanded="false"><span class="drawer-label" data-i18n="onlineCourses">Cursos online</span> <span>›</span></button><div class="drawer-sub"><a href="https://marketing.dpia.site/" data-i18n="courseMarketing">IA y sistemas automáticos</a><a href="https://procesos.dpia.site/" data-i18n="courseProcesses">IA para procesos y decisiones</a><a href="https://masterclass.dpia.site/" data-i18n="courseMasterclass">Del mundo físico a la IA</a></div></div>
       <div class="drawer-item"><button class="drawer-toggle" aria-expanded="false">Conocé DPIA <span>›</span></button><div class="drawer-sub"><a href="#equipo">Equipo</a><a href="/experiencia">Experiencia</a><a href="#inversion">Justificación de inversión</a></div></div>
       <a class="drawer-direct" href="#contacto"><span data-i18n="contact">Contacto</span> <span>›</span></a>
     </nav>
