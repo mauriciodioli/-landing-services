@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Masterclass de Mauricio Dioli: aprende cómo conectar sensores, datos, software e inteligencia artificial para crear sistemas inteligentes.">
+  <meta name="theme-color" content="#081018">
+  <title>Masterclass | Del mundo físico a la inteligencia artificial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='masterclass/styles.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="Inicio">
+      <span class="brand-mark">MD</span>
+      <span>Mauricio Dioli <small>MASTERCLASS</small></span>
+    </a>
+    <a class="header-cta" href="#registro">Reservar mi lugar <span>↗</span></a>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="orb orb-one"></div>
+      <div class="orb orb-two"></div>
+      <div class="hero-content">
+        <div class="hero-copy">
+          <p class="kicker"><span></span> Masterclass en vivo · Nivel inicial + medio</p>
+          <h1>Del mundo físico a la <em>inteligencia artificial.</em></h1>
+          <p class="hero-lead">Descubre cómo los sensores, los datos en tiempo real, el software y la IA se conectan para crear sistemas que observan, interpretan y actúan.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#registro">Quiero participar <span>→</span></a>
+            <a class="text-link" href="#programa">Ver el programa</a>
+          </div>
+          <div class="hero-facts" aria-label="Información de la masterclass">
+            <div><strong>2</strong><span>niveles progresivos</span></div>
+            <div><strong>100%</strong><span>práctica y accesible</span></div>
+            <div><strong>0</strong><span>requisitos previos</span></div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="photo-frame">
+            <img src="{{ url_for('static', filename='masterclass/assets/mauricio-dioli-profesional-v3.png') }}" alt="Mauricio Dioli, instructor de la masterclass">
+            <div class="photo-caption">
+              <span>Tu instructor</span>
+              <strong>Mauricio Dioli</strong>
+              <small>AI · IoT · Sistemas en tiempo real</small>
+            </div>
+          </div>
+          <div class="signal-card signal-card-top"><i></i><span>DATOS EN VIVO</span><strong>98.4%</strong></div>
+          <div class="signal-card signal-card-bottom"><span>Sensor</span><b>→</b><span>Cloud</span><b>→</b><span>IA</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Áreas de experiencia">
+      <span>SENSORES</span><i>✦</i><span>IoT</span><i>✦</i><span>TIEMPO REAL</span><i>✦</i><span>BACKEND</span><i>✦</i><span>CLOUD</span><i>✦</i><span>INTELIGENCIA ARTIFICIAL</span>
+    </section>
+
+    <section class="section intro" id="experiencia">
+      <div class="section-tag">01 · LA EXPERIENCIA</div>
+      <div class="intro-grid">
+        <h2>La IA deja de ser abstracta cuando puedes ver <span>todo el recorrido del dato.</span></h2>
+        <div>
+          <p>Esta masterclass traduce conceptos complejos a un lenguaje claro. Partiremos de una medición del mundo real y seguiremos el dato hasta convertirlo en una visualización, una alerta y una decisión inteligente.</p>
+          <ul class="check-list">
+            <li><span>✓</span> Explicaciones claras y ejemplos cotidianos.</li>
+            <li><span>✓</span> Demostración de un sistema completo.</li>
+            <li><span>✓</span> Un proyecto que podrás diseñar paso a paso.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="program" id="programa">
+      <div class="section program-head">
+        <div>
+          <div class="section-tag section-tag-light">02 · EL PROGRAMA</div>
+          <h2>Empieza entendiendo.<br><span>Termina diseñando.</span></h2>
+        </div>
+        <p>Dos niveles conectados para avanzar desde los conceptos esenciales hasta la arquitectura de una solución real.</p>
+      </div>
+
+      <div class="section level-grid">
+        <article class="level-card level-card-featured">
+          <div class="level-number">Nivel 01</div>
+          <span class="level-pill">Inicial · 2 h 30 min</span>
+          <h3>Cómo funcionan los sistemas inteligentes</h3>
+          <p>Una introducción visual y accesible para comprender el ecosistema completo, sin necesidad de programar.</p>
+          <ol>
+            <li><b>01</b><span>Del mundo físico al digital</span></li>
+            <li><b>02</b><span>Sensores: los sentidos de una máquina</span></li>
+            <li><b>03</b><span>Cómo viajan y se procesan los datos</span></li>
+            <li><b>04</b><span>Backend, aplicaciones y nube</span></li>
+            <li><b>05</b><span>Introducción práctica a la IA</span></li>
+            <li><b>06</b><span>Demostración y taller conceptual</span></li>
+          </ol>
+        </article>
+
+        <article class="level-card">
+          <div class="level-number">Nivel 02</div>
+          <span class="level-pill">Medio · 6 horas</span>
+          <h3>Diseña una solución IoT e IA de extremo a extremo</h3>
+          <p>Profundiza en la arquitectura, las decisiones técnicas y la operación de un sistema preparado para crecer.</p>
+          <ol>
+            <li><b>01</b><span>Arquitectura y ciclo de vida del dato</span></li>
+            <li><b>02</b><span>Adquisición, calidad y protocolos</span></li>
+            <li><b>03</b><span>APIs y procesamiento en tiempo real</span></li>
+            <li><b>04</b><span>Almacenamiento y visualización</span></li>
+            <li><b>05</b><span>IA aplicada y detección de anomalías</span></li>
+            <li><b>06</b><span>Docker, cloud, seguridad y proyecto final</span></li>
+          </ol>
+        </article>
+      </div>
+    </section>
+
+    <section class="case-study section">
+      <div class="case-visual" aria-hidden="true">
+        <div class="machine-core"><span></span><i></i><b></b></div>
+        <div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="data-tag tag-one">VIBRACIÓN <strong>2.41 g</strong></div>
+        <div class="data-tag tag-two">ESTADO <strong>NORMAL</strong></div>
+      </div>
+      <div class="case-copy">
+        <div class="section-tag">03 · CASO CONDUCTOR</div>
+        <h2>Un sistema de monitorización que evoluciona contigo.</h2>
+        <p>Seguiremos un caso industrial realista: desde la lectura de vibraciones hasta la detección inteligente de anomalías.</p>
+        <div class="flow">
+          <span>Sensor</span><b>→</b><span>Datos</span><b>→</b><span>Dashboard</span><b>→</b><span>IA</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="about">
+      <div class="section about-grid">
+        <div class="about-photo"><img src="{{ url_for('static', filename='masterclass/assets/mauricio-dioli-profesional-v3.png') }}" alt="Mauricio Dioli trabajando con sistemas informáticos"></div>
+        <div class="about-copy">
+          <div class="section-tag section-tag-light">04 · TU INSTRUCTOR</div>
+          <h2>Experiencia real, explicada de forma clara.</h2>
+          <p class="quote">“Mi especialidad es conectar el mundo físico con el digital y convertir datos reales en decisiones útiles.”</p>
+          <p>Mauricio Dioli es ingeniero informático con más de 20 años de experiencia en software, sistemas embebidos, computación de alto rendimiento, integración industrial e inteligencia artificial aplicada.</p>
+          <div class="credentials">
+            <div><strong>20+</strong><span>años de experiencia</span></div>
+            <div><strong>IoT + IA</strong><span>visión de extremo a extremo</span></div>
+            <div><strong>3</strong><span>idiomas profesionales</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="registration section" id="registro">
+      <div class="registration-copy">
+        <div class="section-tag">05 · INSCRIPCIÓN</div>
+        <h2>Reserva tu lugar y da el primer paso.</h2>
+        <p>Completa tus datos para recibir la fecha, modalidad, materiales y novedades de la próxima edición.</p>
+        <div class="privacy-note"><span>✓</span><p>Usaremos tus datos únicamente para gestionar tu inscripción y comunicaciones relacionadas con la masterclass.</p></div>
+      </div>
+
+      <form class="lead-form" id="registrationForm" data-endpoint="{{ masterclass_registration_endpoint|default('', true)|e }}" novalidate>
+        <div class="form-heading">
+          <span>Registro de interés</span>
+          <small>Todos los campos con * son obligatorios</small>
+        </div>
+        <label>Nombre y apellido *
+          <input type="text" name="name" autocomplete="name" placeholder="Tu nombre completo" required minlength="2">
+          <span class="field-error"></span>
+        </label>
+        <label>Correo electrónico *
+          <input type="email" name="email" autocomplete="email" placeholder="tu@email.com" required>
+          <span class="field-error"></span>
+        </label>
+        <label>Teléfono / WhatsApp
+          <input type="tel" name="phone" autocomplete="tel" placeholder="+39 000 000 0000">
+          <span class="field-error"></span>
+        </label>
+        <label>¿Cuál es tu perfil? *
+          <select name="profile" required>
+            <option value="">Selecciona una opción</option>
+            <option value="curioso">Me interesa aprender tecnología</option>
+            <option value="estudiante">Estudiante</option>
+            <option value="profesional">Profesional</option>
+            <option value="emprendedor">Emprendedor/a</option>
+            <option value="empresa">Represento a una empresa</option>
+          </select>
+          <span class="field-error"></span>
+        </label>
+        <label class="consent">
+          <input type="checkbox" name="consent" value="true" required>
+          <span>Acepto recibir información sobre esta masterclass y futuras ediciones. *</span>
+        </label>
+        <button class="button button-submit" type="submit">
+          <span class="button-label">Quiero reservar mi lugar</span><b>→</b>
+        </button>
+        <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <a class="brand" href="#inicio"><span class="brand-mark">MD</span><span>Mauricio Dioli <small>MASTERCLASS</small></span></a>
+      <p>Del mundo físico a la inteligencia artificial.</p>
+      <span>© <span id="year"></span> Mauricio Dioli</span>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='masterclass/app.js') }}"></script>
+</body>
+</html>
+

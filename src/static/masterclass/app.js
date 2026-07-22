@@ -1,0 +1,106 @@
+(() => {
+  'use strict';
+
+  // Para conectar el formulario, pega aquí la URL completa de tu endpoint.
+  // También puedes definirla en el atributo data-endpoint del formulario HTML.
+  const REGISTRATION_ENDPOINT = '';
+
+  const form = document.querySelector('#registrationForm');
+  const status = document.querySelector('#formStatus');
+  const submitButton = form.querySelector('button[type="submit"]');
+  const buttonLabel = submitButton.querySelector('.button-label');
+
+  const messages = {
+    valueMissing: 'Este campo es obligatorio.',
+    typeMismatch: 'Introduce un correo electrónico válido.',
+    tooShort: 'Introduce al menos 2 caracteres.'
+  };
+
+  function showFieldError(field) {
+    const error = field.closest('label')?.querySelector('.field-error');
+    if (!error) return;
+    field.classList.toggle('invalid', !field.validity.valid);
+    if (field.validity.valid) {
+      error.textContent = '';
+      return;
+    }
+    const key = Object.keys(messages).find(name => field.validity[name]);
+    error.textContent = messages[key] || 'Revisa este campo.';
+  }
+
+  form.querySelectorAll('input:not([type="checkbox"]), select').forEach(field => {
+    field.addEventListener('blur', () => showFieldError(field));
+    field.addEventListener('input', () => {
+      if (field.classList.contains('invalid')) showFieldError(field);
+    });
+  });
+
+  function getTrackingData() {
+    const query = new URLSearchParams(window.location.search);
+    return {
+      utm_source: query.get('utm_source'),
+      utm_medium: query.get('utm_medium'),
+      utm_campaign: query.get('utm_campaign'),
+      utm_content: query.get('utm_content'),
+      referrer: document.referrer || null,
+      page_url: window.location.href
+    };
+  }
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    status.className = 'form-status';
+    status.textContent = '';
+
+    form.querySelectorAll('input:not([type="checkbox"]), select').forEach(showFieldError);
+    if (!form.checkValidity()) {
+      status.classList.add('error');
+      status.textContent = 'Revisa los campos indicados antes de continuar.';
+      form.querySelector(':invalid')?.focus();
+      return;
+    }
+
+    const endpoint = form.dataset.endpoint || REGISTRATION_ENDPOINT;
+    const values = Object.fromEntries(new FormData(form).entries());
+    const payload = {
+      ...values,
+      consent: values.consent === 'true',
+      source: 'masterclass-landing',
+      submitted_at: new Date().toISOString(),
+      ...getTrackingData()
+    };
+
+    if (!endpoint) {
+      status.classList.add('error');
+      status.textContent = 'El formulario está listo. Falta configurar la URL del endpoint en app.js.';
+      return;
+    }
+
+    submitButton.disabled = true;
+    buttonLabel.textContent = 'Enviando inscripción…';
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      form.reset();
+      form.querySelectorAll('.field-error').forEach(item => item.textContent = '');
+      status.classList.add('success');
+      status.textContent = '¡Registro recibido! Te enviaremos muy pronto la información de la próxima edición.';
+    } catch (error) {
+      console.error('No se pudo completar el registro:', error);
+      status.classList.add('error');
+      status.textContent = 'No pudimos enviar tus datos. Inténtalo nuevamente o contacta directamente con el organizador.';
+    } finally {
+      submitButton.disabled = false;
+      buttonLabel.textContent = 'Quiero reservar mi lugar';
+    }
+  });
+
+  document.querySelector('#year').textContent = new Date().getFullYear();
+})();

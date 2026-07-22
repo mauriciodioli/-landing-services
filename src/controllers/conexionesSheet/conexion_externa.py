@@ -51,6 +51,21 @@ def _is_ia_marketing_host():
     return request_host in allowed_hosts
 
 
+def _is_masterclass_host():
+    """Detecta el subdominio dedicado a la masterclass."""
+    configured_hosts = os.getenv(
+        "MASTERCLASS_HOSTS",
+        "masterclass.dpia.site",
+    )
+    allowed_hosts = {
+        host.strip().lower()
+        for host in configured_hosts.split(",")
+        if host.strip()
+    }
+    request_host = request.host.split(":", 1)[0].lower()
+    return request_host in allowed_hosts
+
+
 def _is_ia_processes_host():
     """Detecta el subdominio dedicado a la inmersión de procesos."""
     configured_hosts = os.getenv(
@@ -68,6 +83,14 @@ def _is_ia_processes_host():
 
 @conexion_externa.route("/")
 def index():
+    if _is_masterclass_host():
+        return render_template(
+            "masterclass/index.html",
+            masterclass_registration_endpoint=os.getenv(
+                "MASTERCLASS_REGISTRATION_ENDPOINT",
+                "",
+            ),
+        )
     if _is_ia_processes_host():
         return render_template(
             "ia-processes/index.html",
@@ -100,6 +123,18 @@ def inmersion_ia_procesos():
         "ia-processes/index.html",
         ia_processes_registration_endpoint=os.getenv(
             "IA_PROCESSES_REGISTRATION_ENDPOINT",
+            "",
+        ),
+    )
+
+
+@conexion_externa.route("/masterclass-ia")
+def masterclass_ia():
+    """Ruta directa de la masterclass del mundo físico a la IA."""
+    return render_template(
+        "masterclass/index.html",
+        masterclass_registration_endpoint=os.getenv(
+            "MASTERCLASS_REGISTRATION_ENDPOINT",
             "",
         ),
     )
