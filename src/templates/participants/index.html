@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Participantes · DPIA Solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='participants/admin.css') }}">
+</head>
+<body>
+  <header>
+    <div><span>DPIA</span><strong>Participantes de cursos</strong></div>
+    <button id="changeToken" type="button">Cambiar acceso</button>
+  </header>
+  <main>
+    <section class="summary">
+      <div><small>REGISTRADOS</small><strong id="totalParticipants">0</strong></div>
+      <div><small>CONFIRMACIONES</small><strong id="totalConfirmed">0</strong></div>
+      <div><small>RECORDATORIOS</small><strong id="totalReminders">0</strong></div>
+      <button id="runReminders" type="button">Enviar recordatorios próximos</button>
+    </section>
+    <section class="filters">
+      <input id="search" type="search" placeholder="Buscar nombre, email, teléfono o empresa">
+      <select id="courseFilter">
+        <option value="">Todos los cursos</option>
+        <option value="ia-marketing">IA y sistemas automáticos</option>
+        <option value="ia-processes">IA para procesos y decisiones</option>
+        <option value="masterclass-ia">Del mundo físico a la IA</option>
+      </select>
+      <select id="statusFilter">
+        <option value="">Todos los estados</option>
+        <option value="registered">Registrado</option>
+        <option value="cancelled">Cancelado</option>
+        <option value="completed">Completado</option>
+      </select>
+      <button id="refresh" type="button">Actualizar</button>
+    </section>
+    <div id="statusMessage" role="status" aria-live="polite"></div>
+    <section class="table-wrap">
+      <table>
+        <thead><tr><th>Participante</th><th>Curso</th><th>Fechas</th><th>Origen</th><th>Estado</th><th>Acciones</th></tr></thead>
+        <tbody id="participantsBody"></tbody>
+      </table>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='participants/admin.js') }}"></script>
+</body>
+</html>

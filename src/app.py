@@ -53,6 +53,7 @@ from controllers.comercios.comercio_dashboard import comercio_dashboard
 from controllers.comercios.comercio_crud import comercio_crud
 from controllers.comercios.comercio_lookup import lookup
 from routes.campania_telefonica_routes import campania_telefonica_bp
+from controllers.course_participants import participants
 
 
 
@@ -73,6 +74,7 @@ app.register_blueprint(repartos)
 app.register_blueprint(comercio_dashboard)
 app.register_blueprint(comercio_crud)
 app.register_blueprint(lookup)
+app.register_blueprint(participants)
 
 
 
@@ -89,6 +91,7 @@ with app.app_context():
     from models.campania_telefonica import CampaniaTelefonica, ensure_campania_telefonica_schema
     from models.contacto_telefonico import ContactoTelefonico
     from models.historial_contacto import HistorialContacto
+    from models.course_participant import CourseParticipant
 
     # IMPORTA el/los modelos con LA MISMA instancia de db (extensions.db)
     try:

@@ -26,7 +26,7 @@
 
   function tracking() {
     const query = new URLSearchParams(location.search);
-    return {utm_source:query.get('utm_source'),utm_medium:query.get('utm_medium'),utm_campaign:query.get('utm_campaign'),utm_content:query.get('utm_content'),referrer:document.referrer||null,page_url:location.href};
+    return {utm_source:query.get('utm_source'),utm_medium:query.get('utm_medium'),utm_campaign:query.get('utm_campaign'),utm_content:query.get('utm_content'),utm_term:query.get('utm_term'),referrer:document.referrer||null,page_url:location.href};
   }
 
   form.addEventListener('submit', async event => {
@@ -39,7 +39,7 @@
 
     const endpoint = form.dataset.endpoint || REGISTRATION_ENDPOINT;
     const values = Object.fromEntries(new FormData(form).entries());
-    const payload = {...values,consent:values.consent==='true',source:'inmersion-ia-procesos',submitted_at:new Date().toISOString(),...tracking()};
+    const payload = {...values,consent:values.consent==='true',course_slug:form.dataset.courseSlug,course_title:form.dataset.courseTitle,course_date:form.dataset.courseDate||null,course_timezone:form.dataset.courseTimezone||'Europe/Rome',source:'inmersion-ia-procesos',submitted_at:new Date().toISOString(),language:navigator.language,browser_language:navigator.language,screen_resolution:screen.width+'x'+screen.height,...tracking()};
     if (!endpoint) {status.classList.add('error');status.textContent='El formulario está listo. Falta configurar la URL del endpoint en app.js.';return;}
 
     submitButton.disabled = true; buttonLabel.textContent = 'Enviando solicitud…';

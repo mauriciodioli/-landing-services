@@ -32,7 +32,7 @@
 
     const params = new URLSearchParams(location.search);
     const values = Object.fromEntries(new FormData(form).entries());
-    const payload = {...values,consent:values.consent==='true',source:'landing-ia-marketing',submitted_at:new Date().toISOString(),utm_source:params.get('utm_source'),utm_medium:params.get('utm_medium'),utm_campaign:params.get('utm_campaign'),referrer:document.referrer||null,page_url:location.href};
+    const payload = {...values,consent:values.consent==='true',course_slug:form.dataset.courseSlug,course_title:form.dataset.courseTitle,course_date:form.dataset.courseDate||null,course_timezone:form.dataset.courseTimezone||'Europe/Rome',source:'landing-ia-marketing',submitted_at:new Date().toISOString(),utm_source:params.get('utm_source'),utm_medium:params.get('utm_medium'),utm_campaign:params.get('utm_campaign'),utm_term:params.get('utm_term'),utm_content:params.get('utm_content'),referrer:document.referrer||null,page_url:location.href,language:navigator.language,browser_language:navigator.language,screen_resolution:screen.width+'x'+screen.height};
     const endpoint = form.dataset.endpoint || REGISTRATION_ENDPOINT;
     if (!endpoint) {status.classList.add('error');status.textContent='El formulario está listo. Falta configurar el endpoint en app.js.';return;}
 

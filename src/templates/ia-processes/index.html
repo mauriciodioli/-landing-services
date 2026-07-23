@@ -160,7 +160,7 @@
 
     <section class="registration section" id="registro">
       <div class="registration-copy"><div class="section-tag">08 · PRÓXIMA EDICIÓN</div><h2>¿Quieres aplicar IA a un proceso real?</h2><p>Déjanos tus datos para recibir información sobre fechas, modalidad, contenidos ampliados y condiciones de participación.</p><div class="privacy-note"><span>✓</span><p>Tus datos se utilizarán únicamente para gestionar esta solicitud y comunicaciones relacionadas con el programa.</p></div></div>
-      <form class="lead-form" id="registrationForm" data-endpoint="{{ ia_processes_registration_endpoint|default('', true)|e }}" novalidate>
+      <form class="lead-form" id="registrationForm" data-endpoint="{{ ia_processes_registration_endpoint|default(url_for('participants.create_participant'), true)|e }}" data-course-slug="ia-processes" data-course-title="IA para procesos y decisiones" data-course-date="" data-course-timezone="Europe/Rome" novalidate>
         <div class="form-heading"><span>Solicitar información</span><small>Los campos con * son obligatorios</small></div>
         <label>Nombre y apellido *<input type="text" name="name" autocomplete="name" placeholder="Tu nombre completo" required minlength="2"><span class="field-error"></span></label>
         <label>Correo electrónico *<input type="email" name="email" autocomplete="email" placeholder="tu@email.com" required><span class="field-error"></span></label>

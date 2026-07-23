@@ -159,7 +159,7 @@
         <div class="privacy-note"><span>✓</span><p>Usaremos tus datos únicamente para gestionar tu inscripción y comunicaciones relacionadas con la masterclass.</p></div>
       </div>
 
-      <form class="lead-form" id="registrationForm" data-endpoint="{{ masterclass_registration_endpoint|default('', true)|e }}" novalidate>
+      <form class="lead-form" id="registrationForm" data-endpoint="{{ masterclass_registration_endpoint|default(url_for('participants.create_participant'), true)|e }}" data-course-slug="masterclass-ia" data-course-title="Del mundo físico a la IA" data-course-date="" data-course-timezone="Europe/Rome" novalidate>
         <div class="form-heading">
           <span>Registro de interés</span>
           <small>Todos los campos con * son obligatorios</small>

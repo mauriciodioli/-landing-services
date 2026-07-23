@@ -93,7 +93,7 @@
 
     <section class="registration shell" id="registro">
       <div class="registration-copy"><span>PRÓXIMA EDICIÓN</span><h2>¿Querés dejar de probar herramientas y empezar a construir con IA?</h2><p>Dejanos tus datos y te enviaremos fechas, modalidad y condiciones de participación.</p></div>
-      <form id="registrationForm" data-endpoint="{{ ia_registration_endpoint|default('', true)|e }}" novalidate>
+      <form id="registrationForm" data-endpoint="{{ ia_registration_endpoint|default(url_for('participants.create_participant'), true)|e }}" data-course-slug="ia-marketing" data-course-title="IA y sistemas automáticos" data-course-date="" data-course-timezone="Europe/Rome" novalidate>
         <label>Nombre y apellido *<input name="name" type="text" autocomplete="name" placeholder="Tu nombre" required minlength="2"><small class="field-error"></small></label>
         <label>Correo electrónico *<input name="email" type="email" autocomplete="email" placeholder="tu@email.com" required><small class="field-error"></small></label>
         <label>Teléfono / WhatsApp<input name="phone" type="tel" autocomplete="tel" placeholder="+39 000 000 0000"><small class="field-error"></small></label>

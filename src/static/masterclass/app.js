@@ -42,6 +42,7 @@
       utm_medium: query.get('utm_medium'),
       utm_campaign: query.get('utm_campaign'),
       utm_content: query.get('utm_content'),
+      utm_term: query.get('utm_term'),
       referrer: document.referrer || null,
       page_url: window.location.href
     };
@@ -65,6 +66,13 @@
     const payload = {
       ...values,
       consent: values.consent === 'true',
+      course_slug: form.dataset.courseSlug,
+      course_title: form.dataset.courseTitle,
+      course_date: form.dataset.courseDate || null,
+      course_timezone: form.dataset.courseTimezone || 'Europe/Rome',
+      language: navigator.language,
+      browser_language: navigator.language,
+      screen_resolution: screen.width + 'x' + screen.height,
       source: 'masterclass-landing',
       submitted_at: new Date().toISOString(),
       ...getTrackingData()

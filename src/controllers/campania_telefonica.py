@@ -12,7 +12,7 @@ from models.contacto_telefonico import ContactoTelefonico
 from models.historial_contacto import HistorialContacto
 from services.importador_sheet_service import ImportadorSheetService
 from services import SipService
-
+from utils.db_session import get_db_session
 
 campania_telefonica = Blueprint("campania_telefonica", __name__)
 importador_service = ImportadorSheetService()
@@ -630,37 +630,43 @@ def historial_campania_contacto(campania_contacto_id: int):
 @campania_telefonica.delete("/admin/campania-telefonica/<int:campania_id>/")
 def eliminar_campania(campania_id: int):
     try:
-        usuario_auth, error_response, status_code = resolver_usuario_importador_requerido()
-        if error_response:
-            return error_response, status_code
+        with get_db_session() as db_session:
+            usuario_auth, error_response, status_code = resolver_usuario_importador_requerido()
+            if error_response:
+                return error_response, status_code
 
-        campaign = obtener_campania_del_usuario(campania_id, usuario_auth["id"])
-        if campaign is None:
-            return jsonify({"ok": False, "error": "Campania no encontrada"}), 404
-
-        contact_ids = [relation.contacto_id for relation in campaign.contactos]
-        deleted_relations = len(campaign.contactos)
-
-        db.session.delete(campaign)
-        db.session.flush()
-
-        deleted_contacts = 0
-        if contact_ids:
-            orphan_contacts = (
-                db.session.query(ContactoTelefonico)
-                .outerjoin(CampaniaContacto, ContactoTelefonico.id == CampaniaContacto.contacto_id)
+            campaign = (
+                db_session.query(CampaniaTelefonica)
                 .filter(
-                    ContactoTelefonico.id.in_(contact_ids),
-                    CampaniaContacto.id.is_(None),
+                    CampaniaTelefonica.id == campania_id,
+                    CampaniaTelefonica.usuario_creador_id == usuario_auth["id"],
                 )
-                .all()
+                .first()
             )
+            if campaign is None:
+                return jsonify({"ok": False, "error": "Campania no encontrada"}), 404
 
-            deleted_contacts = len(orphan_contacts)
-            for contact in orphan_contacts:
-                db.session.delete(contact)
+            contact_ids = [relation.contacto_id for relation in campaign.contactos]
+            deleted_relations = len(campaign.contactos)
 
-        db.session.commit()
+            db_session.delete(campaign)
+            db_session.flush()
+
+            deleted_contacts = 0
+            if contact_ids:
+                orphan_contacts = (
+                    db_session.query(ContactoTelefonico)
+                    .outerjoin(CampaniaContacto, ContactoTelefonico.id == CampaniaContacto.contacto_id)
+                    .filter(
+                        ContactoTelefonico.id.in_(contact_ids),
+                        CampaniaContacto.id.is_(None),
+                    )
+                    .all()
+                )
+
+                deleted_contacts = len(orphan_contacts)
+                for contact in orphan_contacts:
+                    db_session.delete(contact)
 
         return jsonify({
             "ok": True,
@@ -669,10 +675,4 @@ def eliminar_campania(campania_id: int):
             "deleted_contacts": deleted_contacts,
         }), 200
     except Exception as e:
-        db.session.rollback()
         return jsonify({"ok": False, "error": str(e)}), 500
-    finally:
-        try:
-            db.session.close()
-        except Exception:
-            pass
