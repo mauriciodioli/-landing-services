@@ -85,8 +85,11 @@ def _mail_settings():
         "port": int(os.getenv("MAIL_PORT", "587")),
         "username": os.getenv("MAIL_USERNAME", ""),
         "password": os.getenv("MAIL_PASSWORD", ""),
-        "sender": os.getenv("MAIL_FROM", os.getenv("MAIL_USERNAME", "")),
-        "use_tls": os.getenv("MAIL_USE_TLS", "false").lower() in {"1", "true", "yes"},
+        "sender": os.getenv(
+            "MAIL_FROM",
+            os.getenv("MAIL_DEFAULT_SENDER", os.getenv("MAIL_USERNAME", "")),
+        ),
+        "use_tls": os.getenv("MAIL_USE_TLS", "true").lower() in {"1", "true", "yes"},
         "use_ssl": os.getenv("MAIL_USE_SSL", "false").lower() in {"1", "true", "yes"},
     }
 
@@ -128,8 +131,9 @@ def _send_email(participant, kind):
         "DPIA Solutions"
     )
 
-    with smtplib.SMTP(settings["host"], settings["port"], timeout=20) as smtp:
-        if settings["use_tls"]:
+    smtp_class = smtplib.SMTP_SSL if settings["use_ssl"] else smtplib.SMTP
+    with smtp_class(settings["host"], settings["port"], timeout=20) as smtp:
+        if settings["use_tls"] and not settings["use_ssl"]:
             smtp.starttls()
         if settings["username"]:
             smtp.login(settings["username"], settings["password"])

@@ -45,9 +45,10 @@
     submitButton.disabled = true; buttonLabel.textContent = 'Enviando solicitud…';
     try {
       const response = await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
       form.reset(); form.querySelectorAll('.field-error').forEach(item => item.textContent='');
-      status.classList.add('success'); status.textContent='¡Solicitud recibida! Te enviaremos la información de la próxima edición.';
+      status.classList.add('success'); status.textContent=result.confirmation_sent?'¡Registro confirmado! Revisa tu correo electrónico.':'Tu registro fue guardado, pero no pudimos enviar el correo de confirmación. Contacta con DPIA.';
     } catch (error) {
       console.error('No se pudo enviar la solicitud:',error); status.classList.add('error'); status.textContent='No pudimos enviar tus datos. Inténtalo nuevamente o contacta directamente con el organizador.';
     } finally {submitButton.disabled=false;buttonLabel.textContent='Quiero recibir información';}

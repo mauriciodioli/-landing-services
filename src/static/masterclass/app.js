@@ -94,12 +94,15 @@
         body: JSON.stringify(payload)
       });
 
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
 
       form.reset();
       form.querySelectorAll('.field-error').forEach(item => item.textContent = '');
       status.classList.add('success');
-      status.textContent = '¡Registro recibido! Te enviaremos muy pronto la información de la próxima edición.';
+      status.textContent = result.confirmation_sent
+        ? '¡Registro confirmado! Revisa tu correo electrónico.'
+        : 'Tu registro fue guardado, pero no pudimos enviar el correo de confirmación. Contacta con DPIA.';
     } catch (error) {
       console.error('No se pudo completar el registro:', error);
       status.classList.add('error');
