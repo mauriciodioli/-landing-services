@@ -18,6 +18,27 @@ def login_api():
     data = request.get_json(silent=True) or {}
     email = (data.get('email') or '').strip().lower()
     password = data.get('password') or ''
+    # simple honeypot: bots will fill this field
+    hp = (data.get('hp') or '').strip()
+    if hp:
+        return jsonify({'error': 'Detenido por validación anti-bot'}), 400
+
+    # Optional: validate reCAPTCHA if configured via env
+    recaptcha_secret = current_app.config.get('RECAPTCHA_SECRET') or None
+    recaptcha_response = (data.get('g-recaptcha-response') or '').strip()
+    if recaptcha_secret and recaptcha_response:
+        try:
+            import requests
+            resp = requests.post('https://www.google.com/recaptcha/api/siteverify', data={
+                'secret': recaptcha_secret,
+                'response': recaptcha_response,
+            }, timeout=5)
+            j = resp.json()
+            if not j.get('success'):
+                return jsonify({'error': 'reCAPTCHA inválido'}), 400
+        except Exception:
+            current_app.logger.exception('Error verificando reCAPTCHA')
+            return jsonify({'error': 'Error verificando reCAPTCHA'}), 500
     if not email or not password:
         return jsonify({'error': 'Credenciales inválidas'}), 400
 
