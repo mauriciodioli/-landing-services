@@ -4,6 +4,9 @@ import hmac
 from datetime import datetime, timedelta, timezone
 from email.message import EmailMessage
 from functools import wraps
+import base64
+from extensions import db
+from sqlalchemy import text
 from zoneinfo import ZoneInfo
 
 from flask import Blueprint, abort, current_app, jsonify, render_template, request
@@ -70,13 +73,82 @@ def _admin_required(view):
         authorization = request.headers.get("Authorization", "")
         if authorization.startswith("Bearer "):
             supplied = authorization[7:].strip()
-        if not expected:
-            return jsonify({"error": "PARTICIPANTS_ADMIN_TOKEN no está configurado"}), 503
-        if not hmac.compare_digest(supplied, expected):
-            return jsonify({"error": "No autorizado"}), 401
-        return view(*args, **kwargs)
+
+        # If an explicit env var token is configured, prefer that (legacy behavior)
+        if expected:
+            if not hmac.compare_digest(supplied or "", expected):
+                return jsonify({"error": "No autorizado"}), 401
+            return view(*args, **kwargs)
+
+        # No env token configured -> authenticate against `usuarios` table.
+        # Support: 1) Authorization: Basic <base64(email:password)>  2) X-Admin-Token or Bearer token matching usuarios.token
+        try:
+            from controllers.campania_telefonica import (
+                _consultar_usuario_por_correo,
+                _consultar_usuario_por_access_token,
+                _verificar_password_usuario,
+            )
+        except Exception:
+            return jsonify({"error": "Autenticación no disponible en el servidor"}), 503
+
+        # 1) Basic auth with email:password
+        if authorization and authorization.lower().startswith("basic "):
+            try:
+                b64 = authorization.split(None, 1)[1].strip()
+                creds = base64.b64decode(b64).decode("utf-8", errors="ignore")
+                if ":" in creds:
+                    email, password = creds.split(":", 1)
+                    usuario = _consultar_usuario_por_correo(email.lower())
+                    if not usuario:
+                        return jsonify({"error": "No autorizado"}), 401
+                    if not bool(usuario.get("activo")):
+                        return jsonify({"error": "Usuario inactivo"}), 403
+                    if _verificar_password_usuario(usuario.get("password"), password):
+                        return view(*args, **kwargs)
+                    return jsonify({"error": "No autorizado"}), 401
+            except Exception:
+                return jsonify({"error": "No autorizado"}), 401
+
+        # 2) Token in X-Admin-Token or Bearer token -> check usuarios.token
+        token_value = supplied or _extra_bearer_token_from_header()
+        if token_value:
+            usuario = _consultar_usuario_por_access_token(token_value)
+            if not usuario:
+                return jsonify({"error": "No autorizado"}), 401
+            if not bool(usuario.get("activo")):
+                return jsonify({"error": "Usuario inactivo"}), 403
+            return view(*args, **kwargs)
+
+        # 3) If token looks like a JWT and an app secret is configured, try decoding to obtain user id
+        try:
+            import jwt
+            secret = current_app.config.get('JWT_SECRET_KEY') or os.getenv('JWT_SECRET_KEY', '')
+            if token_value and secret:
+                payload = jwt.decode(token_value, secret, algorithms=['HS256'])
+                user_id = payload.get('sub') or payload.get('user_id') or payload.get('id')
+                if user_id:
+                    row = db.session.execute(
+                        text("SELECT id, correo_electronico, password, activo, roll FROM usuarios WHERE id = :id LIMIT 1"),
+                        {"id": int(user_id)},
+                    ).mappings().first()
+                    if row:
+                        if not bool(row.get('activo')):
+                            return jsonify({"error": "Usuario inactivo"}), 403
+                        return view(*args, **kwargs)
+        except Exception:
+            # ignore JWT errors and fallthrough to unauthorized
+            pass
+
+        return jsonify({"error": "PARTICIPANTS_ADMIN_TOKEN no está configurado y no se proporcionaron credenciales válidas"}), 503
 
     return wrapped
+
+
+def _extra_bearer_token_from_header():
+    authorization = request.headers.get("Authorization", "").strip()
+    if authorization.lower().startswith("bearer "):
+        return authorization[7:].strip()
+    return ""
 
 
 def _mail_settings():

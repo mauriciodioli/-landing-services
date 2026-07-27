@@ -9,22 +9,53 @@
   let rows = [];
 
   const token = () => {
-    let value = sessionStorage.getItem('participants-admin-token');
-    if (!value) {
-      value = window.prompt('Token de administración:') || '';
-      if (value) sessionStorage.setItem('participants-admin-token', value);
+    // Prefer stored credentials (email+password), fall back to token for backwards compatibility
+    try {
+      const credsJson = sessionStorage.getItem('participants-admin-credentials');
+      if (credsJson) {
+        const creds = JSON.parse(credsJson);
+        return { type: 'basic', email: creds.email || '', password: creds.password || '' };
+      }
+    } catch (e) {}
+    let tokenValue = sessionStorage.getItem('participants-admin-token');
+    if (tokenValue) return { type: 'token', token: tokenValue };
+
+    // Ask for email/password first (preferred)
+    const email = window.prompt('Email de admin:') || '';
+    if (email) {
+      const password = window.prompt('Contraseña:') || '';
+      if (password) {
+        sessionStorage.setItem('participants-admin-credentials', JSON.stringify({ email, password }));
+        return { type: 'basic', email, password };
+      }
     }
-    return value;
+
+    // Fallback: token prompt
+    tokenValue = window.prompt('Token de administración (opcional):') || '';
+    if (tokenValue) {
+      sessionStorage.setItem('participants-admin-token', tokenValue);
+      return { type: 'token', token: tokenValue };
+    }
+    return { type: 'none' };
   };
 
   const request = async (url, options = {}) => {
+    const auth = token();
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(options.headers || {}),
+    };
+    if (auth.type === 'basic') {
+      try {
+        headers['Authorization'] = 'Basic ' + btoa(`${auth.email}:${auth.password}`);
+      } catch (e) {}
+    } else if (auth.type === 'token') {
+      headers['X-Admin-Token'] = auth.token;
+      headers['Authorization'] = 'Bearer ' + auth.token;
+    }
     const response = await fetch(url, {
       ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Admin-Token': token(),
-        ...(options.headers || {}),
-      },
+      headers,
     });
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(payload.error || `HTTP ${response.status}`);
@@ -120,6 +151,7 @@
   document.querySelector('#refresh').addEventListener('click', load);
   document.querySelector('#changeToken').addEventListener('click', () => {
     sessionStorage.removeItem('participants-admin-token');
+    sessionStorage.removeItem('participants-admin-credentials');
     load();
   });
   [courseFilter, statusFilter].forEach(element => element.addEventListener('change', load));
