@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <title>Participantes · DPIA Solutions</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
@@ -12,7 +13,13 @@
 </head>
 <body>
   <header>
-    <div><span>DPIA</span><strong>Participantes de cursos</strong></div>
+    <div>
+      <a href="http://127.0.0.1:8300/" style="display:inline-flex;align-items:center;text-decoration:none;color:inherit;">
+        <img src="{{ url_for('static', filename='b2b/dpia-symbol.png') }}" alt="DPIA" style="height:28px;margin-right:.5rem;">
+        <span>DPIA</span>
+      </a>
+      <strong style="margin-left:12px;">Participantes de cursos</strong>
+    </div>
     <button id="changeToken" type="button">Cambiar acceso</button>
   </header>
   <main>

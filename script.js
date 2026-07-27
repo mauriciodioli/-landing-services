@@ -17,7 +17,15 @@
 			} else {
 				li.innerHTML = '<a href="/login" class="navbar__link">Acceso admin</a>';
 			}
-			menu.appendChild(li);
+			// Try to insert after the Contact link if present, otherwise append
+			let contactLi = null;
+			const contactAnchor = menu.querySelector('a[href*="#contacto"]') || menu.querySelector('a[href$="/contacto"]') || menu.querySelector('a.navbar__link[href="index.html#contacto"]');
+			if (contactAnchor) contactLi = contactAnchor.closest('li');
+			if (contactLi && contactLi.parentNode) {
+				contactLi.parentNode.insertBefore(li, contactLi.nextSibling);
+			} else {
+				menu.appendChild(li);
+			}
 		});
 
 		const btn = document.getElementById('logoutBtn');
