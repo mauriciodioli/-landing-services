@@ -23,6 +23,9 @@ COURSES = {
     "masterclass-ia": "Del mundo físico a la IA",
 }
 
+# Roles permitidos para acceder al admin
+ALLOWED_ADMIN_ROLES = {"administrador", "avanzado", "moderador"}
+
 EDITABLE_FIELDS = {
     "name",
     "email",
@@ -104,7 +107,10 @@ def _admin_required(view):
                     if not bool(usuario.get("activo")):
                         return jsonify({"error": "Usuario inactivo"}), 403
                     if _verificar_password_usuario(usuario.get("password"), password):
-                        return view(*args, **kwargs)
+                        role = (usuario.get('roll') or '')
+                        if role and role.lower() in ALLOWED_ADMIN_ROLES:
+                            return view(*args, **kwargs)
+                        return jsonify({"error": "Acceso restringido"}), 403
                     return jsonify({"error": "No autorizado"}), 401
             except Exception:
                 return jsonify({"error": "No autorizado"}), 401
@@ -117,7 +123,10 @@ def _admin_required(view):
                 return jsonify({"error": "No autorizado"}), 401
             if not bool(usuario.get("activo")):
                 return jsonify({"error": "Usuario inactivo"}), 403
-            return view(*args, **kwargs)
+            role = (usuario.get('roll') or '')
+            if role and role.lower() in ALLOWED_ADMIN_ROLES:
+                return view(*args, **kwargs)
+            return jsonify({"error": "Acceso restringido"}), 403
 
         # 3) If token looks like a JWT and an app secret is configured, try decoding to obtain user id
         try:
@@ -134,7 +143,10 @@ def _admin_required(view):
                     if row:
                         if not bool(row.get('activo')):
                             return jsonify({"error": "Usuario inactivo"}), 403
-                        return view(*args, **kwargs)
+                        role = (row.get('roll') or '')
+                        if role and role.lower() in ALLOWED_ADMIN_ROLES:
+                            return view(*args, **kwargs)
+                        return jsonify({"error": "Acceso restringido"}), 403
         except Exception:
             # ignore JWT errors and fallthrough to unauthorized
             pass

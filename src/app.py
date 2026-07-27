@@ -54,6 +54,7 @@ from controllers.comercios.comercio_crud import comercio_crud
 from controllers.comercios.comercio_lookup import lookup
 from routes.campania_telefonica_routes import campania_telefonica_bp
 from controllers.course_participants import participants
+from controllers.autenticacion import autenticacion
 
 
 
@@ -75,6 +76,7 @@ app.register_blueprint(comercio_dashboard)
 app.register_blueprint(comercio_crud)
 app.register_blueprint(lookup)
 app.register_blueprint(participants)
+app.register_blueprint(autenticacion)
 
 
 
