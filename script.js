@@ -18,11 +18,16 @@
 				li.innerHTML = '<a href="/login" class="navbar__link">Acceso admin</a>';
 			}
 			// Try to insert after the Contact link if present, otherwise append
-			let contactLi = null;
 			const contactAnchor = menu.querySelector('a[href*="#contacto"]') || menu.querySelector('a[href$="/contacto"]') || menu.querySelector('a.navbar__link[href="index.html#contacto"]');
-			if (contactAnchor) contactLi = contactAnchor.closest('li');
-			if (contactLi && contactLi.parentNode) {
-				contactLi.parentNode.insertBefore(li, contactLi.nextSibling);
+			if (contactAnchor) {
+				const contactLi = contactAnchor.closest('li');
+				if (contactLi && contactLi.parentNode) {
+					contactLi.parentNode.insertBefore(li, contactLi.nextSibling);
+				} else if (contactAnchor.parentNode) {
+					contactAnchor.parentNode.insertBefore(li, contactAnchor.nextSibling);
+				} else {
+					menu.appendChild(li);
+				}
 			} else {
 				menu.appendChild(li);
 			}
