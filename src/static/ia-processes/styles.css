@@ -15,3 +15,6 @@
 .button-submit{background:var(--lime);color:#fff}
 .button-submit:hover{background:#4a7fff}
 .button-submit b{color:#fff}
+
+/* DPIA home link */
+.brand>.dpia-logo{width:40px;height:40px;object-fit:contain;border-radius:8px;flex:0 0 auto}
