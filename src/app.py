@@ -55,6 +55,7 @@ from controllers.comercios.comercio_lookup import lookup
 from routes.campania_telefonica_routes import campania_telefonica_bp
 from controllers.course_participants import participants
 from controllers.autenticacion import autenticacion
+from controllers.callCenters.call_centers import call_centers
 
 
 
@@ -77,6 +78,7 @@ app.register_blueprint(comercio_crud)
 app.register_blueprint(lookup)
 app.register_blueprint(participants)
 app.register_blueprint(autenticacion)
+app.register_blueprint(call_centers)
 
 
 

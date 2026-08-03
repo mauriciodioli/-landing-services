@@ -80,9 +80,26 @@ def _is_ia_processes_host():
     request_host = request.host.split(":", 1)[0].lower()
     return request_host in allowed_hosts
 
+def _is_call_centers_host():
+    """Detecta el subdominio dedicado a Talent Call."""
+    configured_hosts = os.getenv(
+        "CALL_CENTERS_HOSTS",
+        "call.dpia.site",
+    )
+    allowed_hosts = {
+        host.strip().lower()
+        for host in configured_hosts.split(",")
+        if host.strip()
+    }
+    request_host = request.host.split(":", 1)[0].lower()
+    return request_host in allowed_hosts
+
+
 
 @conexion_externa.route("/")
 def index():
+    if _is_call_centers_host():
+        return render_template("callCenters/index.html")
     if _is_masterclass_host():
         return render_template(
             "masterclass/index.html",
