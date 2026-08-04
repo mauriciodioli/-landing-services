@@ -7,3 +7,10 @@ call_centers = Blueprint("call_centers", __name__)
 def landing():
     """Presenta Talent Call y los servicios DPIA para call centers."""
     return render_template("callCenters/index.html")
+
+
+@call_centers.get("/call-centers/soluciones")
+@call_centers.get("/call-centers/soluciones/")
+def soluciones():
+    """Detalle de soluciones modulares para operaciones de contact center."""
+    return render_template("callCenters/soluciones.html")
