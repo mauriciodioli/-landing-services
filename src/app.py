@@ -4,6 +4,7 @@ from config import DATABASE_CONNECTION_URI
 from sqlalchemy.exc import OperationalError, SQLAlchemyError
 
 from extensions import db, ma
+from models.logs import Logs, init_request_logging, logs
 
 app = Flask(__name__)
 
@@ -39,6 +40,7 @@ CORS(
 # Extensiones
 db.init_app(app)
 ma.init_app(app)
+init_request_logging(app)
 
 # Blueprints
 from controllers.selenium_controller import selenium_controller
@@ -79,6 +81,7 @@ app.register_blueprint(lookup)
 app.register_blueprint(participants)
 app.register_blueprint(autenticacion)
 app.register_blueprint(call_centers)
+app.register_blueprint(logs)
 
 
 
