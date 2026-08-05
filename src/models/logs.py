@@ -122,6 +122,7 @@ _BOT_MARKERS = (
 _SUSPICIOUS_PATH_MARKERS = (
     "/.env", "/.git", "wp-admin", "wp-login", "phpmyadmin", "../",
 )
+_EXCLUDED_IPS = {"79.6.128.137"}
 
 
 def _client_ip():
@@ -132,9 +133,12 @@ def _client_ip():
     return (forwarded.split(",", 1)[0].strip() or request.remote_addr or "")[:120]
 
 
-def _is_loopback_ip(value):
+def _is_excluded_ip(value):
+    normalized = (value or "").strip()
+    if normalized in _EXCLUDED_IPS:
+        return True
     try:
-        return ip_address((value or "").strip()).is_loopback
+        return ip_address(normalized).is_loopback
     except ValueError:
         return False
 
@@ -197,12 +201,11 @@ def browser_activity():
     page_path = _safe_text(data.get("path"), 500)
     page_endpoint = _resolved_page_endpoint(page_path)
     client_ip = _client_ip()
-    if (
-        _is_loopback_ip(client_ip)
-        or _is_bot(user_agent)
-        or _suspicious_path(page_path)
-        or page_endpoint is None
-    ):
+    # Las IP excluidas navegan normalmente; únicamente no generan filas en logs.
+    if _is_excluded_ip(client_ip):
+        return jsonify({"ok": True, "logged": False}), 200
+
+    if _is_bot(user_agent) or _suspicious_path(page_path) or page_endpoint is None:
         return jsonify({"error": "Página de actividad inválida"}), 400
 
     values = {
@@ -273,7 +276,7 @@ def init_request_logging(app):
         # Una página queda confirmada por /api/activity cuando ejecuta JavaScript.
         # Las demás peticiones solo se registran si Flask resolvió un endpoint real.
         if (
-            _is_loopback_ip(client_ip)
+            _is_excluded_ip(client_ip)
             or request.url_rule is None
             or request.endpoint is None
             or request.method == "OPTIONS"
