@@ -3,6 +3,7 @@ from flask import Blueprint, current_app, g, jsonify, request
 from extensions import db
 from sqlalchemy import inspect, Column, Integer, String, DateTime, Boolean, Text, insert
 from datetime import datetime, timedelta
+from ipaddress import ip_address
 from time import perf_counter
 from urllib.parse import urlsplit
 from sqlalchemy.exc import SQLAlchemyError
@@ -131,6 +132,13 @@ def _client_ip():
     return (forwarded.split(",", 1)[0].strip() or request.remote_addr or "")[:120]
 
 
+def _is_loopback_ip(value):
+    try:
+        return ip_address((value or "").strip()).is_loopback
+    except ValueError:
+        return False
+
+
 def _request_type():
     if request.path.startswith("/api/"):
         return "api"
@@ -188,7 +196,13 @@ def browser_activity():
     user_agent = request.headers.get("User-Agent", "")
     page_path = _safe_text(data.get("path"), 500)
     page_endpoint = _resolved_page_endpoint(page_path)
-    if _is_bot(user_agent) or _suspicious_path(page_path) or page_endpoint is None:
+    client_ip = _client_ip()
+    if (
+        _is_loopback_ip(client_ip)
+        or _is_bot(user_agent)
+        or _suspicious_path(page_path)
+        or page_endpoint is None
+    ):
         return jsonify({"error": "Página de actividad inválida"}), 400
 
     values = {
@@ -196,7 +210,7 @@ def browser_activity():
         "userCuenta": _safe_text(data.get("visitor_id"), 120),
         "accountCuenta": _safe_text(data.get("session_id"), 120),
         "fecha_log": datetime.utcnow(),
-        "ip": _client_ip(),
+        "ip": client_ip,
         "funcion": "%s:%s" % (page_endpoint, event),
         "archivo": "activity-tracker.js",
         "linea": None,
@@ -252,13 +266,15 @@ def init_request_logging(app):
                 response.set_data(html[:closing_index] + tracker + html[closing_index:])
 
         user_agent = request.headers.get("User-Agent", "")
+        client_ip = _client_ip()
         is_bot = _is_bot(user_agent)
         is_html_page = request.method == "GET" and "text/html" in content_type
 
         # Una página queda confirmada por /api/activity cuando ejecuta JavaScript.
         # Las demás peticiones solo se registran si Flask resolvió un endpoint real.
         if (
-            request.url_rule is None
+            _is_loopback_ip(client_ip)
+            or request.url_rule is None
             or request.endpoint is None
             or request.method == "OPTIONS"
             or _suspicious_path(request.path)
@@ -270,7 +286,7 @@ def init_request_logging(app):
         started_at = getattr(g, "activity_started_at", perf_counter())
         values = {
             "fecha_log": datetime.utcnow(),
-            "ip": _client_ip(),
+            "ip": client_ip,
             "funcion": (request.endpoint or "not_found")[:120],
             "archivo": (request.blueprint or "app")[:120],
             "error": str(response.status_code) if response.status_code >= 400 else None,
