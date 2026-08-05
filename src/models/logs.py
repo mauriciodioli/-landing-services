@@ -4,6 +4,7 @@ from extensions import db
 from sqlalchemy import inspect, Column, Integer, String, DateTime, Boolean, Text, insert
 from datetime import datetime, timedelta
 from time import perf_counter
+from urllib.parse import urlsplit
 from sqlalchemy.exc import SQLAlchemyError
 from utils.db_session import get_db_session 
 ma = Marshmallow()
@@ -115,6 +116,7 @@ mer_schema_many = MerSchema(many=True)  # ✅ Nombre corregido
 _BOT_MARKERS = (
     "bot", "crawler", "spider", "slurp", "headless",
     "facebookexternalhit", "whatsapp", "telegrambot", "bingpreview",
+    "scanner", "zgrab", "masscan", "nmap", "nikto", "sqlmap",
 )
 _SUSPICIOUS_PATH_MARKERS = (
     "/.env", "/.git", "wp-admin", "wp-login", "phpmyadmin", "../",
@@ -136,6 +138,31 @@ def _request_type():
         return "action"
     return "page"
 
+
+def _is_bot(user_agent):
+    normalized = (user_agent or "").lower()
+    return any(marker in normalized for marker in _BOT_MARKERS)
+
+
+def _suspicious_path(path):
+    normalized = (path or "").lower()
+    return any(marker in normalized for marker in _SUSPICIOUS_PATH_MARKERS)
+
+
+def _resolved_page_endpoint(path):
+    """Devuelve el endpoint GET real de una página o None si la ruta no existe."""
+    clean_path = urlsplit(path or "").path
+    if not clean_path.startswith("/"):
+        return None
+    try:
+        endpoint, _ = current_app.url_map.bind_to_environ(request.environ).match(
+            clean_path, method="GET"
+        )
+    except Exception:
+        return None
+    if endpoint == "static" or endpoint == "logs.browser_activity":
+        return None
+    return endpoint
 
 
 def _safe_text(value, limit):
@@ -159,13 +186,18 @@ def browser_activity():
         return jsonify({"error": "Duración inválida"}), 400
 
     user_agent = request.headers.get("User-Agent", "")
+    page_path = _safe_text(data.get("path"), 500)
+    page_endpoint = _resolved_page_endpoint(page_path)
+    if _is_bot(user_agent) or _suspicious_path(page_path) or page_endpoint is None:
+        return jsonify({"error": "Página de actividad inválida"}), 400
+
     values = {
         "user_id": None,
         "userCuenta": _safe_text(data.get("visitor_id"), 120),
         "accountCuenta": _safe_text(data.get("session_id"), 120),
         "fecha_log": datetime.utcnow(),
         "ip": _client_ip(),
-        "funcion": event,
+        "funcion": "%s:%s" % (page_endpoint, event),
         "archivo": "activity-tracker.js",
         "linea": None,
         "error": None,
@@ -173,11 +205,11 @@ def browser_activity():
         "latitude": _safe_text(data.get("latitude"), 120),
         "longitude": _safe_text(data.get("longitude"), 120),
         "language": _safe_text(data.get("language"), 50),
-        "path": _safe_text(data.get("path"), 500),
+        "path": page_path,
         "method": request.method,
         "user_agent": user_agent or None,
         "referer": request.headers.get("Referer", "")[:1000] or None,
-        "es_bot": any(marker in user_agent.lower() for marker in _BOT_MARKERS),
+        "es_bot": False,
         "status_code": 200,
         "request_type": "browser_activity",
         "trafico_sospechoso": False,
@@ -220,13 +252,20 @@ def init_request_logging(app):
                 response.set_data(html[:closing_index] + tracker + html[closing_index:])
 
         user_agent = request.headers.get("User-Agent", "")
-        normalized_path = request.path.lower()
-        is_bot = any(marker in user_agent.lower() for marker in _BOT_MARKERS)
-        suspicion_reason = None
-        if any(marker in normalized_path for marker in _SUSPICIOUS_PATH_MARKERS):
-            suspicion_reason = "ruta_sospechosa"
-        elif response.status_code in (401, 403, 429):
-            suspicion_reason = "acceso_rechazado"
+        is_bot = _is_bot(user_agent)
+        is_html_page = request.method == "GET" and "text/html" in content_type
+
+        # Una página queda confirmada por /api/activity cuando ejecuta JavaScript.
+        # Las demás peticiones solo se registran si Flask resolvió un endpoint real.
+        if (
+            request.url_rule is None
+            or request.endpoint is None
+            or request.method == "OPTIONS"
+            or _suspicious_path(request.path)
+            or is_bot
+            or is_html_page
+        ):
+            return response
 
         started_at = getattr(g, "activity_started_at", perf_counter())
         values = {
@@ -243,8 +282,8 @@ def init_request_logging(app):
             "es_bot": is_bot,
             "status_code": response.status_code,
             "request_type": _request_type(),
-            "trafico_sospechoso": bool(suspicion_reason),
-            "motivo_sospecha": suspicion_reason,
+            "trafico_sospechoso": False,
+            "motivo_sospecha": None,
             "duracion_ms": max(0, round((perf_counter() - started_at) * 1000)),
         }
         try:
