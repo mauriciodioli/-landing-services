@@ -95,7 +95,8 @@ jobs:
             docker cp /home/ubuntu/client_secrets.json ${{ env.DEPLOYMENT_VERSION }}:/src/utils
             docker cp /home/ubuntu/credentials_module.json ${{ env.DEPLOYMENT_VERSION }}:/src/utils
             docker cp /home/ubuntu/pruebasheetpython.json ${{ env.DEPLOYMENT_VERSION }}:/src/utils
-              
+            docker cp /home/ubuntu/upload_to_gcs.json ${{ env.DEPLOYMENT_VERSION }}:/src
+                
     - name: Install vim and nano inside the container
       uses: appleboy/ssh-action@master
       with:
