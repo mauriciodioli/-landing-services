@@ -29,3 +29,11 @@ env/
 
 # Ignore workspace file
 bot421.code-workspace
+
+# Ignore SQL and markdown files and local git hooks
+*.sql
+*.md
+.githooks/
+
+# Ignore GCS credential if present locally
+src/upload_to_gcs.json
