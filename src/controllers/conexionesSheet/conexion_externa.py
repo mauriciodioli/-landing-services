@@ -80,6 +80,18 @@ def _is_ia_processes_host():
     request_host = request.host.split(":", 1)[0].lower()
     return request_host in allowed_hosts
 
+def _is_ola_host():
+    """Detecta el subdominio privado del álbum de Ola."""
+    configured_hosts = os.getenv("OLA_HOSTS", "ola.dpia.site")
+    allowed_hosts = {
+        host.strip().lower()
+        for host in configured_hosts.split(",")
+        if host.strip()
+    }
+    request_host = request.host.split(":", 1)[0].lower()
+    return request_host in allowed_hosts
+
+
 def _is_call_centers_host():
     """Detecta el subdominio dedicado a Talent Call."""
     configured_hosts = os.getenv(
@@ -98,6 +110,17 @@ def _is_call_centers_host():
 
 @conexion_externa.route("/")
 def index():
+    if _is_ola_host():
+        from models.album import Album
+
+        slug = os.getenv("OLA_ALBUM_SLUG", "ola-PRIVATE-SLUG")
+        album = Album.query.filter_by(slug=slug, active=True).first_or_404()
+        response = current_app.make_response(
+            render_template("album/index.html", slug=album.slug)
+        )
+        response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
+        response.headers["Cache-Control"] = "private, no-store"
+        return response
     if _is_call_centers_host():
         return render_template("callCenters/index.html")
     if _is_masterclass_host():
