@@ -9,11 +9,14 @@ class AlbumStorage:
         bucket_name = os.environ.get("BUCKET_NAME")
         if not bucket_name:
             raise RuntimeError("BUCKET_NAME is not configured")
-        credentials_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS") or os.environ.get("BUCKET_GOOGLE_CREDENTIAL")
-        if credentials_path:
-            self.client = storage.Client.from_service_account_json(credentials_path)
-        else:
-            self.client = storage.Client()
+        credentials_path = os.environ.get("BUCKET_GOOGLE_CREDENTIAL")
+        if not credentials_path:
+            raise RuntimeError("BUCKET_GOOGLE_CREDENTIAL is not configured")
+        if not os.path.isfile(credentials_path):
+            raise RuntimeError(
+                f"BUCKET_GOOGLE_CREDENTIAL file does not exist: {credentials_path}"
+            )
+        self.client = storage.Client.from_service_account_json(credentials_path)
         self.bucket = self.client.bucket(bucket_name)
 
     def upload(self, key, stream, mime_type):

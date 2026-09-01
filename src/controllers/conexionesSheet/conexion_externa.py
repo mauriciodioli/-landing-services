@@ -113,7 +113,7 @@ def index():
     if _is_ola_host():
         from models.album import Album
 
-        slug = os.getenv("OLA_ALBUM_SLUG", "ola-PRIVATE-SLUG")
+        slug = os.getenv("OLA_ALBUM_SLUG", "ola-prod-9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4")
         album = Album.query.filter_by(slug=slug, active=True).first_or_404()
         response = current_app.make_response(
             render_template("album/index.html", slug=album.slug)
