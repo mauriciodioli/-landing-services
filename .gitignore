@@ -36,4 +36,4 @@ bot421.code-workspace
 .githooks/
 
 # Ignore GCS credential if present locally
-/src/utils/upload_to_gcs.json
+/src/upload_to_gcs.json

@@ -5,11 +5,12 @@ from sqlalchemy.exc import OperationalError, SQLAlchemyError
 
 from extensions import db, ma
 from models.logs import Logs, init_request_logging, logs
-
+import os
 app = Flask(__name__)
 
 # --- Config ---
-app.secret_key = '*0984632'
+app.secret_key = os.environ.get('SECRET_KEY', '*0984632')
+app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SECURE=os.environ.get('SESSION_COOKIE_SECURE', '1') == '1', SESSION_COOKIE_SAMESITE='Lax')
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_CONNECTION_URI
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -58,6 +59,7 @@ from routes.campania_telefonica_routes import campania_telefonica_bp
 from controllers.course_participants import participants
 from controllers.autenticacion import autenticacion
 from controllers.callCenters.call_centers import call_centers
+from controllers.album import album_bp
 
 
 
@@ -81,6 +83,7 @@ app.register_blueprint(lookup)
 app.register_blueprint(participants)
 app.register_blueprint(autenticacion)
 app.register_blueprint(call_centers)
+app.register_blueprint(album_bp)
 app.register_blueprint(logs)
 
 
@@ -99,6 +102,7 @@ with app.app_context():
     from models.contacto_telefonico import ContactoTelefonico
     from models.historial_contacto import HistorialContacto
     from models.course_participant import CourseParticipant
+    from models.album import Album, AlbumPage, AlbumMedia
 
     # IMPORTA el/los modelos con LA MISMA instancia de db (extensions.db)
     try:
