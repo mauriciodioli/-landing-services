@@ -27,7 +27,22 @@ MAX_VIDEO = 250 * 1024 * 1024
 _attempts = {}
 
 
-def _admin(): return float(session.get(SESSION_KEY, 0)) > time.time()
+def _admin(item):
+    records = session.get(SESSION_KEY, {})
+    record = records.get(str(item.id), {}) if isinstance(records, dict) else {}
+    return float(record.get("until", 0)) > time.time() and int(record.get("version", 0)) == item.admin_session_version
+
+def _set_admin(item):
+    records = session.get(SESSION_KEY, {})
+    if not isinstance(records, dict):
+        records = {}
+    records[str(item.id)] = {"until": time.time() + int(os.environ.get("ALBUM_ADMIN_SESSION_SECONDS", "3600")), "version": item.admin_session_version}
+    session[SESSION_KEY] = records
+    session.permanent = False
+
+def _pin_hash(item):
+    return (item.admin_pin_hash or os.environ.get("ALBUM_ADMIN_PIN_HASH", "")).encode()
+
 def _csrf():
     token = session.get("ola_album_csrf")
     if not token: token = session["ola_album_csrf"] = secrets.token_urlsafe(32)
@@ -36,7 +51,8 @@ def _csrf():
 def admin_required(fn):
     @wraps(fn)
     def wrapped(*args, **kwargs):
-        if not _admin(): return jsonify(error="unauthorized"), 401
+        item = _album(kwargs.get("slug"))
+        if not _admin(item): return jsonify(error="unauthorized"), 401
         if request.method not in ("GET", "HEAD") and not secrets.compare_digest(request.headers.get("X-CSRF-Token", ""), _csrf()):
             return jsonify(error="invalid_request"), 403
         return fn(*args, **kwargs)
@@ -102,26 +118,59 @@ def album_shared(slug, token):
 
 @album_bp.post("/api/albums/<slug>/admin/login")
 def album_login(slug):
-    _album(slug); ip=request.headers.get("X-Forwarded-For",request.remote_addr or "").split(",")[0].strip(); now=time.time()
+    item=_album(slug); ip=request.headers.get("X-Forwarded-For",request.remote_addr or "").split(",")[0].strip(); now=time.time()
     recent=[stamp for stamp in _attempts.get(ip,[]) if now-stamp<900]
     if len(recent)>=5: return jsonify(error="try_later"),429
-    pin_hash=os.environ.get("ALBUM_ADMIN_PIN_HASH","").encode(); pin=str((request.get_json(silent=True) or {}).get("pin","")).encode()
+    pin_hash=_pin_hash(item); pin=str((request.get_json(silent=True) or {}).get("pin","")).encode()
     if not pin_hash: return jsonify(error="pin_not_configured"),503
     try: valid=bool(pin) and bcrypt.checkpw(pin,pin_hash)
     except ValueError: valid=False
     if not valid:
         recent.append(now); _attempts[ip]=recent; return jsonify(error="invalid_credentials"),401
-    _attempts.pop(ip,None); session[SESSION_KEY]=now+int(os.environ.get("ALBUM_ADMIN_SESSION_SECONDS","3600")); session.permanent=False
+    _attempts.pop(ip,None); _set_admin(item)
     return jsonify(ok=True,csrf_token=_csrf())
 
 @album_bp.post("/api/albums/<slug>/admin/logout")
 @admin_required
-def album_logout(slug): _album(slug); session.pop(SESSION_KEY,None); return jsonify(ok=True)
+def album_logout(slug):
+    item = _album(slug); records = session.get(SESSION_KEY, {})
+    if isinstance(records, dict): records.pop(str(item.id), None); session[SESSION_KEY] = records
+    return jsonify(ok=True)
+
+@album_bp.post("/api/albums/<slug>/admin/pin")
+@admin_required
+def album_change_pin(slug):
+    item = _album(slug); data = request.get_json(silent=True) or {}
+    current_pin = str(data.get("current_pin", "")); new_pin = str(data.get("new_pin", ""))
+    if len(new_pin) < 4 or len(new_pin) > 64:
+        return jsonify(error="invalid_new_pin"), 400
+    try:
+        valid = bool(current_pin) and bcrypt.checkpw(current_pin.encode(), _pin_hash(item))
+    except ValueError:
+        valid = False
+    if not valid:
+        return jsonify(error="invalid_current_pin"), 400
+    if secrets.compare_digest(current_pin, new_pin):
+        return jsonify(error="same_pin"), 400
+    item.admin_pin_hash = bcrypt.hashpw(new_pin.encode(), bcrypt.gensalt()).decode()
+    item.admin_session_version = (item.admin_session_version or 1) + 1
+    db.session.commit(); _set_admin(item)
+    return jsonify(ok=True, csrf_token=_csrf())
+
+@album_bp.patch("/api/albums/<slug>/admin/title")
+@admin_required
+def album_change_title(slug):
+    item = _album(slug)
+    title = str((request.get_json(silent=True) or {}).get("title", "")).strip()[:160]
+    if not title:
+        return jsonify(error="title_required"), 400
+    item.title = title; db.session.commit()
+    return jsonify(ok=True, title=item.title)
 
 @album_bp.get("/api/albums/<slug>/admin")
 @admin_required
 def album_admin(slug):
-    item=_album(slug); storage=AlbumStorage(); return jsonify(csrf_token=_csrf(),pages=[_page_json(p,storage,True) for p in item.pages])
+    item=_album(slug); storage=AlbumStorage(); return jsonify(title=item.title,subtitle=item.subtitle,music_url=item.music_url,csrf_token=_csrf(),pages=[_page_json(p,storage,True) for p in item.pages])
 
 @album_bp.post("/api/albums/<slug>/pages")
 @admin_required

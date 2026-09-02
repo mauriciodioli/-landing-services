@@ -41,4 +41,27 @@ class AlbumTest(unittest.TestCase):
         import bcrypt
         with patch.dict(os.environ,{"ALBUM_ADMIN_PIN_HASH":bcrypt.hashpw(b"4409",bcrypt.gensalt()).decode()}):self.assertEqual(200,self.app.test_client().post("/api/albums/private/admin/login",json={"pin":"4409"}).status_code)
 
+    def test_admin_can_change_own_pin(self):
+        import bcrypt
+        initial_hash = bcrypt.hashpw(b"4409", bcrypt.gensalt()).decode()
+        with patch.dict(os.environ, {"ALBUM_ADMIN_PIN_HASH": initial_hash}):
+            client = self.app.test_client()
+            login = client.post("/api/albums/private/admin/login", json={"pin": "4409"})
+            response = client.post("/api/albums/private/admin/pin", json={"current_pin": "4409", "new_pin": "9876"}, headers={"X-CSRF-Token": login.get_json()["csrf_token"]})
+            self.assertEqual(200, response.status_code)
+            other = self.app.test_client()
+            self.assertEqual(401, other.post("/api/albums/private/admin/login", json={"pin": "4409"}).status_code)
+            self.assertEqual(200, other.post("/api/albums/private/admin/login", json={"pin": "9876"}).status_code)
+
+
+    def test_admin_can_change_album_title(self):
+        import bcrypt
+        with patch.dict(os.environ, {"ALBUM_ADMIN_PIN_HASH": bcrypt.hashpw(b"4409", bcrypt.gensalt()).decode()}):
+            client = self.app.test_client()
+            login = client.post("/api/albums/private/admin/login", json={"pin": "4409"})
+            response = client.patch("/api/albums/private/admin/title", json={"title": "Nuestros momentos"}, headers={"X-CSRF-Token": login.get_json()["csrf_token"]})
+            self.assertEqual(200, response.status_code)
+            self.assertEqual("Nuestros momentos", response.get_json()["title"])
+
+
 if __name__=="__main__":unittest.main()

@@ -1,6 +1,19 @@
 from datetime import datetime
+from sqlalchemy import inspect, text
 from extensions import db
 
+
+def ensure_album_schema(engine):
+    """Agrega campos de seguridad a instalaciones existentes."""
+    inspector = inspect(engine)
+    if "albums" not in inspector.get_table_names():
+        return
+    columns = {column["name"] for column in inspector.get_columns("albums")}
+    with engine.begin() as connection:
+        if "admin_pin_hash" not in columns:
+            connection.execute(text("ALTER TABLE albums ADD COLUMN admin_pin_hash VARCHAR(255) NULL"))
+        if "admin_session_version" not in columns:
+            connection.execute(text("ALTER TABLE albums ADD COLUMN admin_session_version INTEGER NOT NULL DEFAULT 1"))
 
 class Album(db.Model):
     __tablename__ = "albums"
@@ -10,6 +23,8 @@ class Album(db.Model):
     subtitle = db.Column(db.String(255))
     music_url = db.Column(db.String(500))
     active = db.Column(db.Boolean, nullable=False, default=True)
+    admin_pin_hash = db.Column(db.String(255))
+    admin_session_version = db.Column(db.Integer, nullable=False, default=1)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
     pages = db.relationship("AlbumPage", back_populates="album", cascade="all, delete-orphan", order_by="AlbumPage.position")

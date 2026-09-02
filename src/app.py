@@ -102,7 +102,7 @@ with app.app_context():
     from models.contacto_telefonico import ContactoTelefonico
     from models.historial_contacto import HistorialContacto
     from models.course_participant import CourseParticipant
-    from models.album import Album, AlbumPage, AlbumMedia
+    from models.album import Album, AlbumPage, AlbumMedia, ensure_album_schema
 
     # IMPORTA el/los modelos con LA MISMA instancia de db (extensions.db)
     try:
@@ -116,6 +116,7 @@ with app.app_context():
 
     # Crea TODO lo mapeado
     db.create_all()
+    ensure_album_schema(db.engine)
     ensure_campania_telefonica_schema(db.engine)
 
     # Airbag extra: fuerza creación SOLO de popup si faltara
