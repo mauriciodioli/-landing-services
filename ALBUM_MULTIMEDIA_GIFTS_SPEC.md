@@ -3,7 +3,7 @@
 ## Estado del documento
 
 - Tipo: visión funcional y base para futuros cambios.
-- Estado: propuesta; todavía no autoriza ni incluye implementación.
+- Estado: implementación inicial activa en `feature/album-multimedia-gifts`; la rama estable permanece separada.
 - Alcance actual: definir con precisión el resultado esperado, sus límites y una secuencia segura de desarrollo.
 - Producto de referencia: álbum privado asociado a una cuenta DPIA, con páginas individuales compartibles públicamente.
 

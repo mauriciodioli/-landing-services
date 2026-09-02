@@ -4,7 +4,7 @@ import os
 import secrets
 import time
 import uuid
-from datetime import date
+from datetime import date, datetime
 from functools import wraps
 from pathlib import Path
 
@@ -16,7 +16,8 @@ from itsdangerous import BadSignature, URLSafeSerializer
 from werkzeug.utils import secure_filename
 
 from extensions import db
-from models.album import Album, AlbumMedia, AlbumPage
+from models.album import Album, AlbumExternalMedia, AlbumGift, AlbumMedia, AlbumPage
+from services.album_content import decrypt_gift, encrypt_gift, normalize_external_url, normalize_music_url, qr_data_url
 from services.album_storage import AlbumStorage
 
 album_bp = Blueprint("album", __name__)
@@ -89,6 +90,9 @@ def _album_template_context(item):
     legacy_slug = os.environ.get("ALBUM_LEGACY_SLUG", "ola-prod-9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4")
     return {"album_title": item.title, "personalized_ola": item.slug == legacy_slug}
 
+def _gift_encryption_key():
+    return os.environ.get("ALBUM_GIFT_ENCRYPTION_KEY") or current_app.secret_key
+
 def _page_token(album_id, page_id):
     signer = URLSafeSerializer(current_app.secret_key, salt="album-page-share-v1")
     return signer.dumps({"album": album_id, "page": page_id})
@@ -107,8 +111,20 @@ def _shared_page(item, token):
 def _media_json(item, storage):
     return {"id":item.id,"type":item.media_type,"name":item.display_name or item.original_name,"url":storage.signed_url(item.object_key),"thumbnail_url":storage.signed_url(item.thumbnail_key or item.object_key)}
 
+def _external_json(item):
+    return {"id": item.id, "type": item.media_type, "provider": item.provider, "url": item.original_url, "embed_url": item.embed_url, "title": item.title or "", "alt_text": item.alt_text or ""}
+
+def _gift_json(item, admin=False):
+    expired = bool(item.expires_at and item.expires_at < datetime.utcnow())
+    status = "expired" if expired and item.status == "available" else item.status
+    result = {"id": item.id, "token": item.public_token, "title": item.title, "message": item.message or "", "provider": item.provider or "", "status": status, "requires_pin": bool(item.pin_hash), "expires_at": item.expires_at.isoformat() if item.expires_at else None}
+    if admin:
+        result["opened_at"] = item.opened_at.isoformat() if item.opened_at else None
+        result["claimed_at"] = item.claimed_at.isoformat() if item.claimed_at else None
+    return result
+
 def _page_json(page, storage, admin=False):
-    result={"id":page.id,"title":page.title,"memory_date":page.memory_date.isoformat() if page.memory_date else None,"description":page.description or "","position":page.position,"is_visible":page.is_visible,"media":[_media_json(m,storage) for m in page.media]}
+    result={"id":page.id,"title":page.title,"memory_date":page.memory_date.isoformat() if page.memory_date else None,"description":page.description or "","position":page.position,"is_visible":page.is_visible,"music_url":page.music_url or page.album.music_url,"page_music_url":page.music_url,"media":[_media_json(m,storage) for m in page.media],"external_media":[_external_json(m) for m in page.external_media],"gifts":[_gift_json(g,admin) for g in page.gifts]}
     if admin:
         result["updated_at"] = page.updated_at.isoformat()
         token = _page_token(page.album_id, page.id)
@@ -262,6 +278,9 @@ def page_update(slug,page_id):
     if "description" in data: page.description=str(data["description"])[:10000]
     if "memory_date" in data: page.memory_date=date.fromisoformat(data["memory_date"]) if data["memory_date"] else None
     if "is_visible" in data: page.is_visible=bool(data["is_visible"])
+    if "music_url" in data:
+        try: page.music_url = normalize_music_url(data.get("music_url"))
+        except ValueError as exc: return jsonify(error=str(exc)), 400
     db.session.commit(); return jsonify(ok=True)
 
 @album_bp.delete("/api/albums/<slug>/pages/<int:page_id>")
@@ -311,10 +330,10 @@ def media_upload(slug,page_id):
         for upload in uploads:
             kind,name,digest,size,width,height,payload,thumb,mime=_prepare(upload)
             if AlbumMedia.query.filter_by(page_id=page.id,sha256=digest).first(): continue
-            uid=uuid.uuid4().hex; folder="images" if kind=="image" else "videos"; key=f"albums/ola/{page.id}/{folder}/{uid}-{Path(name).stem}.{'jpg' if kind=='image' else Path(name).suffix.lstrip('.')}"
+            uid=uuid.uuid4().hex; folder="images" if kind=="image" else "videos"; key=f"albums/{item.id}/{page.id}/{folder}/{uid}-{Path(name).stem}.{'jpg' if kind=='image' else Path(name).suffix.lstrip('.')}"
             storage.upload(key,io.BytesIO(payload),mime); uploaded.append(key); thumb_key=None
             if thumb is not None:
-                thumb_key=f"albums/ola/{page.id}/images/{uid}-thumb.jpg"; storage.upload(thumb_key,io.BytesIO(thumb),"image/jpeg"); uploaded.append(thumb_key)
+                thumb_key=f"albums/{item.id}/{page.id}/images/{uid}-thumb.jpg"; storage.upload(thumb_key,io.BytesIO(thumb),"image/jpeg"); uploaded.append(thumb_key)
             media=AlbumMedia(page_id=page.id,media_type=kind,original_name=name,object_key=key,thumbnail_key=thumb_key,mime_type=mime,size=size,sha256=digest,width=width,height=height,position=next_pos)
             next_pos+=1; db.session.add(media); created.append(media)
         db.session.commit(); return jsonify(ids=[m.id for m in created]),201
@@ -343,3 +362,122 @@ def media_delete(slug,media_id):
     for key in {media.object_key,media.thumbnail_key}:
         if key: storage.delete(key)
     db.session.delete(media); db.session.commit(); return "",204
+
+@album_bp.patch("/api/albums/<slug>/admin/music")
+@admin_required
+def album_change_music(slug):
+    item = _owned_album(slug)
+    try:
+        item.music_url = normalize_music_url((request.get_json(silent=True) or {}).get("music_url"))
+    except ValueError as exc:
+        return jsonify(error=str(exc)), 400
+    db.session.commit()
+    return jsonify(ok=True, music_url=item.music_url)
+
+
+@album_bp.post("/api/albums/<slug>/pages/<int:page_id>/external-media")
+@admin_required
+def external_media_create(slug, page_id):
+    item = _owned_album(slug)
+    page = AlbumPage.query.filter_by(id=page_id, album_id=item.id).first_or_404()
+    data = request.get_json(silent=True) or {}
+    try:
+        normalized = normalize_external_url(data.get("url"))
+    except ValueError as exc:
+        return jsonify(error=str(exc)), 400
+    position = (db.session.query(func.max(AlbumExternalMedia.position)).filter_by(page_id=page.id).scalar() or 0) + 1
+    external = AlbumExternalMedia(
+        page_id=page.id, position=position, title=str(data.get("title", "")).strip()[:255] or None,
+        alt_text=str(data.get("alt_text", "")).strip()[:500] or None, **normalized,
+    )
+    db.session.add(external); db.session.commit()
+    return jsonify(item=_external_json(external)), 201
+
+
+@album_bp.delete("/api/albums/<slug>/external-media/<int:media_id>")
+@admin_required
+def external_media_delete(slug, media_id):
+    item = _owned_album(slug)
+    external = AlbumExternalMedia.query.join(AlbumPage).filter(AlbumExternalMedia.id == media_id, AlbumPage.album_id == item.id).first_or_404()
+    db.session.delete(external); db.session.commit()
+    return "", 204
+
+
+@album_bp.post("/api/albums/<slug>/pages/<int:page_id>/gifts")
+@admin_required
+def gift_create(slug, page_id):
+    item = _owned_album(slug)
+    page = AlbumPage.query.filter_by(id=page_id, album_id=item.id).first_or_404()
+    data = request.get_json(silent=True) or {}
+    title = str(data.get("title", "")).strip()[:200]
+    pin = str(data.get("pin", "")).strip()
+    if not title: return jsonify(error="gift_title_required"), 400
+    if pin and (len(pin) < 4 or len(pin) > 64): return jsonify(error="invalid_gift_pin"), 400
+    expires_at = None
+    if data.get("expires_at"):
+        try: expires_at = datetime.fromisoformat(str(data["expires_at"]))
+        except ValueError: return jsonify(error="invalid_expiration"), 400
+    try: encrypted = encrypt_gift(_gift_encryption_key(), data.get("secret"))
+    except ValueError as exc: return jsonify(error=str(exc)), 400
+    gift = AlbumGift(
+        page_id=page.id, public_token=secrets.token_urlsafe(24), title=title,
+        message=str(data.get("message", ""))[:5000] or None,
+        provider=str(data.get("provider", "")).strip()[:120] or None,
+        secret_encrypted=encrypted, pin_hash=bcrypt.hashpw(pin.encode(), bcrypt.gensalt()).decode() if pin else None,
+        expires_at=expires_at, status="available",
+    )
+    db.session.add(gift); db.session.commit()
+    return jsonify(gift=_gift_json(gift, True)), 201
+
+
+@album_bp.patch("/api/albums/<slug>/gifts/<int:gift_id>")
+@admin_required
+def gift_update(slug, gift_id):
+    item = _owned_album(slug)
+    gift = AlbumGift.query.join(AlbumPage).filter(AlbumGift.id == gift_id, AlbumPage.album_id == item.id).first_or_404()
+    data = request.get_json(silent=True) or {}
+    status = str(data.get("status", ""))
+    if status not in {"available", "claimed", "revoked"}: return jsonify(error="invalid_gift_status"), 400
+    gift.status = status
+    if status == "claimed" and not gift.claimed_at: gift.claimed_at = datetime.utcnow()
+    db.session.commit()
+    return jsonify(gift=_gift_json(gift, True))
+
+
+@album_bp.delete("/api/albums/<slug>/gifts/<int:gift_id>")
+@admin_required
+def gift_delete(slug, gift_id):
+    item = _owned_album(slug)
+    gift = AlbumGift.query.join(AlbumPage).filter(AlbumGift.id == gift_id, AlbumPage.album_id == item.id).first_or_404()
+    db.session.delete(gift); db.session.commit()
+    return "", 204
+
+
+@album_bp.post("/api/albums/<slug>/shared/<page_token>/gifts/<gift_token>/reveal")
+def gift_reveal(slug, page_token, gift_token):
+    item = _album(slug); page = _shared_page(item, page_token)
+    gift = AlbumGift.query.filter_by(page_id=page.id, public_token=gift_token).first_or_404()
+    now = datetime.utcnow()
+    if gift.status == "revoked": return jsonify(error="gift_revoked"), 410
+    if gift.status == "claimed": return jsonify(error="gift_claimed"), 410
+    if gift.expires_at and gift.expires_at < now: return jsonify(error="gift_expired"), 410
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr or "").split(",")[0].strip()
+    attempt_key = f"gift:{gift.id}:{ip}"
+    recent = [stamp for stamp in _attempts.get(attempt_key, []) if time.time() - stamp < 900]
+    if len(recent) >= 8: return jsonify(error="try_later"), 429
+    pin = str((request.get_json(silent=True) or {}).get("pin", ""))
+    if gift.pin_hash:
+        try: valid = bool(pin) and bcrypt.checkpw(pin.encode(), gift.pin_hash.encode())
+        except ValueError: valid = False
+        if not valid:
+            recent.append(time.time()); _attempts[attempt_key] = recent
+            return jsonify(error="invalid_gift_pin"), 401
+    _attempts.pop(attempt_key, None)
+    try: secret = decrypt_gift(_gift_encryption_key(), gift.secret_encrypted)
+    except ValueError: return jsonify(error="gift_unavailable"), 500
+    if not gift.opened_at: gift.opened_at = now
+    if bool((request.get_json(silent=True) or {}).get("claim")):
+        gift.status = "claimed"; gift.claimed_at = now
+    db.session.commit()
+    is_url = secret.startswith("https://")
+    return jsonify(secret=secret, is_url=is_url, qr_data_url=qr_data_url(secret), status=gift.status)

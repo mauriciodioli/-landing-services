@@ -102,7 +102,7 @@ with app.app_context():
     from models.contacto_telefonico import ContactoTelefonico
     from models.historial_contacto import HistorialContacto
     from models.course_participant import CourseParticipant
-    from models.album import Album, AlbumPage, AlbumMedia, assign_album_owner, ensure_album_schema
+    from models.album import Album, AlbumPage, AlbumMedia, AlbumExternalMedia, AlbumGift, assign_album_owner, ensure_album_schema
 
     # IMPORTA el/los modelos con LA MISMA instancia de db (extensions.db)
     try:

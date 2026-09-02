@@ -31,3 +31,5 @@ flask-cors
 bcrypt>=4,<6
 google-cloud-storage>=3,<4
 Pillow>=10,<13
+cryptography>=42,<47
+qrcode>=7,<9
