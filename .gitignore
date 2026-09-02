@@ -33,6 +33,7 @@ bot421.code-workspace
 # Ignore SQL and markdown files and local git hooks
 *.sql
 *.md
+!ALBUM_MULTIMEDIA_GIFTS_SPEC.md
 .githooks/
 
 # Ignore GCS credential if present locally
