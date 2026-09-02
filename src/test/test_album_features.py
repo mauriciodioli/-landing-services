@@ -31,7 +31,7 @@ class AlbumFeatureTest(unittest.TestCase):
             db.session.execute(text("INSERT INTO usuarios VALUES (1, 'owner@example.com', :password, 1, 'regular')"), {"password": password})
             album = Album(owner_user_id=1, slug="features", title="Recuerdos", active=True, music_url="https://open.spotify.com/track/abc")
             db.session.add(album); db.session.flush()
-            page = AlbumPage(album_id=album.id, title="Página", position=1, is_visible=True)
+            page = AlbumPage(album_id=album.id, title="Página", position=1, is_visible=True, share_enabled=True)
             db.session.add(page); db.session.commit()
             self.page_id = page.id; self.album_id = album.id
         self.client = self.app.test_client()
@@ -61,6 +61,29 @@ class AlbumFeatureTest(unittest.TestCase):
         with self.app.app_context():
             page = db.session.get(AlbumPage, self.page_id)
             self.assertEqual(music, page.music_url)
+
+    @patch("controllers.album.AlbumStorage", return_value=FakeStorage())
+    def test_preview_works_for_hidden_page_and_share_can_be_revoked(self, _):
+        with self.app.app_context():
+            page = db.session.get(AlbumPage, self.page_id)
+            page.is_visible = False; db.session.commit()
+        admin = self.client.get("/api/albums/features/admin").get_json()
+        page_data = admin["pages"][0]
+        old_url = page_data["share_url"]
+        preview_path = page_data["preview_url"].replace("http://localhost", "")
+        self.assertEqual(200, self.client.get(preview_path).status_code)
+        old_path = old_url.replace("http://localhost", "")
+        self.assertEqual(404, self.app.test_client().get(old_path).status_code)
+        with self.app.app_context():
+            page = db.session.get(AlbumPage, self.page_id)
+            page.is_visible = True; db.session.commit()
+        revoked = self.client.patch(f"/api/albums/features/pages/{self.page_id}/share", headers=self.headers, json={"enabled":False})
+        self.assertEqual(200, revoked.status_code)
+        self.assertEqual(404, self.app.test_client().get(old_path).status_code)
+        activated = self.client.patch(f"/api/albums/features/pages/{self.page_id}/share", headers=self.headers, json={"enabled":True}).get_json()
+        self.assertNotEqual(old_url, activated["share_url"])
+        new_path = activated["share_url"].replace("http://localhost", "")
+        self.assertEqual(200, self.app.test_client().get(new_path).status_code)
 
     @patch("controllers.album.AlbumStorage", return_value=FakeStorage())
     def test_gift_secret_is_hidden_and_reveal_requires_pin(self, _):

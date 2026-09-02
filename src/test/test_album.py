@@ -35,7 +35,7 @@ class AlbumTest(unittest.TestCase):
             db.session.add(album)
             db.session.flush()
             db.session.add_all([
-                AlbumPage(album_id=album.id, title="Public", position=1, is_visible=True),
+                AlbumPage(album_id=album.id, title="Public", position=1, is_visible=True, share_enabled=True),
                 AlbumPage(album_id=album.id, title="Hidden", position=2, is_visible=False),
             ])
             db.session.commit()

@@ -25,6 +25,10 @@ def ensure_album_schema(engine):
             connection.execute(text("ALTER TABLE albums ADD COLUMN admin_session_version INTEGER NOT NULL DEFAULT 1"))
         if "music_url" not in page_columns:
             connection.execute(text("ALTER TABLE album_pages ADD COLUMN music_url VARCHAR(1000) NULL"))
+        if "share_enabled" not in page_columns:
+            connection.execute(text("ALTER TABLE album_pages ADD COLUMN share_enabled BOOLEAN NOT NULL DEFAULT 1"))
+        if "share_version" not in page_columns:
+            connection.execute(text("ALTER TABLE album_pages ADD COLUMN share_version INTEGER NOT NULL DEFAULT 1"))
 
 
 def assign_album_owner(engine, slug, email):
@@ -66,6 +70,8 @@ class AlbumPage(db.Model):
     memory_date = db.Column(db.Date)
     description = db.Column(db.Text)
     music_url = db.Column(db.String(1000))
+    share_enabled = db.Column(db.Boolean, nullable=False, default=False)
+    share_version = db.Column(db.Integer, nullable=False, default=1)
     position = db.Column(db.Integer, nullable=False)
     is_visible = db.Column(db.Boolean, nullable=False, default=False, index=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)

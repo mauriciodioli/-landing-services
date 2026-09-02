@@ -93,9 +93,23 @@ def _album_template_context(item):
 def _gift_encryption_key():
     return os.environ.get("ALBUM_GIFT_ENCRYPTION_KEY") or current_app.secret_key
 
-def _page_token(album_id, page_id):
+def _page_token(album_id, page_id, version=1):
     signer = URLSafeSerializer(current_app.secret_key, salt="album-page-share-v1")
+    return signer.dumps({"album": album_id, "page": page_id, "version": version})
+
+def _preview_token(album_id, page_id):
+    signer = URLSafeSerializer(current_app.secret_key, salt="album-page-preview-v1")
     return signer.dumps({"album": album_id, "page": page_id})
+
+def _preview_page(item, token):
+    signer = URLSafeSerializer(current_app.secret_key, salt="album-page-preview-v1")
+    try:
+        payload = signer.loads(token)
+        album_id, page_id = int(payload["album"]), int(payload["page"])
+    except (BadSignature, KeyError, TypeError, ValueError):
+        abort(404)
+    if album_id != item.id: abort(404)
+    return AlbumPage.query.filter_by(id=page_id, album_id=item.id).first_or_404()
 
 def _shared_page(item, token):
     signer = URLSafeSerializer(current_app.secret_key, salt="album-page-share-v1")
@@ -106,7 +120,10 @@ def _shared_page(item, token):
         abort(404)
     if album_id != item.id:
         abort(404)
-    return AlbumPage.query.filter_by(id=page_id, album_id=item.id, is_visible=True).first_or_404()
+    page = AlbumPage.query.filter_by(id=page_id, album_id=item.id, is_visible=True, share_enabled=True).first_or_404()
+    token_version = int(payload.get("version", 1))
+    if token_version != page.share_version: abort(404)
+    return page
 
 def _media_json(item, storage):
     return {"id":item.id,"type":item.media_type,"name":item.display_name or item.original_name,"url":storage.signed_url(item.object_key),"thumbnail_url":storage.signed_url(item.thumbnail_key or item.object_key)}
@@ -127,8 +144,11 @@ def _page_json(page, storage, admin=False):
     result={"id":page.id,"title":page.title,"memory_date":page.memory_date.isoformat() if page.memory_date else None,"description":page.description or "","position":page.position,"is_visible":page.is_visible,"music_url":page.music_url or page.album.music_url,"page_music_url":page.music_url,"media":[_media_json(m,storage) for m in page.media],"external_media":[_external_json(m) for m in page.external_media],"gifts":[_gift_json(g,admin) for g in page.gifts]}
     if admin:
         result["updated_at"] = page.updated_at.isoformat()
-        token = _page_token(page.album_id, page.id)
+        token = _page_token(page.album_id, page.id, page.share_version)
+        preview_token = _preview_token(page.album_id, page.id)
+        result["share_enabled"] = page.share_enabled
         result["share_url"] = request.url_root.rstrip("/") + f"/album/{page.album.slug}/page/{token}"
+        result["preview_url"] = request.url_root.rstrip("/") + f"/album/{page.album.slug}/preview/{preview_token}"
     return result
 
 @album_bp.get("/album")
@@ -192,6 +212,19 @@ def album_page_view(slug, token):
     response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
     response.headers["Cache-Control"] = "private, no-store"
     return response
+
+@album_bp.get("/album/<slug>/preview/<token>")
+def album_page_preview(slug, token):
+    item = _owned_album(slug); _preview_page(item, token)
+    response = current_app.make_response(render_template("album/index.html", slug=slug, preview_token=token, **_album_template_context(item)))
+    response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
+    response.headers["Cache-Control"] = "private, no-store"
+    return response
+
+@album_bp.get("/api/albums/<slug>/preview/<token>")
+def album_preview_api(slug, token):
+    item = _owned_album(slug); page = _preview_page(item, token); storage = AlbumStorage()
+    return jsonify(title=item.title, subtitle=item.subtitle, music_url=item.music_url, pages=[_page_json(page, storage)])
 
 @album_bp.get("/api/albums/<slug>")
 def album_public(slug):
@@ -293,6 +326,20 @@ def page_delete(slug,page_id):
                 try: storage.delete(key)
                 except Exception: current_app.logger.exception("No se pudo eliminar objeto del álbum")
     db.session.delete(page); db.session.commit(); return "",204
+
+@album_bp.patch("/api/albums/<slug>/pages/<int:page_id>/share")
+@admin_required
+def page_share_update(slug, page_id):
+    item = _owned_album(slug)
+    page = AlbumPage.query.filter_by(id=page_id, album_id=item.id).first_or_404()
+    enabled = bool((request.get_json(silent=True) or {}).get("enabled"))
+    if enabled and not page.is_visible:
+        return jsonify(error="page_not_visible"), 400
+    if not enabled:
+        page.share_version = (page.share_version or 1) + 1
+    page.share_enabled = enabled
+    db.session.commit()
+    return jsonify(enabled=page.share_enabled, share_url=request.url_root.rstrip("/") + f"/album/{item.slug}/page/{_page_token(item.id, page.id, page.share_version)}")
 
 @album_bp.post("/api/albums/<slug>/pages/reorder")
 @admin_required
@@ -454,8 +501,12 @@ def gift_delete(slug, gift_id):
 
 
 @album_bp.post("/api/albums/<slug>/shared/<page_token>/gifts/<gift_token>/reveal")
+@album_bp.post("/api/albums/<slug>/preview/<page_token>/gifts/<gift_token>/reveal")
 def gift_reveal(slug, page_token, gift_token):
-    item = _album(slug); page = _shared_page(item, page_token)
+    if "/preview/" in request.path:
+        item = _owned_album(slug); page = _preview_page(item, page_token)
+    else:
+        item = _album(slug); page = _shared_page(item, page_token)
     gift = AlbumGift.query.filter_by(page_id=page.id, public_token=gift_token).first_or_404()
     now = datetime.utcnow()
     if gift.status == "revoked": return jsonify(error="gift_revoked"), 410
