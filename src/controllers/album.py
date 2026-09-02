@@ -12,6 +12,7 @@ import bcrypt
 from flask import Blueprint, abort, current_app, jsonify, render_template, request, session
 from PIL import Image, ImageOps, UnidentifiedImageError
 from sqlalchemy import func
+from itsdangerous import BadSignature, URLSafeSerializer
 from werkzeug.utils import secure_filename
 
 from extensions import db
@@ -46,12 +47,30 @@ def _album(slug):
     if not item: abort(404)
     return item
 
+def _page_token(album_id, page_id):
+    signer = URLSafeSerializer(current_app.secret_key, salt="album-page-share-v1")
+    return signer.dumps({"album": album_id, "page": page_id})
+
+def _shared_page(item, token):
+    signer = URLSafeSerializer(current_app.secret_key, salt="album-page-share-v1")
+    try:
+        payload = signer.loads(token)
+        album_id, page_id = int(payload["album"]), int(payload["page"])
+    except (BadSignature, KeyError, TypeError, ValueError):
+        abort(404)
+    if album_id != item.id:
+        abort(404)
+    return AlbumPage.query.filter_by(id=page_id, album_id=item.id, is_visible=True).first_or_404()
+
 def _media_json(item, storage):
     return {"id":item.id,"type":item.media_type,"name":item.display_name or item.original_name,"url":storage.signed_url(item.object_key),"thumbnail_url":storage.signed_url(item.thumbnail_key or item.object_key)}
 
 def _page_json(page, storage, admin=False):
     result={"id":page.id,"title":page.title,"memory_date":page.memory_date.isoformat() if page.memory_date else None,"description":page.description or "","position":page.position,"is_visible":page.is_visible,"media":[_media_json(m,storage) for m in page.media]}
-    if admin: result["updated_at"]=page.updated_at.isoformat()
+    if admin:
+        result["updated_at"] = page.updated_at.isoformat()
+        token = _page_token(page.album_id, page.id)
+        result["share_url"] = request.url_root.rstrip("/") + f"/album/{page.album.slug}/page/{token}"
     return result
 
 @album_bp.get("/album/<slug>")
@@ -61,11 +80,25 @@ def album_view(slug):
     response.headers["X-Robots-Tag"]="noindex, nofollow, noarchive"; response.headers["Cache-Control"]="private, no-store"
     return response
 
+@album_bp.get("/album/<slug>/page/<token>")
+def album_page_view(slug, token):
+    item = _album(slug)
+    _shared_page(item, token)
+    response = current_app.make_response(render_template("album/index.html", slug=slug, page_token=token))
+    response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
+    response.headers["Cache-Control"] = "private, no-store"
+    return response
+
 @album_bp.get("/api/albums/<slug>")
 def album_public(slug):
     item=_album(slug); storage=AlbumStorage()
     pages=AlbumPage.query.filter_by(album_id=item.id,is_visible=True).order_by(AlbumPage.position).all()
     return jsonify(title=item.title,subtitle=item.subtitle,music_url=item.music_url,pages=[_page_json(p,storage) for p in pages])
+
+@album_bp.get("/api/albums/<slug>/shared/<token>")
+def album_shared(slug, token):
+    item = _album(slug); page = _shared_page(item, token); storage = AlbumStorage()
+    return jsonify(title=item.title, subtitle=item.subtitle, music_url=item.music_url, pages=[_page_json(page, storage)])
 
 @album_bp.post("/api/albums/<slug>/admin/login")
 def album_login(slug):
