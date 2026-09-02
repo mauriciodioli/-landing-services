@@ -9,11 +9,23 @@ def ensure_album_schema(engine):
     if "albums" not in inspector.get_table_names():
         return
     columns = {column["name"] for column in inspector.get_columns("albums")}
+    indexes = {index["name"] for index in inspector.get_indexes("albums")}
     with engine.begin() as connection:
+        if "owner_user_id" not in columns:
+            connection.execute(text("ALTER TABLE albums ADD COLUMN owner_user_id INTEGER NULL"))
+        if "uq_albums_owner_user_id" not in indexes:
+            connection.execute(text("CREATE UNIQUE INDEX uq_albums_owner_user_id ON albums (owner_user_id)"))
         if "admin_pin_hash" not in columns:
             connection.execute(text("ALTER TABLE albums ADD COLUMN admin_pin_hash VARCHAR(255) NULL"))
         if "admin_session_version" not in columns:
             connection.execute(text("ALTER TABLE albums ADD COLUMN admin_session_version INTEGER NOT NULL DEFAULT 1"))
+
+def assign_album_owner(engine, slug, email):
+    """Vincula una sola vez un álbum heredado con un usuario DPIA existente."""
+    with engine.begin() as connection:
+        user_id = connection.execute(text("SELECT id FROM usuarios WHERE LOWER(correo_electronico) = :email LIMIT 1"), {"email": email.strip().lower()}).scalar()
+        if user_id:
+            connection.execute(text("UPDATE albums SET owner_user_id = :user_id WHERE slug = :slug AND owner_user_id IS NULL"), {"user_id": user_id, "slug": slug})
 
 class Album(db.Model):
     __tablename__ = "albums"
@@ -23,6 +35,7 @@ class Album(db.Model):
     subtitle = db.Column(db.String(255))
     music_url = db.Column(db.String(500))
     active = db.Column(db.Boolean, nullable=False, default=True)
+    owner_user_id = db.Column(db.Integer, unique=True, index=True)
     admin_pin_hash = db.Column(db.String(255))
     admin_session_version = db.Column(db.Integer, nullable=False, default=1)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)

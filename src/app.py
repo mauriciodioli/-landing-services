@@ -102,7 +102,7 @@ with app.app_context():
     from models.contacto_telefonico import ContactoTelefonico
     from models.historial_contacto import HistorialContacto
     from models.course_participant import CourseParticipant
-    from models.album import Album, AlbumPage, AlbumMedia, ensure_album_schema
+    from models.album import Album, AlbumPage, AlbumMedia, assign_album_owner, ensure_album_schema
 
     # IMPORTA el/los modelos con LA MISMA instancia de db (extensions.db)
     try:
@@ -117,6 +117,7 @@ with app.app_context():
     # Crea TODO lo mapeado
     db.create_all()
     ensure_album_schema(db.engine)
+    assign_album_owner(db.engine, os.environ.get("ALBUM_LEGACY_SLUG", "ola-prod-9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4"), os.environ.get("ALBUM_LEGACY_OWNER_EMAIL", "Ola.soniewicka@gmail.com"))
     ensure_campania_telefonica_schema(db.engine)
 
     # Airbag extra: fuerza creación SOLO de popup si faltara

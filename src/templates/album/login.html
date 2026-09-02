@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#fbf9ff">
+  <title>Mi álbum · DPIA</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='album/album.css') }}">
+</head>
+<body>
+  <div class="glow g1"></div><div class="glow g2"></div>
+  <main>
+    <section class="account-login" aria-labelledby="accountLoginTitle">
+      <div class="flower" aria-hidden="true">✦</div>
+      <p class="eyebrow">DPIA</p>
+      <h1 id="accountLoginTitle">Mi álbum</h1>
+      <p>Ingresa con la cuenta que ya tienes registrada en DPIA.</p>
+      <form id="accountLoginForm">
+        <label>Correo electrónico<input id="accountEmail" type="email" autocomplete="username" required></label>
+        <label>Contraseña<input id="accountPassword" type="password" autocomplete="current-password" required></label>
+        <input id="accountWebsite" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p id="accountLoginError" class="error" role="alert"></p>
+        <button class="primary" type="submit">Ingresar</button>
+      </form>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='album/album-login.js') }}" defer></script>
+</body>
+</html>

@@ -9,7 +9,7 @@ from functools import wraps
 from pathlib import Path
 
 import bcrypt
-from flask import Blueprint, abort, current_app, jsonify, render_template, request, session
+from flask import Blueprint, abort, current_app, jsonify, redirect, render_template, request, session, url_for
 from PIL import Image, ImageOps, UnidentifiedImageError
 from sqlalchemy import func
 from itsdangerous import BadSignature, URLSafeSerializer
@@ -21,6 +21,7 @@ from services.album_storage import AlbumStorage
 
 album_bp = Blueprint("album", __name__)
 SESSION_KEY = "ola_album_admin_until"
+USER_SESSION_KEY = "album_dpia_user"
 MAX_FILES = 20
 MAX_IMAGE = 20 * 1024 * 1024
 MAX_VIDEO = 250 * 1024 * 1024
@@ -51,17 +52,42 @@ def _csrf():
 def admin_required(fn):
     @wraps(fn)
     def wrapped(*args, **kwargs):
-        item = _album(kwargs.get("slug"))
+        item = _owned_album(kwargs.get("slug"))
         if not _admin(item): return jsonify(error="unauthorized"), 401
         if request.method not in ("GET", "HEAD") and not secrets.compare_digest(request.headers.get("X-CSRF-Token", ""), _csrf()):
             return jsonify(error="invalid_request"), 403
         return fn(*args, **kwargs)
     return wrapped
 
+def _current_user():
+    saved = session.get(USER_SESSION_KEY) or {}
+    user_id = saved.get("id") if isinstance(saved, dict) else None
+    if not user_id:
+        return None
+    from sqlalchemy import text
+    user = db.session.execute(text("SELECT id, correo_electronico, activo FROM usuarios WHERE id = :id LIMIT 1"), {"id": int(user_id)}).mappings().first()
+    if not user or not bool(user.get("activo")):
+        session.pop(USER_SESSION_KEY, None)
+        return None
+    return user
+
+def _owned_album(slug):
+    user = _current_user()
+    if not user:
+        abort(401)
+    item = Album.query.filter_by(slug=slug, owner_user_id=int(user["id"]), active=True).first()
+    if not item:
+        abort(404)
+    return item
+
 def _album(slug):
     item = Album.query.filter_by(slug=slug, active=True).first()
     if not item: abort(404)
     return item
+
+def _album_template_context(item):
+    legacy_slug = os.environ.get("ALBUM_LEGACY_SLUG", "ola-prod-9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4")
+    return {"album_title": item.title, "personalized_ola": item.slug == legacy_slug}
 
 def _page_token(album_id, page_id):
     signer = URLSafeSerializer(current_app.secret_key, salt="album-page-share-v1")
@@ -89,10 +115,56 @@ def _page_json(page, storage, admin=False):
         result["share_url"] = request.url_root.rstrip("/") + f"/album/{page.album.slug}/page/{token}"
     return result
 
+@album_bp.get("/album")
+def album_home():
+    user = _current_user()
+    if not user:
+        return render_template("album/login.html")
+    item = Album.query.filter_by(owner_user_id=int(user["id"]), active=True).first()
+    if not item:
+        item = Album(owner_user_id=int(user["id"]), slug=f"album-{uuid.uuid4().hex}", title="Nuestros momentos", active=True)
+        db.session.add(item); db.session.commit()
+    return redirect(url_for("album.album_view", slug=item.slug))
+
+@album_bp.post("/api/album/session")
+def album_user_login():
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr or "").split(",")[0].strip(); now = time.time()
+    recent = [stamp for stamp in _attempts.get("user:" + ip, []) if now - stamp < 900]
+    if len(recent) >= 5: return jsonify(error="try_later"), 429
+    data = request.get_json(silent=True) or {}
+    if str(data.get("hp", "")).strip(): return jsonify(error="invalid_request"), 400
+    email = str(data.get("email", "")).strip().lower(); password = str(data.get("password", ""))
+    from controllers.campania_telefonica import _consultar_usuario_por_correo, _verificar_password_usuario
+    user = _consultar_usuario_por_correo(email) if email and password else None
+    if not user or not bool(user.get("activo")) or not _verificar_password_usuario(user.get("password"), password):
+        recent.append(now); _attempts["user:" + ip] = recent
+        return jsonify(error="invalid_credentials"), 401
+    _attempts.pop("user:" + ip, None)
+    session[USER_SESSION_KEY] = {"id": int(user["id"]), "email": user["correo_electronico"]}
+    item = Album.query.filter_by(owner_user_id=int(user["id"]), active=True).first()
+    if not item:
+        item = Album(owner_user_id=int(user["id"]), slug=f"album-{uuid.uuid4().hex}", title="Nuestros momentos", active=True)
+        db.session.add(item); db.session.commit()
+    return jsonify(ok=True, album_url=url_for("album.album_view", slug=item.slug), email=user["correo_electronico"])
+
+@album_bp.get("/api/album/session")
+def album_user_session():
+    user = _current_user()
+    if not user:
+        return jsonify(authenticated=False), 401
+    item = Album.query.filter_by(owner_user_id=int(user["id"]), active=True).first()
+    return jsonify(authenticated=True, email=user["correo_electronico"], album_url=url_for("album.album_view", slug=item.slug) if item else url_for("album.album_home"))
+
+@album_bp.post("/api/album/session/logout")
+def album_user_logout():
+    session.pop(USER_SESSION_KEY, None); session.pop(SESSION_KEY, None)
+    return jsonify(ok=True)
+
 @album_bp.get("/album/<slug>")
 def album_view(slug):
-    _album(slug)
-    response=current_app.make_response(render_template("album/index.html",slug=slug))
+    if not _current_user(): return redirect(url_for("album.album_home"))
+    item = _owned_album(slug)
+    response=current_app.make_response(render_template("album/index.html", slug=slug, **_album_template_context(item)))
     response.headers["X-Robots-Tag"]="noindex, nofollow, noarchive"; response.headers["Cache-Control"]="private, no-store"
     return response
 
@@ -100,14 +172,14 @@ def album_view(slug):
 def album_page_view(slug, token):
     item = _album(slug)
     _shared_page(item, token)
-    response = current_app.make_response(render_template("album/index.html", slug=slug, page_token=token))
+    response = current_app.make_response(render_template("album/index.html", slug=slug, page_token=token, **_album_template_context(item)))
     response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
     response.headers["Cache-Control"] = "private, no-store"
     return response
 
 @album_bp.get("/api/albums/<slug>")
 def album_public(slug):
-    item=_album(slug); storage=AlbumStorage()
+    item=_owned_album(slug); storage=AlbumStorage()
     pages=AlbumPage.query.filter_by(album_id=item.id,is_visible=True).order_by(AlbumPage.position).all()
     return jsonify(title=item.title,subtitle=item.subtitle,music_url=item.music_url,pages=[_page_json(p,storage) for p in pages])
 
@@ -118,7 +190,7 @@ def album_shared(slug, token):
 
 @album_bp.post("/api/albums/<slug>/admin/login")
 def album_login(slug):
-    item=_album(slug); ip=request.headers.get("X-Forwarded-For",request.remote_addr or "").split(",")[0].strip(); now=time.time()
+    item=_owned_album(slug); ip=request.headers.get("X-Forwarded-For",request.remote_addr or "").split(",")[0].strip(); now=time.time()
     recent=[stamp for stamp in _attempts.get(ip,[]) if now-stamp<900]
     if len(recent)>=5: return jsonify(error="try_later"),429
     pin_hash=_pin_hash(item); pin=str((request.get_json(silent=True) or {}).get("pin","")).encode()
