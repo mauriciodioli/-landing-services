@@ -61,6 +61,11 @@
   const directContinueWithoutPhoneBtn = document.getElementById(`cphq-direct-continue-without-phone-${SUFFIX}`);
   const directTargetButtons = Array.from(modal.querySelectorAll('.cphq-direct-option-camara-rapida-publicacion'));
   const recordLabel = recordBtn.querySelector('.cphq-tool-label-camara-rapida-publicacion');
+  const review = document.getElementById(`cphq-review-${SUFFIX}`);
+  const reviewContent = document.getElementById(`cphq-review-content-${SUFFIX}`);
+  const reviewCloseBtn = document.getElementById(`cphq-review-close-${SUFFIX}`);
+  const reviewDeleteBtn = document.getElementById(`cphq-review-delete-${SUFFIX}`);
+  const reviewKeepBtn = document.getElementById(`cphq-review-keep-${SUFFIX}`);
 
   function applyAriaTranslations() {
     modal.querySelectorAll('[data-i18n-aria-label]').forEach((node) => {
@@ -82,6 +87,7 @@
     preferNativeCapture: false,
     directPublishTarget: '',
     cameraFacingMode: 'environment',
+    reviewIndex: -1,
   };
 
   function revokePreviewUrl(file) {
@@ -207,6 +213,38 @@
     updateStatus(t('camara_rapida_publicacion_status_ready', 'Archivos listos. Ya puedes continuar o publicar directo.'));
   }
 
+  function closeReview() {
+    if (!review) return;
+    reviewContent.querySelector("video")?.pause();
+    reviewContent.innerHTML = "";
+    review.classList.add("is-hidden");
+    state.reviewIndex = -1;
+  }
+
+  function openReview(index) {
+    const file = state.files[index];
+    if (state.reviewIndex === index) closeReview();
+    else if (state.reviewIndex > index) state.reviewIndex -= 1;
+    if (!file || !review) return;
+    closeReview();
+    state.reviewIndex = index;
+    const isVideo = file.type.startsWith("video/");
+    const media = document.createElement(isVideo ? "video" : "img");
+    media.src = getPreviewUrl(file);
+    media.className = "cphq-review-media-camara-rapida-publicacion";
+    if (isVideo) { media.controls = true; media.playsInline = true; media.preload = "metadata"; }
+    else { media.alt = file.name || "Captura a pantalla completa"; }
+    reviewContent.appendChild(media);
+    review.classList.remove("is-hidden");
+    reviewCloseBtn.focus();
+  }
+
+  function deleteReviewedFile() {
+    const index = state.reviewIndex;
+    closeReview();
+    if (index >= 0) removeFileAt(index);
+  }
+
   function removeFileAt(index) {
     const file = state.files[index];
     if (!file) {
@@ -228,6 +266,11 @@
     const media = document.createElement(isVideo ? 'video' : 'img');
     media.className = 'cphq-preview-media-camara-rapida-publicacion';
     media.src = previewUrl;
+    media.tabIndex = 0;
+    media.setAttribute("role", "button");
+    media.setAttribute("aria-label", isVideo ? "Reproducir video a pantalla completa" : "Ver foto a pantalla completa");
+    media.addEventListener("click", () => openReview(index));
+    media.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openReview(index); } });
 
     if (isVideo) {
       media.muted = true;
@@ -606,6 +649,7 @@
   }
 
   function resetModalState() {
+    closeReview();
     stopCamera();
     state.files.forEach(revokePreviewUrl);
     state.files = [];
@@ -729,6 +773,10 @@
   }
 
   closeBtn.addEventListener('click', closeModal);
+  reviewCloseBtn?.addEventListener("click", closeReview);
+  reviewKeepBtn?.addEventListener("click", closeReview);
+  reviewDeleteBtn?.addEventListener("click", deleteReviewedFile);
+  review?.addEventListener("click", (event) => { if (event.target === review) closeReview(); });
   cancelBtn.addEventListener('click', closeModal);
   modal.addEventListener('click', (event) => {
     if (event.target === modal) {
@@ -792,6 +840,7 @@
   });
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && modal.classList.contains('is-open')) {
+      if (review && !review.classList.contains("is-hidden")) { closeReview(); return; }
       if (directPhoneChoice && !directPhoneChoice.classList.contains('is-hidden')) {
         hideDirectPhoneChoice();
         return;
