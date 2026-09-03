@@ -19,13 +19,13 @@
       <p>Ingresa con la cuenta que ya tienes registrada en DPIA.</p>
       <form id="accountLoginForm">
         <label>Correo electrónico<input id="accountEmail" type="email" autocomplete="username" required></label>
-        <label>Contraseña<input id="accountPassword" type="password" autocomplete="current-password" required></label>
+        <label>Contraseña<span class="password-field"><input id="accountPassword" type="password" autocomplete="current-password" required><button id="toggleAccountPassword" type="button" aria-label="Mostrar contraseña" title="Mostrar contraseña" aria-pressed="false">+</button></span></label>
         <input id="accountWebsite" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
         <p id="accountLoginError" class="error" role="alert"></p>
         <button class="primary" type="submit">Ingresar</button>
       </form>
     </section>
   </main>
-  <script src="{{ url_for('static', filename='album/album-login.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='album/album-login.js') }}?v=password-toggle-1" defer></script>
 </body>
 </html>
