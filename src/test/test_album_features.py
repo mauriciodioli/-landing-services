@@ -1,8 +1,10 @@
+import io
 import os
 import unittest
 from unittest.mock import patch
 
 import bcrypt
+from PIL import Image
 from flask import Flask
 from sqlalchemy import text
 
@@ -14,6 +16,8 @@ from services.album_content import normalize_external_url, normalize_music_url
 
 class FakeStorage:
     def signed_url(self, key): return f"https://signed/{key}"
+    def upload(self, key, stream, mime_type): self.uploaded = getattr(self, "uploaded", []) + [key]
+    def delete(self, key): self.deleted = getattr(self, "deleted", []) + [key]
 
 
 class AlbumFeatureTest(unittest.TestCase):
@@ -112,6 +116,39 @@ class AlbumFeatureTest(unittest.TestCase):
         with self.app.app_context(): page_token = _page_token(self.album_id, self.page_id)
         response = self.app.test_client().post(f"/api/albums/features/shared/{page_token}/gifts/{created['token']}/reveal", json={})
         self.assertEqual(410, response.status_code)
+
+
+    def test_temporary_contributions_require_moderation(self):
+        enabled = self.client.post(f"/api/albums/features/pages/{self.page_id}/contributions", headers=self.headers, json={"enabled":True,"hours":24})
+        self.assertEqual(200, enabled.status_code)
+        contribution_path = enabled.get_json()["contribution_url"].replace("http://localhost", "")
+        token = contribution_path.rsplit("/", 1)[-1]
+        public = self.app.test_client()
+        self.assertEqual(200, public.get(contribution_path).status_code)
+        image = Image.new("RGB", (4, 4), "red"); payload = io.BytesIO(); image.save(payload, "PNG"); payload.seek(0)
+        storage = FakeStorage()
+        with patch("controllers.album.AlbumStorage", return_value=storage):
+            uploaded = public.post(f"/api/albums/features/contribute/{token}/media", data={"files":(payload,"guest.png"),"contributor_name":"Ana"}, content_type="multipart/form-data")
+            self.assertEqual(201, uploaded.status_code)
+            media_id = uploaded.get_json()["ids"][0]
+            admin_page = self.client.get("/api/albums/features/admin").get_json()["pages"][0]
+            self.assertEqual([], admin_page["media"]); self.assertEqual("Ana", admin_page["pending_contributions"][0]["contributor_name"] )
+            approved = self.client.patch(f"/api/albums/features/contributions/{media_id}", headers=self.headers, json={"action":"approve"})
+            self.assertEqual(200, approved.status_code)
+            shared = public.get(f"/api/albums/features/contribute/{token}").get_json()["pages"][0]
+            self.assertEqual(1, len(shared["media"])); self.assertNotIn("pending_contributions", shared)
+            second = Image.new("RGB", (4, 4), "blue"); second_payload = io.BytesIO(); second.save(second_payload, "PNG"); second_payload.seek(0)
+            second_upload = public.post(f"/api/albums/features/contribute/{token}/media", data={"files":(second_payload,"second.png")}, content_type="multipart/form-data").get_json()
+            rejected = self.client.patch(f"/api/albums/features/contributions/{second_upload['ids'][0]}", headers=self.headers, json={"action":"reject"})
+            self.assertEqual(200, rejected.status_code); self.assertTrue(storage.deleted)
+
+    def test_contribution_link_can_expire_and_be_revoked(self):
+        enabled = self.client.post(f"/api/albums/features/pages/{self.page_id}/contributions", headers=self.headers, json={"enabled":True,"hours":1}).get_json()
+        path = enabled["contribution_url"].replace("http://localhost", "")
+        self.assertEqual(200, self.app.test_client().get(path).status_code)
+        revoked = self.client.post(f"/api/albums/features/pages/{self.page_id}/contributions", headers=self.headers, json={"enabled":False})
+        self.assertEqual(200, revoked.status_code)
+        self.assertEqual(404, self.app.test_client().get(path).status_code)
 
 
 if __name__ == "__main__": unittest.main()

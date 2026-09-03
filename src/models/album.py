@@ -13,6 +13,7 @@ def ensure_album_schema(engine):
         return
     album_columns = {column["name"] for column in inspector.get_columns("albums")}
     page_columns = {column["name"] for column in inspector.get_columns("album_pages")} if "album_pages" in tables else set()
+    media_columns = {column["name"] for column in inspector.get_columns("album_media")} if "album_media" in tables else set()
     indexes = {index["name"] for index in inspector.get_indexes("albums")}
     with engine.begin() as connection:
         if "owner_user_id" not in album_columns:
@@ -29,6 +30,16 @@ def ensure_album_schema(engine):
             connection.execute(text("ALTER TABLE album_pages ADD COLUMN share_enabled BOOLEAN NOT NULL DEFAULT 1"))
         if "share_version" not in page_columns:
             connection.execute(text("ALTER TABLE album_pages ADD COLUMN share_version INTEGER NOT NULL DEFAULT 1"))
+        if "contribution_enabled" not in page_columns:
+            connection.execute(text("ALTER TABLE album_pages ADD COLUMN contribution_enabled BOOLEAN NOT NULL DEFAULT 0"))
+        if "contribution_expires_at" not in page_columns:
+            connection.execute(text("ALTER TABLE album_pages ADD COLUMN contribution_expires_at DATETIME NULL"))
+        if "contribution_version" not in page_columns:
+            connection.execute(text("ALTER TABLE album_pages ADD COLUMN contribution_version INTEGER NOT NULL DEFAULT 1"))
+        if "moderation_status" not in media_columns:
+            connection.execute(text("ALTER TABLE album_media ADD COLUMN moderation_status VARCHAR(20) NOT NULL DEFAULT 'approved'"))
+        if "contributor_name" not in media_columns:
+            connection.execute(text("ALTER TABLE album_media ADD COLUMN contributor_name VARCHAR(120) NULL"))
 
 
 def assign_album_owner(engine, slug, email):
@@ -72,6 +83,9 @@ class AlbumPage(db.Model):
     music_url = db.Column(db.String(1000))
     share_enabled = db.Column(db.Boolean, nullable=False, default=False)
     share_version = db.Column(db.Integer, nullable=False, default=1)
+    contribution_enabled = db.Column(db.Boolean, nullable=False, default=False)
+    contribution_expires_at = db.Column(db.DateTime)
+    contribution_version = db.Column(db.Integer, nullable=False, default=1)
     position = db.Column(db.Integer, nullable=False)
     is_visible = db.Column(db.Boolean, nullable=False, default=False, index=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
@@ -102,6 +116,8 @@ class AlbumMedia(db.Model):
     width = db.Column(db.Integer)
     height = db.Column(db.Integer)
     duration = db.Column(db.Float)
+    moderation_status = db.Column(db.String(20), nullable=False, default="approved", index=True)
+    contributor_name = db.Column(db.String(120))
     position = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     page = db.relationship("AlbumPage", back_populates="media")

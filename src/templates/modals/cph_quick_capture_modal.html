@@ -1,0 +1,133 @@
+<div class="cphq-backdrop-camara-rapida-publicacion" id="cphq-modal-camara-rapida-publicacion" aria-hidden="true">
+  <div class="cphq-card-camara-rapida-publicacion" role="dialog" aria-modal="true" aria-labelledby="cphq-title-camara-rapida-publicacion">
+    <div class="cphq-base-view-camara-rapida-publicacion" id="cphq-base-view-camara-rapida-publicacion">
+      <div class="cphq-layout-camara-rapida-publicacion">
+      <section class="cphq-stage-camara-rapida-publicacion">
+        <div class="cphq-camera-shell-camara-rapida-publicacion" id="cphq-camera-shell-camara-rapida-publicacion">
+          <div class="cphq-chrome-camara-rapida-publicacion">
+            <div class="cphq-topbar-camara-rapida-publicacion">
+              <div class="cphq-heading-camara-rapida-publicacion">
+                <h2 class="cphq-title-camara-rapida-publicacion" id="cphq-title-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_title">Captura rápida</h2>
+                <p class="cphq-subtitle-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_subtitle">Toma una foto, graba un video o sube archivos.</p>
+              </div>
+              <button class="cphq-close-camara-rapida-publicacion" type="button" id="cphq-close-camara-rapida-publicacion" data-i18n-aria-label="camara_rapida_publicacion_close" aria-label="Cerrar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+            </div>
+
+            <div class="cphq-status-camara-rapida-publicacion" id="cphq-status-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_status_preparing">Preparando cámara...</div>
+          </div>
+
+          <button type="button" class="cphq-flip-camera-camara-rapida-publicacion" id="cphq-flip-camera-camara-rapida-publicacion" data-i18n-aria-label="camara_rapida_publicacion_flip_camera" aria-label="Cambiar camara">
+            <span class="cphq-tool-icon-camara-rapida-publicacion" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 10c0-1.1.9-2 2-2h3l2-2h4l2 2h3c1.1 0 2 .9 2 2v6c0 1.1-.9 2-2 2h-3l-2 2h-4l-2-2H5c-1.1 0-2-.9-2-2z"></path>
+                <path d="M9 12a3 3 0 0 1 5.2-2.1"></path>
+                <path d="m14 8.5.6 1.9 2-.5"></path>
+                <path d="M15 12a3 3 0 0 1-5.2 2.1"></path>
+                <path d="m10 15.5-.6-1.9-2 .5"></path>
+              </svg>
+            </span>
+          </button>
+
+          <video id="cphq-camera-camara-rapida-publicacion" class="cphq-camera-camara-rapida-publicacion" autoplay playsinline muted></video>
+
+          <div class="cphq-empty-camara-rapida-publicacion" id="cphq-empty-state-camara-rapida-publicacion">
+            <strong data-translate="camara_rapida_publicacion_empty_title">La cámara se activará al abrir el modal</strong>
+            <span data-translate="camara_rapida_publicacion_empty_text">Si el navegador bloquea el acceso, puedes seguir con subida manual.</span>
+          </div>
+
+          <div class="cphq-preview-tray-camara-rapida-publicacion is-hidden" id="cphq-preview-tray-camara-rapida-publicacion">
+            <div class="cphq-preview-list-camara-rapida-publicacion" id="cphq-preview-list-camara-rapida-publicacion"></div>
+          </div>
+
+          <div class="cphq-controls-overlay-camara-rapida-publicacion">
+            <button type="button" class="cphq-tool-camara-rapida-publicacion" id="cphq-upload-file-camara-rapida-publicacion" data-i18n-aria-label="camara_rapida_publicacion_upload" aria-label="Subir archivo">
+              <span class="cphq-tool-icon-camara-rapida-publicacion" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 16V4"></path>
+                  <path d="m7 9 5-5 5 5"></path>
+                  <path d="M5 20h14"></path>
+                </svg>
+              </span>
+              <span class="cphq-tool-label-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_upload">Subir</span>
+            </button>
+
+            <button type="button" class="cphq-shutter-camara-rapida-publicacion" id="cphq-take-photo-camara-rapida-publicacion" data-i18n-aria-label="camara_rapida_publicacion_take_photo" aria-label="Tomar foto">
+              <span class="cphq-shutter-ring-camara-rapida-publicacion"></span>
+              <span class="cphq-shutter-core-camara-rapida-publicacion"></span>
+            </button>
+
+            <button type="button" class="cphq-tool-camara-rapida-publicacion cphq-tool-record-camara-rapida-publicacion" id="cphq-record-video-camara-rapida-publicacion" data-i18n-aria-label="camara_rapida_publicacion_video" aria-label="Grabar video">
+              <span class="cphq-tool-icon-camara-rapida-publicacion" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="12" r="5"></circle>
+                </svg>
+              </span>
+              <span class="cphq-tool-label-camara-rapida-publicacion">Video</span>
+            </button>
+          </div>
+
+          <input type="file" id="cphq-file-input-camara-rapida-publicacion" accept="image/*,video/*" multiple hidden>
+          <input type="file" id="cphq-photo-input-camara-rapida-publicacion" accept="image/*" capture="environment" hidden>
+          <input type="file" id="cphq-video-input-camara-rapida-publicacion" accept="video/*" capture="environment" hidden>
+        </div>
+      </section>
+      </div>
+
+      <div class="cphq-footer-camara-rapida-publicacion is-hidden" id="cphq-footer-actions-camara-rapida-publicacion">
+        <div class="cphq-footer-preview-camara-rapida-publicacion is-hidden" id="cphq-footer-preview-camara-rapida-publicacion">
+          <div class="cphq-footer-preview-list-camara-rapida-publicacion" id="cphq-footer-preview-list-camara-rapida-publicacion"></div>
+        </div>
+        <button type="button" class="cphq-secondary-camara-rapida-publicacion" id="cphq-cancel-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_cancel">Cancelar</button>
+        <button type="button" class="cphq-secondary-camara-rapida-publicacion" id="cphq-direct-publish-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_direct_publish">Publicar directo</button>
+        <button type="button" class="cphq-primary-camara-rapida-publicacion" id="cphq-continue-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_continue">Continuar</button>
+      </div>
+    </div>
+
+    <div class="cphq-direct-options-camara-rapida-publicacion is-hidden" id="cphq-direct-options-camara-rapida-publicacion">
+      <div class="cphq-direct-options-dialog-camara-rapida-publicacion">
+        <div class="cphq-direct-options-topbar-camara-rapida-publicacion">
+          <div class="cphq-direct-options-header-camara-rapida-publicacion">
+            <h3 class="cphq-direct-options-title-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_direct_options_title">Elige donde publicar directo</h3>
+            <p class="cphq-direct-options-subtitle-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_direct_options_subtitle">Selecciona el destino de esta publicación rápida.</p>
+          </div>
+          <button class="cphq-close-camara-rapida-publicacion cphq-direct-close-camara-rapida-publicacion" type="button" id="cphq-direct-close-camara-rapida-publicacion" data-i18n-aria-label="camara_rapida_publicacion_close" aria-label="Cerrar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+        </div>
+
+        <div class="cphq-direct-options-list-camara-rapida-publicacion">
+          <button type="button" class="cphq-direct-option-camara-rapida-publicacion" id="cphq-direct-target-personal-camara-rapida-publicacion" data-target="personal_privado">
+            <span class="cphq-direct-option-title-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_direct_target_personal_title">Ambito personal</span>
+            <span class="cphq-direct-option-meta-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_direct_target_personal_meta">Categoria: Privado</span>
+          </button>
+
+          <button type="button" class="cphq-direct-option-camara-rapida-publicacion" id="cphq-direct-target-noticias-camara-rapida-publicacion" data-target="noticias_nuevos">
+            <span class="cphq-direct-option-title-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_direct_target_news_title">Ambito Noticias</span>
+            <span class="cphq-direct-option-meta-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_direct_target_news_meta">Categoria: Nuevos</span>
+          </button>
+        </div>
+
+        <div class="cphq-direct-options-actions-camara-rapida-publicacion">
+          <button type="button" class="cphq-secondary-camara-rapida-publicacion" id="cphq-direct-back-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_back">Volver</button>
+          <button type="button" class="cphq-primary-camara-rapida-publicacion" id="cphq-direct-confirm-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_direct_confirm" disabled>Confirmar publicación directa</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="cphq-direct-phone-modal-camara-rapida-publicacion is-hidden" id="cphq-direct-phone-choice-camara-rapida-publicacion">
+      <div class="cphq-direct-phone-dialog-camara-rapida-publicacion" role="dialog" aria-modal="true" aria-labelledby="cphq-direct-phone-title-camara-rapida-publicacion">
+        <div class="cphq-direct-options-topbar-camara-rapida-publicacion">
+          <div class="cphq-direct-options-header-camara-rapida-publicacion">
+            <h3 class="cphq-direct-options-title-camara-rapida-publicacion" id="cphq-direct-phone-title-camara-rapida-publicacion">Telefono opcional</h3>
+            <p class="cphq-direct-options-subtitle-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_direct_phone_optional">No encontramos un telefono valido. Puedes agregarlo ahora o continuar sin telefono.</p>
+          </div>
+          <button class="cphq-close-camara-rapida-publicacion cphq-direct-close-camara-rapida-publicacion" type="button" id="cphq-direct-phone-close-camara-rapida-publicacion" data-i18n-aria-label="camara_rapida_publicacion_close" aria-label="Cerrar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+        </div>
+
+        <div class="cphq-direct-phone-actions-camara-rapida-publicacion">
+          <button type="button" class="cphq-secondary-camara-rapida-publicacion" id="cphq-direct-add-phone-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_direct_add_phone">Agregar telefono</button>
+          <button type="button" class="cphq-primary-camara-rapida-publicacion" id="cphq-direct-continue-without-phone-camara-rapida-publicacion" data-translate="camara_rapida_publicacion_direct_continue_without_phone">Continuar sin telefono</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

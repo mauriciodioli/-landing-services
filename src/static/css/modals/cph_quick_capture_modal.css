@@ -1,0 +1,815 @@
+.cphq-backdrop-camara-rapida-publicacion {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 18, 32, 0.72);
+  backdrop-filter: blur(8px);
+  z-index: 12000;
+  padding: 20px;
+}
+
+.cphq-backdrop-camara-rapida-publicacion.is-open {
+  display: flex;
+}
+
+.cphq-card-camara-rapida-publicacion {
+  position: relative;
+  width: min(1275px, 100%);
+  max-height: min(88vh, 860px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-radius: 28px;
+  background: #0b1220;
+  box-shadow: 0 24px 80px rgba(14, 24, 40, 0.28);
+  display: flex;
+  flex-direction: column;
+}
+
+.cphq-base-view-camara-rapida-publicacion {
+  min-height: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.cphq-card-camara-rapida-publicacion.is-direct-options-open-camara-rapida-publicacion .cphq-base-view-camara-rapida-publicacion {
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.cphq-footer-camara-rapida-publicacion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+}
+
+.cphq-title-camara-rapida-publicacion {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.1;
+  color: #f5f8ff;
+}
+
+.cphq-subtitle-camara-rapida-publicacion {
+  margin: 6px 0 0;
+  color: rgba(245, 248, 255, 0.72);
+  font-size: 15px;
+}
+
+.cphq-close-camara-rapida-publicacion,
+.cphq-secondary-camara-rapida-publicacion,
+.cphq-primary-camara-rapida-publicacion {
+  border: 0;
+  border-radius: 16px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.cphq-secondary-camara-rapida-publicacion {
+  padding: 10px 14px;
+  background: #e9eef5;
+  color: #122033;
+}
+
+.cphq-close-camara-rapida-publicacion {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  padding: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 26px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.cphq-primary-camara-rapida-publicacion,
+.cphq-shutter-camara-rapida-publicacion {
+  background: #0b67ff;
+  color: #fff;
+}
+
+.cphq-primary-camara-rapida-publicacion {
+  padding: 11px 18px;
+}
+
+.cphq-layout-camara-rapida-publicacion {
+  display: block;
+  padding: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.cphq-stage-camara-rapida-publicacion {
+  min-height: 0;
+  height: 100%;
+}
+
+.cphq-camera-shell-camara-rapida-publicacion {
+  position: relative;
+  min-height: clamp(365px, 58vh, 620px);
+  max-height: min(64vh, 620px);
+  height: 100%;
+  overflow: hidden;
+  background: radial-gradient(circle at top, #20324f 0%, #0d1524 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cphq-chrome-camara-rapida-publicacion {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: 20px;
+  display: grid;
+  gap: 14px;
+  background: linear-gradient(180deg, rgba(5, 12, 24, 0.72) 0%, rgba(5, 12, 24, 0) 100%);
+}
+
+.cphq-topbar-camara-rapida-publicacion {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cphq-heading-camara-rapida-publicacion {
+  max-width: 560px;
+}
+
+.cphq-camera-camara-rapida-publicacion {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #09111d;
+  display: none;
+}
+
+.cphq-camera-camara-rapida-publicacion.is-visible {
+  display: block;
+}
+
+.cphq-backdrop-camara-rapida-publicacion.is-native-capture-camara-rapida-publicacion .cphq-empty-camara-rapida-publicacion {
+  display: grid !important;
+}
+
+.cphq-backdrop-camara-rapida-publicacion.is-native-capture-camara-rapida-publicacion .cphq-camera-camara-rapida-publicacion {
+  display: none !important;
+}
+
+.cphq-empty-camara-rapida-publicacion {
+  display: grid;
+  gap: 10px;
+  text-align: center;
+  padding: 32px;
+  color: #fff;
+  max-width: 520px;
+  z-index: 1;
+}
+
+.cphq-status-camara-rapida-publicacion {
+  width: fit-content;
+  max-width: min(100%, 520px);
+  padding: 12px 14px;
+  border-radius: 999px;
+  background: rgba(237, 243, 255, 0.16);
+  color: #eef4ff;
+  font-size: 14px;
+  backdrop-filter: blur(10px);
+}
+
+.cphq-backdrop-camara-rapida-publicacion.is-native-capture-camara-rapida-publicacion .cphq-status-camara-rapida-publicacion {
+  background: rgba(11, 103, 255, 0.22);
+}
+
+.cphq-flip-camera-camara-rapida-publicacion {
+  position: absolute;
+  top: 112px;
+  right: 20px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(5, 12, 24, 0.42);
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+}
+
+.cphq-flip-camera-camara-rapida-publicacion:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cphq-flip-camera-camara-rapida-publicacion .cphq-tool-icon-camara-rapida-publicacion,
+.cphq-flip-camera-camara-rapida-publicacion .cphq-tool-icon-camara-rapida-publicacion svg {
+  width: 20px;
+  height: 20px;
+}
+
+.cphq-preview-tray-camara-rapida-publicacion {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 148px;
+  z-index: 3;
+  display: grid;
+}
+
+.cphq-preview-tray-camara-rapida-publicacion.is-hidden {
+  display: none;
+}
+
+.cphq-footer-preview-camara-rapida-publicacion {
+  display: none;
+}
+
+.cphq-footer-preview-camara-rapida-publicacion.is-hidden {
+  display: none;
+}
+
+.cphq-preview-list-camara-rapida-publicacion {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 8px 2px 4px;
+  scrollbar-width: thin;
+}
+
+.cphq-preview-item-camara-rapida-publicacion {
+  position: relative;
+  flex: 0 0 116px;
+  width: 116px;
+  height: 156px;
+  border-radius: 22px;
+  overflow: hidden;
+  background: rgba(9, 15, 28, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+.cphq-preview-media-camara-rapida-publicacion {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cphq-preview-meta-camara-rapida-publicacion {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  gap: 2px;
+  padding: 26px 10px 10px;
+  background: linear-gradient(180deg, rgba(3, 8, 17, 0) 0%, rgba(3, 8, 17, 0.92) 68%, rgba(3, 8, 17, 0.98) 100%);
+  color: #eef4ff;
+}
+
+.cphq-preview-name-camara-rapida-publicacion {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cphq-preview-kind-camara-rapida-publicacion {
+  font-size: 11px;
+  color: rgba(238, 244, 255, 0.72);
+}
+
+.cphq-preview-remove-camara-rapida-publicacion {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(3, 8, 17, 0.72);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.cphq-preview-badge-camara-rapida-publicacion {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: rgba(11, 103, 255, 0.72);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.cphq-footer-preview-list-camara-rapida-publicacion {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+}
+
+.cphq-footer-preview-camara-rapida-publicacion .cphq-preview-item-camara-rapida-publicacion {
+  flex: 0 0 72px;
+  width: 72px;
+  height: 92px;
+  border-radius: 16px;
+}
+
+.cphq-footer-preview-camara-rapida-publicacion .cphq-preview-remove-camara-rapida-publicacion {
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+}
+
+.cphq-footer-preview-camara-rapida-publicacion .cphq-preview-badge-camara-rapida-publicacion {
+  top: 6px;
+  left: 6px;
+  padding: 3px 5px;
+  font-size: 8px;
+}
+
+.cphq-footer-preview-camara-rapida-publicacion .cphq-preview-meta-camara-rapida-publicacion {
+  gap: 1px;
+  padding: 16px 6px 6px;
+}
+
+.cphq-footer-preview-camara-rapida-publicacion .cphq-preview-name-camara-rapida-publicacion {
+  font-size: 10px;
+}
+
+.cphq-footer-preview-camara-rapida-publicacion .cphq-preview-kind-camara-rapida-publicacion {
+  font-size: 9px;
+}
+
+.cphq-controls-overlay-camara-rapida-publicacion {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  z-index: 3;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: end;
+  gap: 18px;
+  padding: 14px 18px;
+  border-radius: 999px;
+  background: rgba(5, 12, 24, 0.42);
+  backdrop-filter: blur(14px);
+}
+
+.cphq-tool-camara-rapida-publicacion {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 88px;
+  min-width: 88px;
+  height: 88px;
+  padding: 0;
+  border: 0;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.cphq-tool-icon-camara-rapida-publicacion {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cphq-tool-icon-camara-rapida-publicacion svg {
+  width: 24px;
+  height: 24px;
+}
+
+.cphq-tool-label-camara-rapida-publicacion {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.cphq-shutter-camara-rapida-publicacion {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  min-width: 96px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.24);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.cphq-shutter-ring-camara-rapida-publicacion {
+  position: absolute;
+  inset: 8px;
+  border-radius: 999px;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+}
+
+.cphq-shutter-core-camara-rapida-publicacion {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+.cphq-tool-record-camara-rapida-publicacion {
+  background: rgba(255, 77, 79, 0.24);
+}
+
+.cphq-tool-record-camara-rapida-publicacion.is-recording {
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.45);
+}
+
+.cphq-footer-camara-rapida-publicacion.is-hidden {
+  display: none;
+}
+
+.cphq-direct-options-camara-rapida-publicacion {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  background: linear-gradient(180deg, rgba(7, 12, 22, 0.96) 0%, rgba(11, 18, 32, 0.98) 100%);
+  backdrop-filter: blur(14px);
+}
+
+.cphq-direct-options-camara-rapida-publicacion.is-hidden {
+  display: none;
+}
+
+.cphq-direct-options-dialog-camara-rapida-publicacion {
+  width: min(560px, 100%);
+  max-width: 560px;
+  box-sizing: border-box;
+  display: grid;
+  gap: 22px;
+  padding: 26px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(20, 31, 54, 0.98) 0%, rgba(10, 17, 31, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.42);
+  overflow: hidden;
+}
+
+.cphq-direct-options-topbar-camara-rapida-publicacion {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cphq-direct-close-camara-rapida-publicacion {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.cphq-direct-options-header-camara-rapida-publicacion {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.cphq-direct-options-title-camara-rapida-publicacion {
+  margin: 0;
+  color: #f5f8ff;
+  font-size: 19px;
+}
+
+.cphq-direct-options-subtitle-camara-rapida-publicacion {
+  margin: 0;
+  color: rgba(245, 248, 255, 0.72);
+  font-size: 14px;
+}
+
+.cphq-direct-options-list-camara-rapida-publicacion {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.cphq-direct-option-camara-rapida-publicacion {
+  display: grid;
+  gap: 6px;
+  padding: 18px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.045);
+  color: #f5f8ff;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s ease;
+}
+
+.cphq-direct-option-camara-rapida-publicacion:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.cphq-direct-option-camara-rapida-publicacion.is-selected {
+  border-color: rgba(11, 103, 255, 0.95);
+  background: rgba(11, 103, 255, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(11, 103, 255, 0.55);
+}
+
+.cphq-direct-option-title-camara-rapida-publicacion {
+  font-weight: 700;
+}
+
+.cphq-direct-option-meta-camara-rapida-publicacion {
+  color: rgba(245, 248, 255, 0.72);
+  font-size: 13px;
+}
+
+.cphq-direct-phone-modal-camara-rapida-publicacion {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  background: rgba(7, 12, 22, 0.7);
+  backdrop-filter: blur(12px);
+}
+
+.cphq-direct-phone-modal-camara-rapida-publicacion.is-hidden {
+  display: none;
+}
+
+.cphq-direct-phone-dialog-camara-rapida-publicacion {
+  width: min(460px, 100%);
+  max-width: 460px;
+  box-sizing: border-box;
+  display: grid;
+  gap: 20px;
+  padding: 24px;
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(20, 31, 54, 0.98) 0%, rgba(10, 17, 31, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.42);
+}
+
+.cphq-direct-phone-actions-camara-rapida-publicacion {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cphq-direct-phone-actions-camara-rapida-publicacion > button {
+  min-width: 180px;
+}
+
+.cphq-direct-options-actions-camara-rapida-publicacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.cphq-direct-options-actions-camara-rapida-publicacion > button {
+  min-width: 180px;
+}
+
+.cphq-primary-camara-rapida-publicacion:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.cphq-footer-camara-rapida-publicacion {
+  gap: 12px;
+  padding: 12px 16px 14px;
+  background: #0b1220;
+}
+
+.cphq-recording-camara-rapida-publicacion {
+  box-shadow: inset 0 0 0 2px #ff4d4f;
+}
+
+@media (max-width: 900px) {
+  .cphq-backdrop-camara-rapida-publicacion {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .cphq-card-camara-rapida-publicacion {
+    width: 100%;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .cphq-footer-camara-rapida-publicacion,
+  .cphq-camera-shell-camara-rapida-publicacion {
+    min-height: 100%;
+  }
+
+  .cphq-footer-camara-rapida-publicacion {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 12px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(180deg, rgba(11, 18, 32, 0.88) 0%, #0b1220 24%);
+    backdrop-filter: blur(8px);
+  }
+
+  .cphq-footer-camara-rapida-publicacion > * {
+    width: 100%;
+  }
+
+  .cphq-direct-options-camara-rapida-publicacion {
+    padding: 16px;
+    align-items: center;
+  }
+
+  .cphq-direct-options-dialog-camara-rapida-publicacion {
+    width: 100%;
+    max-width: 560px;
+    max-height: min(82dvh, 720px);
+    overflow: auto;
+    padding: 22px 16px calc(18px + env(safe-area-inset-bottom, 0px));
+    border-radius: 24px;
+  }
+
+  .cphq-direct-options-list-camara-rapida-publicacion {
+    grid-template-columns: 1fr;
+  }
+
+  .cphq-direct-phone-modal-camara-rapida-publicacion {
+    padding: 16px;
+  }
+
+  .cphq-direct-phone-dialog-camara-rapida-publicacion {
+    width: 100%;
+    max-width: 460px;
+    padding: 22px 16px calc(18px + env(safe-area-inset-bottom, 0px));
+    border-radius: 24px;
+  }
+
+  .cphq-direct-phone-actions-camara-rapida-publicacion,
+  .cphq-direct-options-actions-camara-rapida-publicacion {
+    flex-direction: column;
+  }
+
+  .cphq-direct-phone-actions-camara-rapida-publicacion > button,
+  .cphq-direct-options-actions-camara-rapida-publicacion > * {
+    width: 100%;
+  }
+
+  .cphq-chrome-camara-rapida-publicacion {
+    padding: 16px;
+  }
+
+  .cphq-controls-overlay-camara-rapida-publicacion {
+    left: 16px;
+    right: 16px;
+    bottom: 20px;
+    transform: none;
+    justify-content: space-between;
+    gap: 12px;
+    border-radius: 28px;
+  }
+
+  .cphq-preview-tray-camara-rapida-publicacion {
+    display: none;
+  }
+
+  .cphq-footer-preview-camara-rapida-publicacion {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .cphq-footer-preview-camara-rapida-publicacion.is-hidden {
+    display: none;
+  }
+
+  .cphq-preview-item-camara-rapida-publicacion {
+    flex-basis: 100px;
+    width: 100px;
+    height: 136px;
+  }
+
+  .cphq-tool-camara-rapida-publicacion {
+    width: 74px;
+    min-width: 74px;
+    height: 74px;
+    border-radius: 20px;
+  }
+
+  .cphq-shutter-camara-rapida-publicacion {
+    width: 84px;
+    min-width: 84px;
+    height: 84px;
+  }
+
+  .cphq-shutter-core-camara-rapida-publicacion {
+    width: 48px;
+    height: 48px;
+  }
+
+}
+
+@media (max-width: 640px) {
+  .cphq-title-camara-rapida-publicacion {
+    font-size: 22px;
+  }
+
+  .cphq-subtitle-camara-rapida-publicacion {
+    font-size: 14px;
+  }
+
+  .cphq-heading-camara-rapida-publicacion {
+    max-width: 220px;
+  }
+
+  .cphq-status-camara-rapida-publicacion {
+    max-width: calc(100% - 56px);
+    font-size: 13px;
+  }
+
+  .cphq-controls-overlay-camara-rapida-publicacion {
+    padding: 12px;
+  }
+
+  .cphq-tool-camara-rapida-publicacion {
+    width: 68px;
+    min-width: 68px;
+    height: 68px;
+  }
+
+  .cphq-tool-label-camara-rapida-publicacion {
+    font-size: 12px;
+  }
+
+  .cphq-shutter-camara-rapida-publicacion {
+    width: 78px;
+    min-width: 78px;
+    height: 78px;
+  }
+
+  .cphq-shutter-ring-camara-rapida-publicacion {
+    inset: 7px;
+  }
+
+  .cphq-shutter-core-camara-rapida-publicacion {
+    width: 44px;
+    height: 44px;
+  }
+
+  .cphq-direct-options-dialog-camara-rapida-publicacion {
+    gap: 18px;
+  }
+
+  .cphq-direct-options-title-camara-rapida-publicacion {
+    font-size: 21px;
+  }
+
+}

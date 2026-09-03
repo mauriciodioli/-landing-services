@@ -4,7 +4,7 @@ import os
 import secrets
 import time
 import uuid
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from functools import wraps
 from pathlib import Path
 
@@ -101,6 +101,27 @@ def _preview_token(album_id, page_id):
     signer = URLSafeSerializer(current_app.secret_key, salt="album-page-preview-v1")
     return signer.dumps({"album": album_id, "page": page_id})
 
+def _contribution_token(album_id, page_id, version=1):
+    signer = URLSafeSerializer(current_app.secret_key, salt="album-page-contribution-v1")
+    return signer.dumps({"album": album_id, "page": page_id, "version": version})
+
+
+def _contribution_page(item, token):
+    signer = URLSafeSerializer(current_app.secret_key, salt="album-page-contribution-v1")
+    try:
+        payload = signer.loads(token)
+        album_id, page_id = int(payload["album"]), int(payload["page"])
+    except (BadSignature, KeyError, TypeError, ValueError):
+        abort(404)
+    if album_id != item.id:
+        abort(404)
+    page = AlbumPage.query.filter_by(id=page_id, album_id=item.id, is_visible=True, share_enabled=True, contribution_enabled=True).first_or_404()
+    if int(payload.get("version", 1)) != page.contribution_version:
+        abort(404)
+    if not page.contribution_expires_at or page.contribution_expires_at <= datetime.utcnow():
+        abort(410)
+    return page
+
 def _preview_page(item, token):
     signer = URLSafeSerializer(current_app.secret_key, salt="album-page-preview-v1")
     try:
@@ -126,7 +147,7 @@ def _shared_page(item, token):
     return page
 
 def _media_json(item, storage):
-    return {"id":item.id,"type":item.media_type,"name":item.display_name or item.original_name,"url":storage.signed_url(item.object_key),"thumbnail_url":storage.signed_url(item.thumbnail_key or item.object_key)}
+    return {"id":item.id,"type":item.media_type,"name":item.display_name or item.original_name,"url":storage.signed_url(item.object_key),"thumbnail_url":storage.signed_url(item.thumbnail_key or item.object_key),"moderation_status":item.moderation_status,"contributor_name":item.contributor_name or ""}
 
 def _external_json(item):
     return {"id": item.id, "type": item.media_type, "provider": item.provider, "url": item.original_url, "embed_url": item.embed_url, "title": item.title or "", "alt_text": item.alt_text or ""}
@@ -141,7 +162,8 @@ def _gift_json(item, admin=False):
     return result
 
 def _page_json(page, storage, admin=False):
-    result={"id":page.id,"title":page.title,"memory_date":page.memory_date.isoformat() if page.memory_date else None,"description":page.description or "","position":page.position,"is_visible":page.is_visible,"music_url":page.music_url or page.album.music_url,"page_music_url":page.music_url,"media":[_media_json(m,storage) for m in page.media],"external_media":[_external_json(m) for m in page.external_media],"gifts":[_gift_json(g,admin) for g in page.gifts]}
+    approved_media=[m for m in page.media if m.moderation_status == "approved"]
+    result={"id":page.id,"title":page.title,"memory_date":page.memory_date.isoformat() if page.memory_date else None,"description":page.description or "","position":page.position,"is_visible":page.is_visible,"music_url":page.music_url or page.album.music_url,"page_music_url":page.music_url,"media":[_media_json(m,storage) for m in approved_media],"external_media":[_external_json(m) for m in page.external_media],"gifts":[_gift_json(g,admin) for g in page.gifts]}
     if admin:
         result["updated_at"] = page.updated_at.isoformat()
         token = _page_token(page.album_id, page.id, page.share_version)
@@ -149,6 +171,12 @@ def _page_json(page, storage, admin=False):
         result["share_enabled"] = page.share_enabled
         result["share_url"] = request.url_root.rstrip("/") + f"/album/{page.album.slug}/page/{token}"
         result["preview_url"] = request.url_root.rstrip("/") + f"/album/{page.album.slug}/preview/{preview_token}"
+        contribution_active = bool(page.contribution_enabled and page.contribution_expires_at and page.contribution_expires_at > datetime.utcnow())
+        contribution_token = _contribution_token(page.album_id, page.id, page.contribution_version)
+        result["contribution_enabled"] = contribution_active
+        result["contribution_expires_at"] = page.contribution_expires_at.isoformat() if page.contribution_expires_at else None
+        result["contribution_url"] = request.url_root.rstrip("/") + f"/album/{page.album.slug}/contribute/{contribution_token}"
+        result["pending_contributions"] = [_media_json(m, storage) for m in page.media if m.moderation_status == "pending"]
     return result
 
 @album_bp.get("/album")
@@ -213,6 +241,15 @@ def album_page_view(slug, token):
     response.headers["Cache-Control"] = "private, no-store"
     return response
 
+
+@album_bp.get("/album/<slug>/contribute/<token>")
+def album_contribution_view(slug, token):
+    item = _album(slug)
+    _contribution_page(item, token)
+    response = current_app.make_response(render_template("album/index.html", slug=slug, contribution_token=token, **_album_template_context(item)))
+    response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
+    response.headers["Cache-Control"] = "private, no-store"
+    return response
 @album_bp.get("/album/<slug>/preview/<token>")
 def album_page_preview(slug, token):
     item = _owned_album(slug); _preview_page(item, token)
@@ -221,6 +258,12 @@ def album_page_preview(slug, token):
     response.headers["Cache-Control"] = "private, no-store"
     return response
 
+
+@album_bp.get("/api/albums/<slug>/contribute/<token>")
+def album_contribution_api(slug, token):
+    item = _album(slug); page = _contribution_page(item, token); storage = AlbumStorage()
+    page_data = _page_json(page, storage); page_data["gifts"] = []
+    return jsonify(title=item.title, subtitle=item.subtitle, music_url=item.music_url, contribution_enabled=True, contribution_expires_at=page.contribution_expires_at.isoformat(), pages=[page_data])
 @album_bp.get("/api/albums/<slug>/preview/<token>")
 def album_preview_api(slug, token):
     item = _owned_album(slug); page = _preview_page(item, token); storage = AlbumStorage()
@@ -532,3 +575,113 @@ def gift_reveal(slug, page_token, gift_token):
     db.session.commit()
     is_url = secret.startswith("https://")
     return jsonify(secret=secret, is_url=is_url, qr_data_url=qr_data_url(secret), status=gift.status)
+
+
+@album_bp.post("/api/albums/<slug>/pages/<int:page_id>/contributions")
+@admin_required
+def contribution_access_update(slug, page_id):
+    item = _owned_album(slug)
+    page = AlbumPage.query.filter_by(id=page_id, album_id=item.id).first_or_404()
+    data = request.get_json(silent=True) or {}
+    enabled = bool(data.get("enabled"))
+    if enabled and (not page.is_visible or not page.share_enabled):
+        return jsonify(error="page_must_be_shared"), 400
+    page.contribution_version = (page.contribution_version or 1) + 1
+    page.contribution_enabled = enabled
+    if enabled:
+        try:
+            hours = int(data.get("hours", 24))
+        except (TypeError, ValueError):
+            return jsonify(error="invalid_duration"), 400
+        if hours < 1 or hours > 168:
+            return jsonify(error="invalid_duration"), 400
+        page.contribution_expires_at = datetime.utcnow() + timedelta(hours=hours)
+    else:
+        page.contribution_expires_at = None
+    db.session.commit()
+    token = _contribution_token(item.id, page.id, page.contribution_version)
+    return jsonify(
+        enabled=page.contribution_enabled,
+        expires_at=page.contribution_expires_at.isoformat() if page.contribution_expires_at else None,
+        contribution_url=request.url_root.rstrip("/") + f"/album/{item.slug}/contribute/{token}" if enabled else None,
+    )
+
+
+@album_bp.post("/api/albums/<slug>/contribute/<token>/media")
+def contribution_media_upload(slug, token):
+    item = _album(slug)
+    page = _contribution_page(item, token)
+    uploads = request.files.getlist("files")
+    if not uploads or len(uploads) > 10:
+        return jsonify(error="invalid_file_count"), 400
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr or "").split(",")[0].strip()
+    attempt_key = f"album-contribution:{page.id}:{ip}"
+    now = time.time()
+    recent = [stamp for stamp in _attempts.get(attempt_key, []) if now - stamp < 3600]
+    if len(recent) + len(uploads) > 20:
+        return jsonify(error="try_later"), 429
+    contributor_name = str(request.form.get("contributor_name", "")).strip()[:120] or None
+    storage = AlbumStorage(); created = []; uploaded_keys = []
+    try:
+        next_pos = (db.session.query(func.max(AlbumMedia.position)).filter_by(page_id=page.id).scalar() or 0) + 1
+        for upload in uploads:
+            kind, name, digest, size, width, height, payload, thumb, mime = _prepare(upload)
+            if AlbumMedia.query.filter_by(page_id=page.id, sha256=digest).first():
+                continue
+            uid = uuid.uuid4().hex
+            extension = "jpg" if kind == "image" else Path(name).suffix.lstrip(".")
+            key = f"albums/{item.id}/{page.id}/contributions/{uid}-{Path(name).stem}.{extension}"
+            storage.upload(key, io.BytesIO(payload), mime); uploaded_keys.append(key)
+            thumb_key = None
+            if thumb is not None:
+                thumb_key = f"albums/{item.id}/{page.id}/contributions/{uid}-thumb.jpg"
+                storage.upload(thumb_key, io.BytesIO(thumb), "image/jpeg"); uploaded_keys.append(thumb_key)
+            media = AlbumMedia(
+                page_id=page.id, media_type=kind, original_name=name, object_key=key,
+                thumbnail_key=thumb_key, mime_type=mime, size=size, sha256=digest,
+                width=width, height=height, position=next_pos, moderation_status="pending",
+                contributor_name=contributor_name,
+            )
+            next_pos += 1; db.session.add(media); created.append(media)
+        db.session.commit()
+        _attempts[attempt_key] = recent + [now] * len(uploads)
+        return jsonify(ids=[media.id for media in created], status="pending"), 201
+    except ValueError as exc:
+        db.session.rollback()
+        for key in uploaded_keys:
+            try: storage.delete(key)
+            except Exception: pass
+        return jsonify(error=str(exc)), 400
+    except Exception:
+        db.session.rollback(); current_app.logger.exception("Falló aporte multimedia del álbum")
+        for key in uploaded_keys:
+            try: storage.delete(key)
+            except Exception: pass
+        return jsonify(error="upload_failed"), 500
+
+
+@album_bp.patch("/api/albums/<slug>/contributions/<int:media_id>")
+@admin_required
+def contribution_moderate(slug, media_id):
+    item = _owned_album(slug)
+    media = AlbumMedia.query.join(AlbumPage).filter(
+        AlbumMedia.id == media_id,
+        AlbumPage.album_id == item.id,
+        AlbumMedia.moderation_status == "pending",
+    ).first_or_404()
+    action = str((request.get_json(silent=True) or {}).get("action", ""))
+    if action == "approve":
+        media.moderation_status = "approved"
+        db.session.commit()
+        return jsonify(ok=True, status="approved")
+    if action == "reject":
+        storage = AlbumStorage()
+        try:
+            for key in {media.object_key, media.thumbnail_key}:
+                if key: storage.delete(key)
+        except Exception:
+            current_app.logger.exception("No se pudo borrar un aporte rechazado")
+            return jsonify(error="storage_delete_failed"), 500
+        db.session.delete(media); db.session.commit()
+        return jsonify(ok=True, status="rejected")
+    return jsonify(error="invalid_action"), 400
