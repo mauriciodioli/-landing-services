@@ -1,8 +1,11 @@
 import hashlib
 import io
 import os
+import re
 import secrets
+import string
 import time
+import unicodedata
 import uuid
 from datetime import date, datetime, timedelta
 from functools import wraps
@@ -27,6 +30,8 @@ MAX_FILES = 20
 MAX_IMAGE = 20 * 1024 * 1024
 MAX_VIDEO = 250 * 1024 * 1024
 _attempts = {}
+SHORT_CODE_LENGTH = 10
+SHORT_CODE_ALPHABET = string.ascii_letters + string.digits
 
 
 def _admin(item):
@@ -97,6 +102,34 @@ def _page_token(album_id, page_id, version=1):
     signer = URLSafeSerializer(current_app.secret_key, salt="album-page-share-v1")
     return signer.dumps({"album": album_id, "page": page_id, "version": version})
 
+def _short_urls_enabled():
+    return os.environ.get("ALBUM_SHORT_URLS_ENABLED", "true").strip().lower() in ("1", "true", "yes", "on")
+
+def _slug_text(value):
+    value = str(value or "").translate(str.maketrans({"ł": "l", "Ł": "L"}))
+    value = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii").lower()
+    return re.sub(r"[^a-z0-9]+", "-", value).strip("-")[:80] or "hoja"
+
+def _new_short_slug(page):
+    label = f"{_slug_text(page.title)}-{date.today().strftime('%d%m%y')}"
+    for _ in range(20):
+        code = "".join(secrets.choice(SHORT_CODE_ALPHABET) for _ in range(SHORT_CODE_LENGTH))
+        if not AlbumPage.query.filter(AlbumPage.short_slug.like(f"{code}/%")).first():
+            return f"{code}/{label}"
+    raise RuntimeError("short_slug_generation_failed")
+
+def _long_share_path(page):
+    return url_for("album.album_page_view", slug=page.album.slug, token=_page_token(page.album_id, page.id, page.share_version))
+
+def _absolute_url(path):
+    base = os.environ.get("ALBUM_PUBLIC_BASE_URL", request.url_root).rstrip("/")
+    return base + path
+
+def _share_url(page):
+    if _short_urls_enabled() and page.short_slug:
+        return _absolute_url("/" + page.short_slug)
+    return _absolute_url(_long_share_path(page))
+
 def _preview_token(album_id, page_id):
     signer = URLSafeSerializer(current_app.secret_key, salt="album-page-preview-v1")
     return signer.dumps({"album": album_id, "page": page_id})
@@ -166,10 +199,9 @@ def _page_json(page, storage, admin=False):
     result={"id":page.id,"title":page.title,"memory_date":page.memory_date.isoformat() if page.memory_date else None,"description":page.description or "","position":page.position,"is_visible":page.is_visible,"music_url":page.music_url or page.album.music_url,"page_music_url":page.music_url,"media":[_media_json(m,storage) for m in approved_media],"external_media":[_external_json(m) for m in page.external_media],"gifts":[_gift_json(g,admin) for g in page.gifts]}
     if admin:
         result["updated_at"] = page.updated_at.isoformat()
-        token = _page_token(page.album_id, page.id, page.share_version)
         preview_token = _preview_token(page.album_id, page.id)
         result["share_enabled"] = page.share_enabled
-        result["share_url"] = request.url_root.rstrip("/") + f"/album/{page.album.slug}/page/{token}"
+        result["share_url"] = _share_url(page)
         result["preview_url"] = request.url_root.rstrip("/") + f"/album/{page.album.slug}/preview/{preview_token}"
         contribution_active = bool(page.contribution_enabled and page.contribution_expires_at and page.contribution_expires_at > datetime.utcnow())
         contribution_token = _contribution_token(page.album_id, page.id, page.contribution_version)
@@ -237,6 +269,20 @@ def album_page_view(slug, token):
     item = _album(slug)
     _shared_page(item, token)
     response = current_app.make_response(render_template("album/index.html", slug=slug, page_token=token, **_album_template_context(item)))
+    response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
+    response.headers["Cache-Control"] = "private, no-store"
+    return response
+
+@album_bp.get("/<share_code>/<label>")
+def album_short_link(share_code, label):
+    if not _short_urls_enabled() or not re.fullmatch(r"[A-Za-z0-9]{10}", share_code):
+        abort(404)
+    page = (AlbumPage.query.join(Album)
+            .filter(AlbumPage.short_slug == f"{share_code}/{label}",
+                    AlbumPage.share_enabled.is_(True),
+                    AlbumPage.is_visible.is_(True),
+                    Album.active.is_(True)).first_or_404())
+    response = redirect(_long_share_path(page), code=302)
     response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
     response.headers["Cache-Control"] = "private, no-store"
     return response
@@ -334,7 +380,14 @@ def album_change_title(slug):
 @album_bp.get("/api/albums/<slug>/admin")
 @admin_required
 def album_admin(slug):
-    item=_album(slug); storage=AlbumStorage(); return jsonify(title=item.title,subtitle=item.subtitle,music_url=item.music_url,csrf_token=_csrf(),pages=[_page_json(p,storage,True) for p in item.pages])
+    item = _album(slug)
+    if _short_urls_enabled():
+        missing = [page for page in item.pages if page.share_enabled and not page.short_slug]
+        for page in missing:
+            page.short_slug = _new_short_slug(page)
+        if missing: db.session.commit()
+    storage = AlbumStorage()
+    return jsonify(title=item.title,subtitle=item.subtitle,music_url=item.music_url,csrf_token=_csrf(),pages=[_page_json(p,storage,True) for p in item.pages])
 
 @album_bp.post("/api/albums/<slug>/pages")
 @admin_required
@@ -380,9 +433,11 @@ def page_share_update(slug, page_id):
         return jsonify(error="page_not_visible"), 400
     if not enabled:
         page.share_version = (page.share_version or 1) + 1
+    elif not page.share_enabled or not page.short_slug:
+        page.short_slug = _new_short_slug(page) if _short_urls_enabled() else page.short_slug
     page.share_enabled = enabled
     db.session.commit()
-    return jsonify(enabled=page.share_enabled, share_url=request.url_root.rstrip("/") + f"/album/{item.slug}/page/{_page_token(item.id, page.id, page.share_version)}")
+    return jsonify(enabled=page.share_enabled, share_url=_share_url(page))
 
 @album_bp.post("/api/albums/<slug>/pages/reorder")
 @admin_required

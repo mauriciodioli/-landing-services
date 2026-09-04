@@ -30,6 +30,9 @@ def ensure_album_schema(engine):
             connection.execute(text("ALTER TABLE album_pages ADD COLUMN share_enabled BOOLEAN NOT NULL DEFAULT 1"))
         if "share_version" not in page_columns:
             connection.execute(text("ALTER TABLE album_pages ADD COLUMN share_version INTEGER NOT NULL DEFAULT 1"))
+        if "short_slug" not in page_columns:
+            connection.execute(text("ALTER TABLE album_pages ADD COLUMN short_slug VARCHAR(255) NULL"))
+            connection.execute(text("CREATE UNIQUE INDEX uq_album_pages_short_slug ON album_pages (short_slug)"))
         if "contribution_enabled" not in page_columns:
             connection.execute(text("ALTER TABLE album_pages ADD COLUMN contribution_enabled BOOLEAN NOT NULL DEFAULT 0"))
         if "contribution_expires_at" not in page_columns:
@@ -83,6 +86,7 @@ class AlbumPage(db.Model):
     music_url = db.Column(db.String(1000))
     share_enabled = db.Column(db.Boolean, nullable=False, default=False)
     share_version = db.Column(db.Integer, nullable=False, default=1)
+    short_slug = db.Column(db.String(255), unique=True, index=True)
     contribution_enabled = db.Column(db.Boolean, nullable=False, default=False)
     contribution_expires_at = db.Column(db.DateTime)
     contribution_version = db.Column(db.Integer, nullable=False, default=1)

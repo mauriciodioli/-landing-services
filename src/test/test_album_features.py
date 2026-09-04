@@ -87,7 +87,7 @@ class AlbumFeatureTest(unittest.TestCase):
         activated = self.client.patch(f"/api/albums/features/pages/{self.page_id}/share", headers=self.headers, json={"enabled":True}).get_json()
         self.assertNotEqual(old_url, activated["share_url"])
         new_path = activated["share_url"].replace("http://localhost", "")
-        self.assertEqual(200, self.app.test_client().get(new_path).status_code)
+        self.assertEqual(200, self.app.test_client().get(new_path, follow_redirects=True).status_code)
 
     @patch("controllers.album.AlbumStorage", return_value=FakeStorage())
     def test_gift_secret_is_hidden_and_reveal_requires_pin(self, _):

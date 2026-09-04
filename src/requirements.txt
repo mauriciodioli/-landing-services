@@ -29,6 +29,6 @@ qrcode>=7,<9
 # CORS
 flask-cors
 bcrypt>=4,<6
-google-cloud-storage>=3,<4
+google-cloud-storage>=3,<
 Pillow>=10,<13
 cryptography>=42,<47

@@ -75,6 +75,32 @@ class AlbumTest(unittest.TestCase):
             token = _page_token(page.album_id, page.id)
         self.assertEqual(404, self.app.test_client().get(f"/api/albums/private/shared/{token}").status_code)
 
+    def test_short_link_redirects_and_cannot_be_guessed_by_page_id(self):
+        with self.app.app_context():
+            page = AlbumPage.query.filter_by(title="Public").one()
+            page.short_slug = "K7x3mQ9Az2/catalogo-090426"
+            db.session.commit()
+        client = self.app.test_client()
+        response = client.get("/K7x3mQ9Az2/catalogo-090426")
+        self.assertEqual(302, response.status_code)
+        self.assertIn("/album/private/page/", response.headers["Location"])
+        self.assertEqual(404, client.get("/K7x3mQ9Az3/catalogo-090426").status_code)
+
+    def test_enabling_share_creates_new_short_slug(self):
+        with self.app.app_context():
+            page = AlbumPage.query.filter_by(title="Public").one()
+            page.share_enabled = False
+            page.short_slug = "OldCode123/catalogo-010126"
+            db.session.commit()
+            page_id = page.id
+        pin_hash = bcrypt.hashpw(b"4409", bcrypt.gensalt()).decode()
+        with patch.dict(os.environ, {"ALBUM_ADMIN_PIN_HASH": pin_hash, "ALBUM_PUBLIC_BASE_URL": "https://ola.dpia.site"}):
+            client = self.app.test_client(); login = self.admin_login(client)
+            response = client.patch(f"/api/albums/private/pages/{page_id}/share", json={"enabled": True}, headers={"X-CSRF-Token": login.get_json()["csrf_token"]})
+        self.assertEqual(200, response.status_code)
+        self.assertRegex(response.get_json()["share_url"], r"^https://ola\.dpia\.site/[A-Za-z0-9]{10}/public-\d{6}$")
+        self.assertNotIn("OldCode123", response.get_json()["share_url"])
+
     def test_login_creates_album_once_and_restores_it(self):
         client = self.app.test_client()
         first = client.post("/api/album/session", json={"email": "otro@example.com", "password": "dpia-secret"})
