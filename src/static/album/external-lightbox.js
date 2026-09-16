@@ -14,7 +14,7 @@ fullscreenButton.className='fullscreen';
 fullscreenButton.setAttribute('aria-label','Pantalla completa');
 fullscreenButton.title='Pantalla completa';
 fullscreenButton.textContent='⛶';
-Object.assign(fullscreenButton.style,{position:'absolute',zIndex:'1',top:'10px',left:'10px',minHeight:'36px',padding:'6px 10px',background:'rgba(23,19,29,.78)',color:'#fff'});
+Object.assign(fullscreenButton.style,{position:'absolute',zIndex:'1',top:'10px',left:'50%',transform:'translateX(-50%)',minHeight:'36px',padding:'6px 10px',background:'rgba(23,19,29,.78)',color:'#fff'});
 dialog.append(fullscreenButton);
 dialog.querySelector('.close').onclick=()=>{dialog.querySelector('iframe').src='';dialog.close()};
 const fullscreenElement=()=>document.fullscreenElement||document.webkitFullscreenElement;
