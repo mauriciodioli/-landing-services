@@ -7,7 +7,7 @@ const dialog=document.createElement('dialog');
 dialog.id='externalLightbox';
 dialog.innerHTML='<button class="close" type="button" aria-label="Cerrar">×</button><iframe title="Video externo" sandbox="allow-scripts allow-same-origin allow-presentation" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
 document.body.append(dialog);
-let sourceUrl='';
+let sourceUrl='',provider='';
 const fullscreenButton=document.createElement('button');
 fullscreenButton.type='button';
 fullscreenButton.className='fullscreen';
@@ -20,11 +20,12 @@ dialog.querySelector('.close').onclick=()=>{dialog.querySelector('iframe').src='
 const fullscreenElement=()=>document.fullscreenElement||document.webkitFullscreenElement;
 const updateFullscreenButton=()=>{const active=fullscreenElement()===dialog;fullscreenButton.textContent=active?'×':'⛶';fullscreenButton.setAttribute('aria-label',active?'Salir de pantalla completa':'Pantalla completa');fullscreenButton.title=fullscreenButton.getAttribute('aria-label')};
 document.addEventListener('fullscreenchange',updateFullscreenButton);document.addEventListener('webkitfullscreenchange',updateFullscreenButton);
-fullscreenButton.onclick=()=>{if(fullscreenElement()){const exit=document.exitFullscreen||document.webkitExitFullscreen;if(exit)exit.call(document);return}const request=dialog.requestFullscreen||dialog.webkitRequestFullscreen;if(request)request.call(dialog).catch(()=>{if(sourceUrl)window.open(sourceUrl,'_blank','noopener')});else if(sourceUrl)window.open(sourceUrl,'_blank','noopener')};
+fullscreenButton.onclick=()=>{if(fullscreenElement()){const exit=document.exitFullscreen||document.webkitExitFullscreen;if(exit)exit.call(document);return}if(provider==='facebook'&&sourceUrl.startsWith('https://')){window.open(sourceUrl,'_blank','noopener');return}const request=dialog.requestFullscreen||dialog.webkitRequestFullscreen;if(request)request.call(dialog).catch(()=>{if(sourceUrl)window.open(sourceUrl,'_blank','noopener')});else if(sourceUrl)window.open(sourceUrl,'_blank','noopener')};
 document.addEventListener('click',event=>{
   const button=event.target.closest('[data-external-embed]');
   if(!button)return;
   sourceUrl=button.dataset.externalUrl||'';
+  provider=button.dataset.externalProvider||'';
   dialog.querySelector('iframe').src=button.dataset.externalEmbed;
   dialog.showModal();
 });
