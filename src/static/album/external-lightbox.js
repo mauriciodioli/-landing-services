@@ -5,7 +5,7 @@ style.textContent='.external-open{display:none}#externalLightbox{width:min(1000p
 document.head.append(style);
 const dialog=document.createElement('dialog');
 dialog.id='externalLightbox';
-dialog.innerHTML='<button class="close" type="button" aria-label="Cerrar">×</button><iframe title="Video externo" sandbox="allow-scripts allow-same-origin allow-presentation" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+dialog.innerHTML='<button class="close" type="button" aria-label="Cerrar">×</button><iframe title="Video externo" sandbox="allow-scripts allow-same-origin allow-presentation" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
 document.body.append(dialog);
 dialog.querySelector('.close').onclick=()=>{dialog.querySelector('iframe').src='';dialog.close()};
 document.addEventListener('click',event=>{
