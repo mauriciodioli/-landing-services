@@ -17,6 +17,9 @@ google-chrome-stable_current_amd64.deb
 # Ignore pycache files
 *.pyc
 
+# Tests are local development-only artifacts.
+/src/test/
+
 # Bytecode and caches
 __pycache__/
 

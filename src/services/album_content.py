@@ -3,7 +3,7 @@ import base64
 import hashlib
 import io
 import re
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, quote, urlparse
 
 from cryptography.fernet import Fernet, InvalidToken
 import qrcode
@@ -59,6 +59,8 @@ def normalize_external_url(value):
         match = re.search(r"/(?:video/)?(\d+)", path)
         if match:
             return {"media_type": "video", "provider": "vimeo", "original_url": url, "embed_url": f"https://player.vimeo.com/video/{match.group(1)}"}
+    if host in {"facebook.com", "www.facebook.com", "m.facebook.com", "fb.watch"}:
+        return {"media_type": "video", "provider": "facebook", "original_url": url, "embed_url": f"https://www.facebook.com/plugins/video.php?href={quote(url, safe='')}"}
     if host in {"giphy.com", "www.giphy.com", "media.giphy.com"}:
         match = re.search(r"(?:gifs/[^/]*-|/media/)([A-Za-z0-9]+)", path)
         if match:
