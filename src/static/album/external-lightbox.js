@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 const style=document.createElement('style');
-style.textContent='.external-open{display:none}#externalLightbox{width:min(1000px,calc(100% - 20px));padding:0;background:#17131d}#externalLightbox iframe{display:block;width:100%;height:min(80dvh,56.25vw);min-height:240px;border:0}#externalLightbox .close{position:absolute;z-index:1;top:10px;right:10px}@media(max-width:640px){.external-item iframe{pointer-events:none}.external-open{display:block;position:absolute;inset:0;width:100%;height:240px;border-radius:0;background:transparent;color:transparent}.external-open:focus-visible{outline:3px solid #7162b8;outline-offset:-3px}}';
+style.textContent='.external-open{display:none}#externalLightbox{width:min(1000px,calc(100% - 20px));padding:0;background:#17131d}#externalLightbox iframe{display:block;width:100%;height:min(80dvh,56.25vw);min-height:240px;border:0}#externalLightbox:fullscreen,#externalLightbox:-webkit-full-screen{width:100%;max-width:none;height:100%;border:0}#externalLightbox:fullscreen iframe,#externalLightbox:-webkit-full-screen iframe{width:100%;height:100%;max-height:none}@media(max-width:640px),(max-height:640px) and (orientation:landscape){.external-item iframe{pointer-events:none}.external-open{display:block;position:absolute;inset:0;width:100%;height:240px;border-radius:0;background:transparent;color:transparent}.external-open:focus-visible{outline:3px solid #7162b8;outline-offset:-3px}}';
 document.head.append(style);
 const dialog=document.createElement('dialog');
 dialog.id='externalLightbox';
@@ -17,7 +17,10 @@ fullscreenButton.textContent='⛶';
 Object.assign(fullscreenButton.style,{position:'absolute',zIndex:'1',top:'10px',left:'10px',minHeight:'36px',padding:'6px 10px',background:'rgba(23,19,29,.78)',color:'#fff'});
 dialog.append(fullscreenButton);
 dialog.querySelector('.close').onclick=()=>{dialog.querySelector('iframe').src='';dialog.close()};
-fullscreenButton.onclick=()=>{const frame=dialog.querySelector('iframe'),request=frame.requestFullscreen||frame.webkitRequestFullscreen;if(request)request.call(frame).catch(()=>{if(sourceUrl)window.open(sourceUrl,'_blank','noopener')});else if(sourceUrl)window.open(sourceUrl,'_blank','noopener')};
+const fullscreenElement=()=>document.fullscreenElement||document.webkitFullscreenElement;
+const updateFullscreenButton=()=>{const active=fullscreenElement()===dialog;fullscreenButton.textContent=active?'×':'⛶';fullscreenButton.setAttribute('aria-label',active?'Salir de pantalla completa':'Pantalla completa');fullscreenButton.title=fullscreenButton.getAttribute('aria-label')};
+document.addEventListener('fullscreenchange',updateFullscreenButton);document.addEventListener('webkitfullscreenchange',updateFullscreenButton);
+fullscreenButton.onclick=()=>{if(fullscreenElement()){const exit=document.exitFullscreen||document.webkitExitFullscreen;if(exit)exit.call(document);return}const request=dialog.requestFullscreen||dialog.webkitRequestFullscreen;if(request)request.call(dialog).catch(()=>{if(sourceUrl)window.open(sourceUrl,'_blank','noopener')});else if(sourceUrl)window.open(sourceUrl,'_blank','noopener')};
 document.addEventListener('click',event=>{
   const button=event.target.closest('[data-external-embed]');
   if(!button)return;
