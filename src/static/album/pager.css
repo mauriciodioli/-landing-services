@@ -1,0 +1,17 @@
+.page-navigation--top {
+  margin: 0 0 14px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(113, 98, 184, 0.14);
+}
+
+.page-navigation--top button {
+  min-height: 36px;
+  padding: 6px 13px;
+  background: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+}
+
+.page-navigation--top span {
+  font-size: 0.82rem;
+  color: #746a80;
+}
