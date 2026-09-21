@@ -77,8 +77,9 @@ def normalize_external_url(value):
     video_id = None
     if host in {"youtu.be", "www.youtu.be"}:
         video_id = path.strip("/").split("/")[0]
-    elif host in {"youtube.com", "www.youtube.com", "music.youtube.com"}:
-        video_id = parse_qs(parsed.query).get("v", [None])[0]
+    elif host in {"youtube.com", "www.youtube.com", "music.youtube.com", "m.youtube.com"}:
+        match = re.fullmatch(r"/(?:shorts|live|embed)/([A-Za-z0-9_-]{11})/?", path)
+        video_id = match.group(1) if match else parse_qs(parsed.query).get("v", [None])[0]
     if video_id and re.fullmatch(r"[A-Za-z0-9_-]{11}", video_id):
         return {"media_type": "video", "provider": "youtube", "original_url": url, "embed_url": f"https://www.youtube-nocookie.com/embed/{video_id}"}
     if host in {"vimeo.com", "www.vimeo.com", "player.vimeo.com"}:
