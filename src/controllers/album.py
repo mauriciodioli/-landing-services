@@ -315,11 +315,29 @@ def album_preview_api(slug, token):
     item = _owned_album(slug); page = _preview_page(item, token); storage = AlbumStorage()
     return jsonify(title=item.title, subtitle=item.subtitle, music_url=item.music_url, pages=[_page_json(page, storage)])
 
+def _pending_contribution_summary(item):
+    counts = dict(db.session.query(AlbumMedia.page_id, func.count(AlbumMedia.id))
+                  .join(AlbumPage).filter(AlbumPage.album_id == item.id,
+                                         AlbumMedia.moderation_status == "pending")
+                  .group_by(AlbumMedia.page_id).all())
+    pages = db.session.query(AlbumPage.id, AlbumPage.title).filter_by(album_id=item.id).order_by(AlbumPage.position).all()
+    return [{"page": {"id": page.id, "title": page.title}, "number": number, "count": counts[page.id]}
+            for number, page in enumerate(pages, 1) if counts.get(page.id)]
+
+
+@album_bp.get("/api/albums/<slug>/pending-summary")
+def album_pending_summary(slug):
+    item = _owned_album(slug)
+    response = jsonify(pending_summary=_pending_contribution_summary(item))
+    response.headers["Cache-Control"] = "private, no-store"
+    return response
+
+
 @album_bp.get("/api/albums/<slug>")
 def album_public(slug):
     item=_owned_album(slug); storage=AlbumStorage()
     pages=AlbumPage.query.filter_by(album_id=item.id,is_visible=True).order_by(AlbumPage.position).all()
-    return jsonify(title=item.title,subtitle=item.subtitle,music_url=item.music_url,pages=[_page_json(p,storage) for p in pages])
+    return jsonify(title=item.title,subtitle=item.subtitle,music_url=item.music_url,pages=[_page_json(p,storage) for p in pages],pending_summary=_pending_contribution_summary(item))
 
 @album_bp.get("/api/albums/<slug>/shared/<token>")
 def album_shared(slug, token):

@@ -3,3 +3,20 @@
 .view-mode-button{min-height:44px;padding:10px 16px;background:#fff;color:var(--violet);box-shadow:0 5px 20px #57477118;font-weight:700;white-space:nowrap}@media(max-width:560px){.view-mode-button{width:44px;padding:0;font-size:0}.view-mode-button::before{content:"👁";font-size:1.15rem}}
 .visibility-toggle{cursor:pointer;border:1px solid transparent}.visibility-toggle:hover,.visibility-toggle:focus-visible{border-color:var(--violet);box-shadow:0 0 0 3px rgba(113,98,184,.14)}.visibility-toggle[aria-pressed="false"]{background:#eee9f3;color:#665c70}.visibility-toggle:disabled{cursor:wait;opacity:.6}
 @media(max-width:640px){.album>header{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;align-items:start;margin-bottom:18px}.album>header>div:first-child{min-width:0;width:100%}.album>header>div:first-child>.eyebrow{display:none}.album-title-row{width:100%;justify-content:space-between;gap:12px}.album-title-row h2{min-width:0;margin:0;font-size:clamp(2rem,11vw,3rem);line-height:1.02;overflow-wrap:anywhere}.title-pencil{flex:0 0 42px;width:42px;min-height:42px}.tools{display:grid;grid-template-columns:repeat(4,44px);gap:9px;width:100%;justify-content:start;align-items:center}.tools .icon{width:44px;min-height:44px}.tools .view-mode-button{width:44px;min-height:44px;padding:0;font-size:0}.tools .view-mode-button::before{content:"👁";font-size:1.15rem}}@media(max-width:360px){.album-title-row h2{font-size:clamp(1.8rem,10vw,2.35rem)}.tools{gap:7px}}
+
+/* Contribution notices keep the header compact and pending files distinct. */
+.contribution-notices{position:relative}
+.contribution-notices[hidden],.contribution-notice-panel[hidden]{display:none}
+.contribution-notice-button{display:grid;place-items:center;width:44px;height:44px;padding:0;background:transparent;border:0;border-radius:50%;cursor:pointer}
+.contribution-dot{width:10px;height:10px;border-radius:50%;background:#c95060;box-shadow:0 0 0 4px #c9506015}
+.contribution-notice-button:hover{background:#c950600d}
+.contribution-notice-button:focus-visible,.contribution-notice-panel button:focus-visible{outline:2px solid #a43e50;outline-offset:3px}
+.contribution-notice-panel{position:absolute;right:0;top:calc(100% + 8px);z-index:30;width:min(330px,calc(100vw - 48px));max-height:60vh;overflow:auto;padding:16px;background:#fff;border:1px solid #efdee3;border-radius:18px;box-shadow:0 12px 36px #28223820;text-align:left}
+.contribution-notice-panel p{margin:0 0 10px;color:#9b4050;font-weight:600}
+.contribution-notice-panel button{display:block;width:100%;padding:12px;background:#fdf7f8;text-align:left;border:0;border-radius:12px;margin-top:8px;white-space:normal;overflow-wrap:anywhere}
+.contribution-notice-panel button span{display:block;margin-top:5px;font-size:.85rem;color:#795862}
+.contribution-status{display:block;margin:8px 0 12px;font-size:.8rem;color:#825613}
+.sent-contributions{margin-top:24px}.contribution-hint{color:#746a80;font-size:.85rem;line-height:1.5}
+.sent-card p{overflow-wrap:anywhere}.sent-card--accepted{background:#f0f8f3;border-color:#abcdb7}.sent-card--accepted .contribution-status{color:#316646}
+.sent-file-icon{display:grid;place-items:center;height:100px;font-size:2rem;color:#a77a33}
+@media(max-width:600px){.contribution-notices{position:static}.contribution-notice-panel{right:0;top:100%}.album header{position:relative}}
