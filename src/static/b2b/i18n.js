@@ -113,6 +113,8 @@
       element.setAttribute('placeholder', translate(lang, element.dataset.i18nPlaceholder));
     });
 
+    document.querySelectorAll('.header-language-select').forEach((select) => { select.value = lang; });
+
     document.querySelectorAll('.language-switch button').forEach((button) => {
       const isActive = button.textContent.trim().toLowerCase() === lang;
       button.classList.toggle('active', isActive);
@@ -130,6 +132,9 @@
   }
 
   function initialize() {
+    document.querySelectorAll('.header-language-select').forEach((select) => {
+      select.addEventListener('change', () => applyLanguage(select.value));
+    });
     document.querySelectorAll('.language-switch button').forEach((button) => {
       button.removeAttribute('title');
       button.addEventListener('click', () => applyLanguage(button.textContent));
@@ -361,6 +366,9 @@ Implementamos y medimos|We implement and measure|Implementiamo e misuriamo
 Ponemos la mejora en marcha y revisamos sus resultados con tu equipo.|We put the improvement into practice and review the results with your team.|Mettiamo in funzione il miglioramento e verifichiamo i risultati con il tuo team.
 
 Casos de uso|Use cases|Casi d’uso
+
+Reduce tareas repetitivas, conecta tus herramientas y aprovecha tus datos.|Reduce repetitive tasks, connect your tools and make use of your data.|Riduci le attività ripetitive, collega gli strumenti e sfrutta i tuoi dati.
+Mejorar mi operación|Improve my operation|Migliora la mia attività
 `.trim().split('\n');
   const dictionaries = { en: Object.create(null), it: Object.create(null) };
   rows.forEach(function (row) {
