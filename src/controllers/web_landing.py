@@ -6,7 +6,8 @@ import time
 from flask import Blueprint, abort, current_app, jsonify, redirect, render_template, request, session, url_for
 from sqlalchemy import delete, select
 from sqlalchemy.exc import SQLAlchemyError
-from services.web_landing.models import Base, RateWindow
+from models.web_lead import RateWindow
+from utils.db_session import get_db_session
 from services.web_landing.lead_service import InvalidLead, register, validate
 from services.web_landing.content import CONTENT
 from services.web_landing.privacy_content import PRIVACY
@@ -14,15 +15,6 @@ from services.web_landing.privacy_content import PRIVACY
 LANGUAGES = ('es', 'en', 'it')
 PUBLIC_ORIGIN = 'https://web.dpia.site'
 web_landing = Blueprint('web_landing', __name__)
-
-def get_engine():
-    # Reuse the existing persistence and credentials; create only this service's tables.
-    if 'web_landing_engine' not in current_app.extensions:
-        from extensions import db
-        engine = db.engine
-        Base.metadata.create_all(engine)
-        current_app.extensions['web_landing_engine'] = engine
-    return current_app.extensions['web_landing_engine']
 
 @web_landing.after_request
 def headers(response):
@@ -59,9 +51,8 @@ def privacy(lang):
 @web_landing.get('/desarrollo-web/health')
 def health():
     try:
-        engine = get_engine()
-        with engine.connect() as conn:
-            conn.execute(select(1))
+        with get_db_session() as db_session:
+            db_session.execute(select(1))
     except SQLAlchemyError:
         return jsonify(ok=False), 503
     return jsonify(ok=True)
@@ -92,33 +83,33 @@ def leads():
     if payload.get('website'):
         return jsonify(ok=False, error='invalid_fields'), 400
     try:
-        engine = get_engine()
         # Atomic shared rate limit, including across Gunicorn workers.
         now = int(time.time())
         key = hmac.new(current_app.secret_key.encode(), f'{request.remote_addr}:{now // 3600}'.encode(), hashlib.sha256).hexdigest()
-        with engine.begin() as conn:
-            conn.execute(delete(RateWindow).where(RateWindow.expires_at < now))
+        with get_db_session() as db_session:
+            dialect_name = db_session.get_bind().dialect.name
+            db_session.execute(delete(RateWindow).where(RateWindow.expires_at < now))
             # SQLite and PostgreSQL use their native atomic UPSERT.
-            if engine.dialect.name == 'sqlite':
+            if dialect_name == 'sqlite':
                 from sqlalchemy.dialects.sqlite import insert
-            elif engine.dialect.name == 'postgresql':
+            elif dialect_name == 'postgresql':
                 from sqlalchemy.dialects.postgresql import insert
-            elif engine.dialect.name in ('mysql', 'mariadb'):
+            elif dialect_name in ('mysql', 'mariadb'):
                 from sqlalchemy.dialects.mysql import insert
             else:
                 raise RuntimeError('Unsupported database dialect.')
             stmt = insert(RateWindow).values(key=key, count=1, expires_at=now+3600)
-            if engine.dialect.name in ('mysql', 'mariadb'):
-                conn.execute(stmt.on_duplicate_key_update(count=RateWindow.count+1))
+            if dialect_name in ('mysql', 'mariadb'):
+                db_session.execute(stmt.on_duplicate_key_update(count=RateWindow.count+1))
             else:
-                conn.execute(stmt.on_conflict_do_update(index_elements=['key'], set_={'count': RateWindow.count+1}))
-            count = conn.execute(select(RateWindow.count).where(RateWindow.key == key)).scalar_one()
+                db_session.execute(stmt.on_conflict_do_update(index_elements=['key'], set_={'count': RateWindow.count+1}))
+            count = db_session.execute(select(RateWindow.count).where(RateWindow.key == key)).scalar_one()
         if count > 15:
             response = jsonify(ok=False, error='rate_limited')
             response.headers['Retry-After'] = str(3600-now % 3600)
             return response, 429
         values = validate(payload)
-        reference = register(engine, values)
+        reference = register(values)
     except InvalidLead as exc:
         return jsonify(ok=False, error=str(exc)), 400
     except SQLAlchemyError:

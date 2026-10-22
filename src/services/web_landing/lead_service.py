@@ -1,8 +1,8 @@
 """Validation and durable registration; integrations can consume this boundary later."""
 import re
 import uuid
-from sqlalchemy.orm import Session
-from .models import Lead
+from utils.db_session import get_db_session
+from models.web_lead import Lead
 
 BUSINESSES = {'retail', 'restaurants', 'hotels', 'workshops', 'industry', 'wholesale', 'services', 'startups'}
 SOLUTIONS = {'web', 'ecommerce', 'erp', 'ai', 'industry', 'infrastructure'}
@@ -41,9 +41,8 @@ def validate(payload):
         raise InvalidLead('privacy_required')
     return result
 
-def register(engine, values):
+def register(values):
     reference = str(uuid.uuid4())
-    with Session(engine) as session:
+    with get_db_session() as session:
         session.add(Lead(id=reference, **values))
-        session.commit()
     return reference

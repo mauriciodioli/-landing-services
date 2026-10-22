@@ -8,18 +8,21 @@ from sqlalchemy.exc import SQLAlchemyError
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 from flask import Flask
-from sqlalchemy import create_engine
+from extensions import db
 from controllers.web_landing import web_landing
-from services.web_landing.models import Base, Lead
+from models.web_lead import Lead
 
 def create_app(config):
     root=Path(__file__).resolve().parents[1] / 'src'
     app=Flask(__name__,template_folder=str(root/'templates'),static_folder=str(root/'static'))
     app.config.update(SECRET_KEY='test-secret',TESTING=True)
     app.config.update(config)
-    engine=create_engine(config['DATABASE_URL'])
-    Base.metadata.create_all(engine)
-    app.extensions['web_landing_engine']=engine
+    app.config['SQLALCHEMY_DATABASE_URI']=config['DATABASE_URL']
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+        app.extensions['test_engine']=db.engine
     app.register_blueprint(web_landing)
     return app
 
@@ -35,7 +38,7 @@ class LandingTests(unittest.TestCase):
             self.csrf = session['web_csrf']
 
     def tearDown(self):
-        self.app.extensions['web_landing_engine'].dispose()
+        self.app.extensions['test_engine'].dispose()
         self.temp.cleanup()
 
     def payload(self, **changes):
@@ -47,7 +50,7 @@ class LandingTests(unittest.TestCase):
         return self.client.post('/desarrollo-web/api/leads', base_url=HOST, json=self.payload(**changes))
 
     def count(self):
-        with self.app.extensions['web_landing_engine'].connect() as conn:
+        with self.app.extensions['test_engine'].connect() as conn:
             return conn.execute(select(func.count()).select_from(Lead)).scalar_one()
 
     def test_multilingual_pages_and_seo(self):
@@ -71,7 +74,7 @@ class LandingTests(unittest.TestCase):
         self.assertEqual(r.status_code,201)
         self.assertTrue(r.json['ok'])
         self.assertEqual(self.count(),1)
-        with self.app.extensions['web_landing_engine'].connect() as conn:
+        with self.app.extensions['test_engine'].connect() as conn:
             row=conn.execute(select(Lead)).first()
             self.assertEqual(row.email,'visitor@example.com')
 
@@ -100,7 +103,7 @@ class LandingTests(unittest.TestCase):
         c=second.test_client();c.get('/desarrollo-web/es/',base_url=HOST)
         with c.session_transaction(base_url=HOST) as session:token=session['web_csrf']
         self.assertEqual(c.post('/desarrollo-web/api/leads',base_url=HOST,json=self.payload(csrf_token=token)).status_code,429)
-        second.extensions['web_landing_engine'].dispose()
+        second.extensions['test_engine'].dispose()
 
     def test_https_origin_behind_existing_proxy(self):
         r=self.client.post('/desarrollo-web/api/leads',base_url='http://web.dpia.site',json=self.payload(),headers={'Origin':HOST})
@@ -114,6 +117,23 @@ class LandingTests(unittest.TestCase):
         self.assertEqual(r.status_code,206)
         self.assertEqual(len(r.data),1024)
         r.close()
+
+    def test_shared_session_rolls_back_and_is_removed_on_commit_failure(self):
+        from services.web_landing.lead_service import register, validate
+        with self.app.app_context():
+            with patch.object(db.session, 'commit', side_effect=SQLAlchemyError('commit failed')):
+                with self.assertRaises(SQLAlchemyError):
+                    register(validate(self.payload()))
+            self.assertFalse(db.session.registry.has())
+        self.assertEqual(self.count(),0)
+
+    def test_models_share_metadata_and_requests_do_not_create_tables(self):
+        self.assertIs(Lead.metadata,db.metadata)
+        with patch.object(db.metadata,'create_all',side_effect=AssertionError('DDL during request')):
+            self.assertEqual(self.client.get('/desarrollo-web/health',base_url=HOST).status_code,200)
+            self.assertEqual(self.post().status_code,201)
+        with self.app.app_context():
+            self.assertFalse(db.session.registry.has())
 
     def test_size_and_json_validation(self):
         self.assertEqual(self.client.post('/desarrollo-web/api/leads',base_url=HOST,data='x'*33000,content_type='application/json').status_code,413)

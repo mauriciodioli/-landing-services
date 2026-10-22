@@ -1,12 +1,10 @@
-"""Persistence owned exclusively by the web.dpia.site service."""
+"""Web enquiries registered in the shared Flask-SQLAlchemy metadata."""
 from datetime import datetime, timezone
 from sqlalchemy import DateTime, Integer, String, Text
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
+from extensions import db
 
-class Base(DeclarativeBase):
-    pass
-
-class Lead(Base):
+class Lead(db.Model):
     __tablename__ = 'web_leads'
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
@@ -23,7 +21,7 @@ class Lead(Base):
     integration_details: Mapped[str] = mapped_column(Text, default='')
     privacy_version: Mapped[str] = mapped_column(String(20), default='2026-10-22')
 
-class RateWindow(Base):
+class RateWindow(db.Model):
     __tablename__ = 'web_rate_windows'
     key: Mapped[str] = mapped_column(String(64), primary_key=True)
     count: Mapped[int] = mapped_column(Integer, default=1)

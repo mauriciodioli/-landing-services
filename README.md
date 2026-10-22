@@ -36,7 +36,7 @@ La nueva landing está integrada en el mismo Flask y en la imagen Docker existen
 - El host `web.dpia.site` selecciona esta landing desde `/`, como los otros subdominios. Se puede configurar con `WEB_LANDING_HOSTS`.
 - Plantillas: `src/templates/web/`. Recursos y video: `src/static/web/`.
 - Controlador: `src/controllers/web_landing.py`. Contenido y validación: `src/services/web_landing/`.
-- El formulario usa `/desarrollo-web/api/leads`, la sesión existente y la conexión de base de datos actual. Crea únicamente las tablas `web_leads` y `web_rate_windows` cuando se utiliza por primera vez. No requiere otra base de datos ni credenciales. Confirmación solo tras guardar.
+- El formulario usa `/desarrollo-web/api/leads` y `get_db_session()` de `src/utils/db_session.py` para commit, rollback y liberación de la sesión compartida. Los modelos `Lead` y `RateWindow` están en `src/models/web_lead.py`, heredan de `db.Model` y se registran en el `db.create_all()` del arranque existente. No se crean tablas durante las peticiones. No requiere otra base de datos ni credenciales. Confirmación solo tras guardar.
 - No se han modificado Nginx, DNS, el Dockerfile ni GitHub Actions. El despliegue actual incluye los archivos al copiar `src/`.
 
 Pruebas aisladas: `python -m unittest discover -s tests -p test_web_landing.py -v`. No requieren las credenciales ni los servicios externos de producción. La validación de persistencia se realiza con SQLite temporal; MySQL utiliza UPSERT propio de su dialecto.
