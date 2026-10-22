@@ -48,3 +48,16 @@ El login existente abre `/admin`, con navegación separada entre `/admin/partici
 La creación manual exige confirmar que el contacto autorizó el tratamiento. La edición conserva la referencia, fecha y versión del consentimiento original. Eliminar requiere confirmación en la interfaz. Este ABM no envía respuestas por correo; los contactos y sus necesidades se consultan para su seguimiento por el equipo.
 
 Pruebas: `python -m unittest discover -s tests -p 'test_web*.py' -v`.
+
+## Globo de ubicaciones
+
+El módulo está en `src/static/web/globe/` y se integra en «YOUR CONTEXT MATTERS» / «TU CONTEXTO IMPORTA» mediante `src/templates/web/index.html`. Conserva los ejemplos por sector. No cambia backend, APIs ni despliegue.
+
+- `config.js`: única lista de ciudades y coordenadas; `enabled: false` mantiene desactivada la quinta entrada hasta definir latitud/longitud. `SETTINGS.rotationSpeed` controla radianes por segundo; `starColor` y `atmosphereColor` ajustan estrellas y halo.
+- `renderer.js`: esfera, coordenadas, iluminación, oclusión de estrellas y liberación WebGL. Ajustar luces y opacidades aquí.
+- `interaction.js`: arrastre, respuesta del cursor e inercia; permite desplazamiento vertical táctil.
+- `index.js`: carga diferida, selección accesible, visibilidad, pausa y alternativa estática.
+- `styles.css`: tamaño responsive y aspecto de controles/fallback.
+- `vendor/three.module.min.js`: Three.js 0.169.0, MIT. No requiere npm, bundler ni compilación. Se usa Three.js directamente para evitar dependencias geográficas adicionales. Créditos/licencias en `THIRD_PARTY.txt`.
+
+Comprobado con Chromium: carga de módulos locales sin errores de consola, WebGL, arrastre, selección de ciudades, pausa, ancho móvil sin desbordamiento, movimiento reducido, alternativa sin WebGL y destrucción del canvas. Firefox y Safari no se han probado en este entorno. Las pruebas Python existentes siguen pasando. No se despliega automáticamente.

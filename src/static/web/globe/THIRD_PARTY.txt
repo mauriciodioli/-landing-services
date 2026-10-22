@@ -1,0 +1,14 @@
+Three.js 0.169.0
+Source: https://unpkg.com/three@0.169.0/build/three.module.min.js
+License: MIT; full license in vendor/THREE-LICENSE.txt. Copyright Three.js authors.
+Pinned, locally served ES module; no package manager or build tool is required.
+
+Earth texture: NASA Earth Observatory, Blue Marble.
+Source distribution: https://github.com/vasturiano/three-globe/blob/master/example/img/earth-blue-marble.jpg
+NASA dataset: https://science.nasa.gov/earth/earth-observatory/blue-marble-next-generation/
+NASA media guidance: https://www.nasa.gov/nasa-brand-center/images-and-media/
+Credit: NASA Earth Observatory. No NASA affiliation or endorsement is implied.
+
+The globe uses Three.js directly: a textured sphere, geographic coordinates,
+and four sprites do not require three-globe's additional geographical layers.
+No external image, script, API, CDN or tracking request is made at runtime.

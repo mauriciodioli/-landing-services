@@ -42,3 +42,11 @@ for _lang, _labels in {
 
 for _lang, _controls in {'es': ('Reproducir video', 'Pausar video'), 'en': ('Play video', 'Pause video'), 'it': ('Riproduci video', 'Pausa video')}.items():
     CONTENT[_lang].update(video_play=_controls[0], video_pause=_controls[1])
+
+# International presence, separate from the industry examples.
+for _lang, _globe in {
+'es': {'world_title':'Cerca de tu negocio, alrededor del mundo.','world_intro':'Conoce dónde estamos. Selecciona una ciudad para localizarla en el planeta.','world_help':'Arrastra horizontalmente para explorar. Selecciona una estrella o una ciudad.','world_label':'Ubicaciones de DPIA en el mundo','world_pause':'Pausar rotación','world_play':'Reanudar rotación'},
+'en': {'world_title':'Close to your business, around the world.','world_intro':'Discover where we are. Select a city to locate it on the globe.','world_help':'Drag horizontally to explore. Select a star or a city.','world_label':'DPIA locations around the world','world_pause':'Pause rotation','world_play':'Resume rotation'},
+'it': {'world_title':'Vicini alla tua impresa, in tutto il mondo.','world_intro':'Scopri dove siamo. Seleziona una città per individuarla sul globo.','world_help':'Trascina in orizzontale per esplorare. Seleziona una stella o una città.','world_label':'Le sedi DPIA nel mondo','world_pause':'Pausa rotazione','world_play':'Riprendi rotazione'},
+}.items():
+    CONTENT[_lang].update(_globe)
