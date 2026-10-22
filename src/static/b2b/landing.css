@@ -42,3 +42,6 @@ html{scroll-padding-top:100px}.top-cta{height:auto;min-height:46px;padding:12px 
 
 /* Match the original logo background across public landing headers and footers. */
 .topbar,body>footer{background:#000;color:#fff}.header-language-select{background:#000}.topbar .brand-mark,footer .brand-mark{background:transparent}
+
+/* Four service pillars remain balanced across desktop and mobile. */
+.landing-services .benefit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}@media(max-width:680px){.landing-services .benefit-grid{grid-template-columns:1fr}}

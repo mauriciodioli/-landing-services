@@ -369,6 +369,11 @@ Casos de uso|Use cases|Casi d’uso
 
 Reduce tareas repetitivas, conecta tus herramientas y aprovecha tus datos.|Reduce repetitive tasks, connect your tools and make use of your data.|Riduci le attività ripetitive, collega gli strumenti e sfrutta i tuoi dati.
 Mejorar mi operación|Improve my operation|Migliora la mia attività
+
+Desarrollo web|Web development|Sviluppo web
+Soluciones para mejorar tu negocio.|Solutions to improve your business.|Soluzioni per migliorare la tua impresa.
+Creamos páginas web dinámicas y aplicaciones web a medida para tu negocio.|We create dynamic websites and custom web applications for your business.|Creiamo siti web dinamici e applicazioni web su misura per la tua impresa.
+Consultar mi proyecto web →|Discuss my web project →|Parliamo del mio progetto web →
 `.trim().split('\n');
   const dictionaries = { en: Object.create(null), it: Object.create(null) };
   rows.forEach(function (row) {
