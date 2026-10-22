@@ -30,3 +30,7 @@ html{scroll-padding-top:100px}.top-cta{height:auto;min-height:46px;padding:12px 
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
 
 .steps{grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:680px){.steps{grid-template-columns:1fr}}
+
+/* Visible language controls remain in the sticky header on every screen. */
+.topbar{height:auto;row-gap:0}.header-languages{grid-column:1/-1;display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:4px 0 8px;border-top:1px solid rgba(255,255,255,.15);font-size:12px;color:#fff}.header-languages .language-switch{gap:6px}.header-languages .language-switch button{min-width:44px;min-height:44px;padding:8px;border-radius:4px;font-weight:700}.header-languages .language-switch button:hover{border-color:var(--cyan)}html{scroll-padding-top:150px}.benefit-grid article{scroll-margin-top:150px}
+@media(max-width:680px){.topbar{height:auto;row-gap:0}.header-languages{justify-content:center;gap:14px;padding:4px 0 6px}.header-languages .language-switch{gap:10px}.header-languages .language-switch button{min-width:48px}}
