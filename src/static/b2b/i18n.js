@@ -21,16 +21,16 @@
       courseMasterclass: 'Del mundo físico a la IA',
       contact: 'Contacto',
       team: 'Equipo',
-      initialConversation: 'Conversación inicial',
-      heroTitle: 'Soluciones digitales para industria y comercio',
-      heroText: 'Analizamos procesos, tecnología y comunicación para identificar dónde tu empresa pierde tiempo, dinero u oportunidades antes de que inviertas en la solución equivocada.',
-      heroButton: 'Solicitar conversación inicial',
+      initialConversation: 'Evaluación gratuita',
+      heroTitle: 'Menos tareas manuales. Más tiempo para hacer crecer tu empresa.',
+      heroText: 'Optimizamos tus procesos operativos, la captación de clientes y el análisis de datos con herramientas tecnológicas a medida, sin complicaciones técnicas para tu equipo.',
+      heroButton: 'Solicitar evaluación gratuita',
       supportRole: 'SOPORTE COMERCIAL Y TÉCNICO · CONO SUR',
       supportName: 'Jorge Rivolta',
       supportDescription: 'Soporte comercial y técnico de DPIA para acompañar oportunidades, clientes e implementaciones en Argentina, Brasil y Uruguay.',
       supportRegions: 'Argentina · Brasil · Uruguay · atención comercial · soporte técnico',
       privacy: 'Política de privacidad',
-      whatsappMessage: 'Hola, quiero analizar una oportunidad de mejora en mi empresa.'
+      whatsappMessage: 'Hola, quisiera una evaluación inicial gratuita para mejorar los procesos de mi empresa.'
     },
     it: {
       language: 'Lingua',
@@ -47,16 +47,16 @@
       courseMasterclass: 'Dal mondo fisico all’IA',
       contact: 'Contatti',
       team: 'Team',
-      initialConversation: 'Conversazione iniziale',
-      heroTitle: 'Soluzioni digitali per l’industria e il commercio',
-      heroText: 'Analizziamo processi, tecnologia e comunicazione per individuare dove la tua azienda perde tempo, denaro o opportunità, prima che investa nella soluzione sbagliata.',
-      heroButton: 'Richiedi una conversazione iniziale',
+      initialConversation: 'Valutazione gratuita',
+      heroTitle: 'Meno attività manuali. Più tempo per far crescere la tua impresa.',
+      heroText: 'Ottimizziamo i processi operativi, l’acquisizione clienti e l’analisi dei dati con strumenti su misura, senza complicazioni tecniche per il tuo team.',
+      heroButton: 'Richiedi una valutazione gratuita',
       supportRole: 'SUPPORTO COMMERCIALE E TECNICO · CONO SUD',
       supportName: 'Jorge Rivolta',
       supportDescription: 'Supporto commerciale e tecnico DPIA per seguire opportunità, clienti e implementazioni in Argentina, Brasile e Uruguay.',
       supportRegions: 'Argentina · Brasile · Uruguay · assistenza commerciale · supporto tecnico',
       privacy: 'Informativa sulla privacy',
-      whatsappMessage: 'Ciao, vorrei analizzare un’opportunità di miglioramento nella mia azienda.'
+      whatsappMessage: 'Ciao, vorrei una valutazione iniziale gratuita per migliorare i processi della mia azienda.'
     },
     en: {
       language: 'Language',
@@ -73,16 +73,16 @@
       courseMasterclass: 'From the physical world to AI',
       contact: 'Contact',
       team: 'Team',
-      initialConversation: 'Initial conversation',
-      heroTitle: 'Digital solutions for industry and commerce',
-      heroText: 'We analyze processes, technology and communication to identify where your company loses time, money or opportunities before you invest in the wrong solution.',
-      heroButton: 'Request an initial conversation',
+      initialConversation: 'Free assessment',
+      heroTitle: 'Less manual work. More time to grow your business.',
+      heroText: 'We improve your operations, customer acquisition and data analysis with tailored technology, without technical complexity for your team.',
+      heroButton: 'Request a free assessment',
       supportRole: 'COMMERCIAL AND TECHNICAL SUPPORT · SOUTHERN CONE',
       supportName: 'Jorge Rivolta',
       supportDescription: 'DPIA commercial and technical support for opportunities, customers and implementations in Argentina, Brazil and Uruguay.',
       supportRegions: 'Argentina · Brazil · Uruguay · commercial assistance · technical support',
       privacy: 'Privacy policy',
-      whatsappMessage: 'Hello, I would like to analyze an improvement opportunity in my company.'
+      whatsappMessage: 'Hello, I would like a free initial assessment to improve my business processes.'
     }
   };
 
@@ -308,6 +308,59 @@ Desde €1.500 + IVA|From €1,500 + VAT|Da €1.500 + IVA
 Desde €4.000 + IVA|From €4,000 + VAT|Da €4.000 + IVA
 Desde €5.000 + IVA|From €5,000 + VAT|Da €5.000 + IVA
 Desde €3.000 + IVA / mes|From €3,000 + VAT / month|Da €3.000 + IVA / mese
+
+Evaluación gratuita|Free assessment|Valutazione gratuita
+Menos tareas manuales. Más tiempo para hacer crecer tu empresa.|Less manual work. More time to grow your business.|Meno attività manuali. Più tempo per far crescere la tua impresa.
+Optimizamos tus procesos operativos, la captación de clientes y el análisis de datos con herramientas tecnológicas a medida, sin complicaciones técnicas para tu equipo.|We improve your operations, customer acquisition and data analysis with tailored technology, without technical complexity for your team.|Ottimizziamo i processi operativi, l’acquisizione clienti e l’analisi dei dati con strumenti su misura, senza complicazioni tecniche per il tuo team.
+Solicitar evaluación gratuita|Request a free assessment|Richiedi una valutazione gratuita
+PARA PYMES DE INDUSTRIA, COMERCIO Y SERVICIOS|FOR SMALL AND MEDIUM BUSINESSES IN INDUSTRY, COMMERCE AND SERVICES|PER PMI DELL’INDUSTRIA, DEL COMMERCIO E DEI SERVIZI
+30 minutos para entender tu problema y orientar el siguiente paso.|30 minutes to understand your problem and guide your next step.|30 minuti per capire il tuo problema e orientare il prossimo passo.
+Ver cómo podemos ayudarte|See how we can help|Scopri come possiamo aiutarti
+Elige el siguiente paso para tu empresa.|Choose the next step for your business.|Scegli il prossimo passo per la tua impresa.
+Un plan claro y una mejora funcionando.|A clear plan and a working improvement.|Un piano chiaro e un miglioramento operativo.
+Entrevistas, revisión de procesos y un plan de mejoras por etapas.|Interviews, process review and a phased improvement plan.|Interviste, revisione dei processi e un piano di miglioramento per fasi.
+Una mejora concreta: tareas automáticas, herramientas conectadas o indicadores para tu equipo.|A concrete improvement: automated tasks, connected tools or indicators for your team.|Un miglioramento concreto: attività automatiche, strumenti collegati o indicatori per il tuo team.
+EVALUACIÓN GRATUITA · 30 MINUTOS|FREE ASSESSMENT · 30 MINUTES|VALUTAZIONE GRATUITA · 30 MINUTI
+Cuéntanos qué tarea te quita tiempo. Revisaremos tu situación y te orientaremos sobre el siguiente paso. La evaluación inicial no incluye la auditoría ni el diagnóstico detallado de pago.|Tell us which task takes up your time. We will review your situation and suggest the next step. The initial assessment does not include the paid audit or detailed diagnosis.|Raccontaci quale attività ti porta via tempo. Valuteremo la situazione e ti orienteremo sul prossimo passo. La valutazione iniziale non include l’audit o la diagnosi dettagliata a pagamento.
+Solicitar evaluación gratuita ↗|Request a free assessment ↗|Richiedi una valutazione gratuita ↗
+TU DÍA A DÍA|YOUR DAILY WORK|IL TUO LAVORO QUOTIDIANO
+¿Qué está frenando a tu empresa?|What is slowing down your business?|Cosa sta rallentando la tua impresa?
+Empezamos por lo que te cuesta tiempo, clientes o claridad para decidir.|We start with what costs you time, customers or clarity in decision-making.|Partiamo da ciò che ti costa tempo, clienti o chiarezza nelle decisioni.
+¿Repites la misma tarea cada día?|Do you repeat the same task every day?|Ripeti la stessa attività ogni giorno?
+Copiar datos entre herramientas consume tiempo y aumenta los errores.|Copying data between tools takes time and increases errors.|Copiare dati tra strumenti richiede tempo e aumenta gli errori.
+¿Se quedan consultas sin seguimiento?|Are enquiries left without follow-up?|Ci sono richieste senza seguito?
+Las consultas dispersas dificultan responder y dar el siguiente paso comercial.|Scattered enquiries make it harder to respond and take the next sales step.|Le richieste disperse rendono difficile rispondere e proseguire il contatto commerciale.
+¿Te cuesta saber qué está pasando?|Is it hard to know what is happening?|Fai fatica a capire cosa sta succedendo?
+La información repartida en archivos retrasa las decisiones.|Information spread across files delays decisions.|Le informazioni sparse nei file rallentano le decisioni.
+CÓMO TE AYUDAMOS|HOW WE HELP|COME TI AIUTIAMO
+Tres formas de mejorar tu negocio.|Three ways to improve your business.|Tre modi per migliorare la tua impresa.
+Operaciones más eficientes|More efficient operations|Operazioni più efficienti
+Reduce tareas repetitivas y errores conectando las herramientas de tu equipo.|Reduce repetitive tasks and errors by connecting your team’s tools.|Riduci attività ripetitive ed errori collegando gli strumenti del tuo team.
+Mejor seguimiento comercial|Better sales follow-up|Migliore gestione dei contatti commerciali
+Organiza consultas, registra prospectos y facilita el seguimiento de cada oportunidad.|Organise enquiries, record prospects and make every opportunity easier to follow up.|Organizza richieste, registra potenziali clienti e segui ogni opportunità.
+Datos para decidir|Data for decisions|Dati per decidere
+Consulta ventas, producción y alertas en un panel adaptado a tu operación.|View sales, production and alerts in a dashboard tailored to your operation.|Consulta vendite, produzione e avvisi in un pannello adatto alla tua attività.
+EJEMPLOS DE APLICACIÓN|APPLICATION EXAMPLES|ESEMPI DI APPLICAZIONE
+Así puede ayudarte en el día a día.|How this can help your daily work.|Come può aiutarti ogni giorno.
+Comercio|Commerce|Commercio
+Conectar pedidos, inventario y facturación para evitar cargar la misma información varias veces.|Connect orders, inventory and invoicing to avoid entering the same information several times.|Collegare ordini, magazzino e fatturazione per evitare inserimenti ripetuti.
+Servicios|Services|Servizi
+Reunir las consultas de clientes y recordar al equipo cuándo volver a contactar.|Bring customer enquiries together and remind the team when to follow up.|Riunire le richieste dei clienti e ricordare al team quando ricontattarli.
+Industria|Industry|Industria
+Consultar el estado de las máquinas y recibir alertas para detectar paradas de producción.|View machine status and receive alerts to detect production stoppages.|Consultare lo stato delle macchine e ricevere avvisi per rilevare fermi di produzione.
+Ejemplos orientativos. El alcance y los resultados dependen de cada proyecto.|Illustrative examples. Scope and results depend on each project.|Esempi indicativi. Ambito e risultati dipendono da ogni progetto.
+
+Experiencia que puedes conocer.|Experience you can explore.|Esperienza da conoscere.
+Plataforma digital con gestión de usuarios, pagos y herramientas conectadas para operar en distintos mercados.|A digital platform with user management, payments and connected tools for operating across markets.|Una piattaforma digitale con gestione utenti, pagamenti e strumenti collegati per operare in diversi mercati.
+Desarrollo de equipos y sistemas para recoger y analizar datos en proyectos industriales y de investigación.|Development of equipment and systems to collect and analyse data for industrial and research projects.|Sviluppo di apparecchiature e sistemi per raccogliere e analizzare dati in progetti industriali e di ricerca.
+Entendemos tu operación|We understand your operation|Comprendiamo la tua attività
+Revisamos tus tareas, herramientas y objetivos para identificar el problema.|We review your tasks, tools and goals to identify the problem.|Esaminiamo attività, strumenti e obiettivi per individuare il problema.
+Definimos prioridades|We define priorities|Definiamo le priorità
+Acordamos qué mejorar primero según el impacto, el esfuerzo y el presupuesto.|We agree what to improve first based on impact, effort and budget.|Concordiamo cosa migliorare prima in base a impatto, impegno e budget.
+Implementamos y medimos|We implement and measure|Implementiamo e misuriamo
+Ponemos la mejora en marcha y revisamos sus resultados con tu equipo.|We put the improvement into practice and review the results with your team.|Mettiamo in funzione il miglioramento e verifichiamo i risultati con il tuo team.
+
+Casos de uso|Use cases|Casi d’uso
 `.trim().split('\n');
   const dictionaries = { en: Object.create(null), it: Object.create(null) };
   rows.forEach(function (row) {
