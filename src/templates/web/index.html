@@ -10,7 +10,7 @@
 <script src="{{ url_for('static', filename='web/app.js') }}" defer></script>
 </head>
 <body id="top">
-<header class="header"><a class="brand" href="{{ url_for('web_landing.landing',lang=lang) }}" aria-label="DPIA Software Solutions"><img src="{{ url_for('static',filename='web/logo.png') }}" alt="" width="44" height="44"><span>DPIA <small>SOFTWARE SOLUTIONS</small></span></a>
+<header class="header"><a class="brand" href="https://solutions.dpia.site/" aria-label="DPIA Software Solutions"><img src="{{ url_for('static',filename='web/logo.png') }}" alt="" width="44" height="44"><span>DPIA <small>SOFTWARE SOLUTIONS</small></span></a>
 <nav aria-label="{{ c.nav_services }}"><a href="#services">{{ c.nav_services }}</a><a href="#process">{{ c.nav_process }}</a><a class="nav-contact" href="#contact">{{ c.nav_contact }} <span aria-hidden="true">↗</span></a></nav>
 <details class="languages"><summary aria-label="{{ c.language }}"><span class="language-label">{{ c.language }}</span> {{ lang|upper }} <span aria-hidden="true">⌄</span></summary><div>{% for code in ['es','en','it'] %}<a href="{{ url_for('web_landing.landing',lang=code) }}" lang="{{ code }}" {% if lang==code %}aria-current="page"{% endif %}>{{ {'es':'Español','en':'English','it':'Italiano'}[code] }}</a>{% endfor %}</div></details></header>
 <main>
