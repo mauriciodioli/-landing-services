@@ -54,7 +54,7 @@ if (form) form.addEventListener('submit', async event => {
   status.textContent = '';
   form.setAttribute('aria-busy', 'true');
   try {
-    const response = await fetch('/api/leads', {method:'POST', headers:{'Content-Type':'application/json'}, credentials:'same-origin', body:JSON.stringify(payload)});
+    const response = await fetch(form.dataset.endpoint, {method:'POST', headers:{'Content-Type':'application/json'}, credentials:'same-origin', body:JSON.stringify(payload)});
     const result = await response.json();
     if (!response.ok || result.ok !== true) throw new Error('submission');
     status.textContent = form.dataset.success;

@@ -2,7 +2,7 @@
 import re
 import uuid
 from sqlalchemy.orm import Session
-from models import Lead
+from .models import Lead
 
 BUSINESSES = {'retail', 'restaurants', 'hotels', 'workshops', 'industry', 'wholesale', 'services', 'startups'}
 SOLUTIONS = {'web', 'ecommerce', 'erp', 'ai', 'industry', 'infrastructure'}

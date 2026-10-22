@@ -42,10 +42,3 @@ bot421.code-workspace
 # Ignore GCS credential if present locally
 /src/upload_to_gcs.json
 /src/utils/firebase_service_account.json
-
-# Independent software landing local data and secrets
-/services/web/.env
-/services/web/.env.*
-!/services/web/.env.example
-/services/web/instance/
-!/services/web/README.md

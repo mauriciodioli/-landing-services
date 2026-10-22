@@ -26,3 +26,17 @@ La misma landing está integrada en `src/templates/index.html`; sus recursos se 
 ## Idiomas
 
 El selector ES/IT/EN está preparado visualmente. Español es la versión activa; las traducciones se incorporarán en archivos separados.
+
+## Landing de desarrollo web
+
+La nueva landing está integrada en el mismo Flask y en la imagen Docker existente (puerto 8300):
+
+- Ruta directa: `/desarrollo-web` (redirige a ES, EN o IT según el navegador).
+- Idiomas: `/desarrollo-web/es/`, `/desarrollo-web/en/`, `/desarrollo-web/it/`.
+- El host `web.dpia.site` selecciona esta landing desde `/`, como los otros subdominios. Se puede configurar con `WEB_LANDING_HOSTS`.
+- Plantillas: `src/templates/web/`. Recursos y video: `src/static/web/`.
+- Controlador: `src/controllers/web_landing.py`. Contenido y validación: `src/services/web_landing/`.
+- El formulario usa `/desarrollo-web/api/leads`, la sesión existente y la conexión de base de datos actual. Crea únicamente las tablas `web_leads` y `web_rate_windows` cuando se utiliza por primera vez. No requiere otra base de datos ni credenciales. Confirmación solo tras guardar.
+- No se han modificado Nginx, DNS, el Dockerfile ni GitHub Actions. El despliegue actual incluye los archivos al copiar `src/`.
+
+Pruebas aisladas: `python -m unittest discover -s tests -p test_web_landing.py -v`. No requieren las credenciales ni los servicios externos de producción. La validación de persistencia se realiza con SQLite temporal; MySQL utiliza UPSERT propio de su dialecto.

@@ -110,6 +110,10 @@ def _is_call_centers_host():
 
 @conexion_externa.route("/")
 def index():
+    web_hosts = {host.strip().lower() for host in os.getenv("WEB_LANDING_HOSTS", "web.dpia.site").split(",") if host.strip()}
+    if request.host.split(":", 1)[0].lower() in web_hosts:
+        from controllers.web_landing import index as web_index
+        return web_index()
     if _is_ola_host():
         from models.album import Album
 
