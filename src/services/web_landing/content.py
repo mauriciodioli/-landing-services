@@ -39,3 +39,6 @@ for _lang, _labels in {
     'it': ('Video illustrativo · Tecnologia per connettere la tua impresa.', 'Il tuo browser non può riprodurre questo video.', 'Scarica il video'),
 }.items():
     CONTENT[_lang].update(video_caption=_labels[0], video_fallback=_labels[1], video_download=_labels[2])
+
+for _lang, _controls in {'es': ('Reproducir video', 'Pausar video'), 'en': ('Play video', 'Pause video'), 'it': ('Riproduci video', 'Pausa video')}.items():
+    CONTENT[_lang].update(video_play=_controls[0], video_pause=_controls[1])

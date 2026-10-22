@@ -70,8 +70,20 @@ if (form) form.addEventListener('submit', async event => {
   }
 });
 
-// Respect reduced motion and data-saving settings; native controls remain available.
+// A background video can always be paused; respect motion and data preferences.
 const presentationVideo = document.getElementById('presentation-video');
-if (presentationVideo && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && !navigator.connection?.saveData) {
-  presentationVideo.play().catch(() => {});
+const videoToggle = document.getElementById('video-toggle');
+if (presentationVideo && videoToggle) {
+  const syncVideoControl = () => {
+    videoToggle.textContent = presentationVideo.paused ? videoToggle.dataset.play : videoToggle.dataset.pause;
+  };
+  presentationVideo.addEventListener('play', syncVideoControl);
+  presentationVideo.addEventListener('pause', syncVideoControl);
+  videoToggle.addEventListener('click', () => {
+    if (presentationVideo.paused) presentationVideo.play().catch(syncVideoControl);
+    else presentationVideo.pause();
+  });
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && !navigator.connection?.saveData) {
+    presentationVideo.play().catch(syncVideoControl);
+  }
 }
