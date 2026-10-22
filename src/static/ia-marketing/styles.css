@@ -3,3 +3,6 @@
 
 /* DPIA home link */
 .logo>.dpia-logo{width:40px;height:40px;object-fit:contain;border-radius:8px;flex:0 0 auto}
+
+/* Match the original logo background across public landing headers and footers. */
+body>header,body>footer{background:#000;color:#fff}.logo>.dpia-logo{background:transparent}

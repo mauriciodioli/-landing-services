@@ -43,3 +43,6 @@ html{scroll-padding-top:100px}.top-cta{height:auto;min-height:46px;padding:12px 
 
 /* Positive logo on the white drawer background. */
 .side-head .brand-mark{background:transparent;border-radius:0;object-fit:contain}
+
+/* Match the original logo background across public landing headers and footers. */
+.topbar,body>footer{background:#000;color:#fff}.header-language-select{background:#000}.topbar .brand-mark,footer .brand-mark{background:transparent}
