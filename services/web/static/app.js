@@ -69,3 +69,9 @@ if (form) form.addEventListener('submit', async event => {
     form.removeAttribute('aria-busy');
   }
 });
+
+// Respect reduced motion and data-saving settings; native controls remain available.
+const presentationVideo = document.getElementById('presentation-video');
+if (presentationVideo && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && !navigator.connection?.saveData) {
+  presentationVideo.play().catch(() => {});
+}

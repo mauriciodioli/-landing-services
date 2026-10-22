@@ -31,3 +31,11 @@ EXTRA = {
 }
 for language, additions in EXTRA.items():
     CONTENT[language].update(additions)
+
+# Media and language navigation for the independent software landing.
+for _lang, _labels in {
+    'es': ('Video ilustrativo · Tecnología para conectar tu negocio.', 'Tu navegador no permite reproducir este video.', 'Descargar video'),
+    'en': ('Illustrative video · Technology to connect your business.', 'Your browser cannot play this video.', 'Download video'),
+    'it': ('Video illustrativo · Tecnologia per connettere la tua impresa.', 'Il tuo browser non può riprodurre questo video.', 'Scarica il video'),
+}.items():
+    CONTENT[_lang].update(video_caption=_labels[0], video_fallback=_labels[1], video_download=_labels[2])
