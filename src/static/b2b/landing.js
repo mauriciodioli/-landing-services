@@ -13,7 +13,7 @@
 			const li = document.createElement('li');
 			li.className = 'nav-admin-item';
 			if (token || creds){
-				li.innerHTML = '<a href="/admin/participantes" class="navbar__link">Panel admin</a> <a href="#" id="logoutBtn" class="navbar__link">Cerrar sesión</a>';
+				li.innerHTML = '<a href="/admin" class="navbar__link">Administración</a> <a href="#" id="logoutBtn" class="navbar__link">Cerrar sesión</a>';
 			} else {
 				li.innerHTML = '<a href="/login" class="navbar__link">Acceso admin</a>';
 			}

@@ -10,11 +10,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='participants/admin.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static',filename='admin/admin.css') }}">
 </head>
 <body>
   <header>
     <div>
-      <a href="http://127.0.0.1:8300/" style="display:inline-flex;align-items:center;text-decoration:none;color:inherit;">
+      <a href="/" style="display:inline-flex;align-items:center;text-decoration:none;color:inherit;">
         <img src="{{ url_for('static', filename='b2b/dpia-symbol.png') }}" alt="DPIA" style="height:28px;margin-right:.5rem;">
         <span>DPIA</span>
       </a>
@@ -22,6 +23,7 @@
     </div>
     <button id="changeToken" type="button">Cambiar acceso</button>
   </header>
+  {% include 'admin/navigation.html' %}
   <main>
     <section class="summary">
       <div><small>REGISTRADOS</small><strong id="totalParticipants">0</strong></div>

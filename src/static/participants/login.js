@@ -28,12 +28,14 @@
       if (!res.ok) throw new Error(payload.error || 'Error');
       // If server returns a token, store it; otherwise store credentials for Basic auth
       if (payload.token) {
+        sessionStorage.removeItem('participants-admin-credentials');
         sessionStorage.setItem('participants-admin-token', payload.token);
       } else {
+        sessionStorage.removeItem('participants-admin-token');
         sessionStorage.setItem('participants-admin-credentials', JSON.stringify({email, password}));
       }
       // redirect to admin page
-      window.location.href = '/admin/participantes';
+      window.location.href = '/admin';
     } catch (err) {
       status.textContent = err.message || 'Error autenticando';
     }

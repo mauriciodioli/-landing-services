@@ -61,6 +61,7 @@ from controllers.autenticacion import autenticacion
 from controllers.callCenters.call_centers import call_centers
 from controllers.album import album_bp
 from controllers.web_landing import web_landing
+from controllers.web_leads_admin import web_leads_admin
 
 
 
@@ -86,6 +87,7 @@ app.register_blueprint(autenticacion)
 app.register_blueprint(call_centers)
 app.register_blueprint(album_bp)
 app.register_blueprint(web_landing)
+app.register_blueprint(web_leads_admin)
 app.register_blueprint(logs)
 
 

@@ -40,3 +40,11 @@ La nueva landing está integrada en el mismo Flask y en la imagen Docker existen
 - No se han modificado Nginx, DNS, el Dockerfile ni GitHub Actions. El despliegue actual incluye los archivos al copiar `src/`.
 
 Pruebas aisladas: `python -m unittest discover -s tests -p test_web_landing.py -v`. No requieren las credenciales ni los servicios externos de producción. La validación de persistencia se realiza con SQLite temporal; MySQL utiliza UPSERT propio de su dialecto.
+
+## Administración de solicitudes web
+
+El login existente abre `/admin`, con navegación separada entre `/admin/participantes` y `/admin/solicitudes-web`. El segundo panel permite alta, consulta, edición, eliminación, búsqueda y filtros paginados de `web_leads`; no mezcla datos con cursos. Las API `/admin/api/web-leads` comprueban el usuario activo y su rol en cada operación: únicamente ADMINISTRADOR y MODERADOR. Se reutilizan los tokens o credenciales existentes y `get_db_session()`; no se añaden conexiones ni columnas a la base de datos. El acceso existente de usuarios avanzados al panel de cursos se conserva.
+
+La creación manual exige confirmar que el contacto autorizó el tratamiento. La edición conserva la referencia, fecha y versión del consentimiento original. Eliminar requiere confirmación en la interfaz. Este ABM no envía respuestas por correo; los contactos y sus necesidades se consultan para su seguimiento por el equipo.
+
+Pruebas: `python -m unittest discover -s tests -p 'test_web*.py' -v`.
