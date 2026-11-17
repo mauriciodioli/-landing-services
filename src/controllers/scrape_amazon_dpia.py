@@ -12,10 +12,7 @@ from controllers.filtro_publicacion import filtro_publicaciones,guardar_respuest
 from controllers.publicaciones import completar_publicaciones
 from typing import List, Dict
 from datetime import datetime
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+
 
 
 from dotenv import load_dotenv
@@ -608,46 +605,6 @@ def lanzar_scraping_amazon(registros: list, pais_defecto: str = "com") -> list:
         })
 
     return resultados
-
-
-
-# ── 1)  Configurá el driver ─────────────────────────
-def get_chrome():
-    opts = webdriver.ChromeOptions()
-    opts.add_argument("--headless=new")   # sin UI
-    opts.add_argument("--no-sandbox")
-    opts.add_argument("--disable-dev-shm-usage")
-    return webdriver.Chrome(options=opts)
-
-driver = get_chrome()
-
-# ── 2)  Función que abre el DP y llama al helper ─────
-def extraer_imagenes_por_asin(asin: str, dominio: str, driver) -> list:
-    url = f"https://www.amazon.{dominio}/dp/{asin}"
-    driver.get(url)
-    return extraer_imagenes(driver)
-
-# ── 3)  Helper para tomar hasta 6 URLs hi-res ────────
-def extraer_imagenes(driver):
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.ID, "imgTagWrapperId"))
-    )
-
-    thumbs = driver.find_elements(By.CSS_SELECTOR, "#altImages li img")
-    urls = set()
-
-    for thumb in thumbs:
-        try:
-            thumb.click()
-            time.sleep(0.5)  # deja que cambie la imagen grande
-            tag  = driver.find_element(By.ID, "landingImage")
-            data = tag.get_attribute("data-a-dynamic-image")
-            hi_res = list(json.loads(data).keys())[0]
-            urls.add(hi_res)
-        except Exception:
-            pass
-
-    return list(urls)[:6]   # máx 6
 
 
 
