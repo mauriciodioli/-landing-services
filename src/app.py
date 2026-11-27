@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, Response
 from flask_cors import CORS  # ⬅️ nuevo
 from config import DATABASE_CONNECTION_URI
 from sqlalchemy.exc import OperationalError, SQLAlchemyError
@@ -90,7 +90,20 @@ app.register_blueprint(web_landing)
 app.register_blueprint(web_leads_admin)
 app.register_blueprint(logs)
 
+# ---------- SEO / GEO ----------
+@app.route("/robots.txt", methods=["GET"])
+def robots_txt():
+    content = (
+        "User-agent: *\n"
+        "Allow: /\n"
+        "Disallow: /admin/\n"
+        "Disallow: /api/\n"
+        "\n"
+        "User-agent: GPTBot\n"
+        "Disallow: /\n"
+    )
 
+    return Response(content, mimetype="text/plain")
 
 @app.teardown_appcontext
 def cleanup_scoped_session(exc):

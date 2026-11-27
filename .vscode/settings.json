@@ -6,5 +6,6 @@
     "DockerRun.DisableDockerrc": true,
     "DockerRun.Containers": [
         "93bdfd360673"
-    ]
+    ],
+    "python-envs.defaultEnvManager": "ms-python.python:system"
 }
