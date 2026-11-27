@@ -145,7 +145,17 @@ def sitemap_xml():
     return Response(content, mimetype="application/xml")
 
 
+# ---------- IndexNow ----------
+INDEXNOW_KEY = "709d12438dbb4806bf01e9e61b4fdd49"
 
+@app.route(f"/{INDEXNOW_KEY}.txt", methods=["GET"])
+def indexnow_verification():
+    host = request.host.split(":")[0].lower()
+
+    if host not in {"solutions.dpia.site", "web.dpia.site"}:
+        abort(404)
+
+    return Response(INDEXNOW_KEY, mimetype="text/plain")
 @app.teardown_appcontext
 def cleanup_scoped_session(exc):
     try:
