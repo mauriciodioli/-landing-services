@@ -1,4 +1,4 @@
-from flask import Flask, Response
+from flask import Flask, Response, request, abort
 from flask_cors import CORS  # ⬅️ nuevo
 from config import DATABASE_CONNECTION_URI
 from sqlalchemy.exc import OperationalError, SQLAlchemyError
@@ -93,6 +93,8 @@ app.register_blueprint(logs)
 # ---------- SEO / GEO ----------
 @app.route("/robots.txt", methods=["GET"])
 def robots_txt():
+    host = request.host.split(":")[0].lower()
+
     content = (
         "User-agent: *\n"
         "Allow: /\n"
@@ -103,7 +105,46 @@ def robots_txt():
         "Disallow: /\n"
     )
 
+    if host in {"solutions.dpia.site", "web.dpia.site"}:
+        content += f"\nSitemap: https://{host}/sitemap.xml\n"
+
     return Response(content, mimetype="text/plain")
+
+
+@app.route("/sitemap.xml", methods=["GET"])
+def sitemap_xml():
+    host = request.host.split(":")[0].lower()
+
+    domains = {
+        "solutions.dpia.site": [
+            "/",
+            "/experiencia",
+            "/call-centers",
+        ],
+        "web.dpia.site": [
+            "/desarrollo-web/es/",
+            "/desarrollo-web/en/",
+            "/desarrollo-web/it/",
+        ],
+    }
+
+    if host not in domains:
+        abort(404)
+
+    urls = "\n".join(
+        f"    <url><loc>https://{host}{path}</loc></url>"
+        for path in domains[host]
+    )
+
+    content = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{urls}
+</urlset>
+"""
+
+    return Response(content, mimetype="application/xml")
+
+
 
 @app.teardown_appcontext
 def cleanup_scoped_session(exc):

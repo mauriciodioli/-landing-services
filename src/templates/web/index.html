@@ -6,6 +6,83 @@
 <meta property="og:title" content="DPIA Software Solutions"><meta property="og:description" content="{{ c.intro }}"><meta property="og:type" content="website"><meta property="og:url" content="https://web.dpia.site/desarrollo-web/{{ lang }}/"><meta name="theme-color" content="#071322"><title>DPIA Software Solutions — {{ c.nav_services }}</title>
 <link rel="canonical" href="https://web.dpia.site/desarrollo-web/{{ lang }}/">
 {% for code in ['es','en','it'] %}<link rel="alternate" hreflang="{{ code }}" href="https://web.dpia.site/desarrollo-web/{{ code }}/">{% endfor %}
+<meta name="robots" content="index,follow">
+
+<link rel="alternate" hreflang="x-default"
+      href="https://web.dpia.site/desarrollo-web/es/">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://dpia.site/#organization",
+      "name": "DPIA",
+      "alternateName": "DPIA Solutions",
+      "url": "https://dpia.site/",
+      "logo": "https://solutions.dpia.site/static/b2b/dpia-symbol.png",
+      "email": "info@dpia.site",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61590381194842"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://web.dpia.site/#website",
+      "name": "DPIA Software Solutions",
+      "url": "https://web.dpia.site/",
+      "publisher": {
+        "@id": "https://dpia.site/#organization"
+      },
+      "inLanguage": ["es", "en", "it"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://web.dpia.site/desarrollo-web/{{ lang }}/#webpage",
+      "url": "https://web.dpia.site/desarrollo-web/{{ lang }}/",
+      "name": "DPIA Software Solutions",
+      "description": {{ c.intro | tojson }},
+      "inLanguage": {{ lang | tojson }},
+      "isPartOf": {
+        "@id": "https://web.dpia.site/#website"
+      },
+      "mainEntity": {
+        "@id": "https://web.dpia.site/#service"
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://web.dpia.site/#service",
+      "name": "DPIA Software Solutions",
+      "description": {{ c.intro | tojson }},
+      "url": "https://web.dpia.site/desarrollo-web/{{ lang }}/",
+      "provider": {
+        "@id": "https://dpia.site/#organization"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": {{ c.services_title | tojson }},
+        "itemListElement": [
+          {% for number, title, text in c.services %}
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": {{ title | tojson }},
+              "description": {{ text | tojson }},
+              "provider": {
+                "@id": "https://dpia.site/#organization"
+              }
+            }
+          }{% if not loop.last %},{% endif %}
+          {% endfor %}
+        ]
+      }
+    }
+  ]
+}
+</script>
 <link rel="stylesheet" href="{{ url_for('static', filename='web/styles.css') }}">
 <script src="{{ url_for('static', filename='web/app.js') }}" defer></script>
 <link rel="stylesheet" href="{{ url_for('static',filename='web/globe/styles.css') }}">
