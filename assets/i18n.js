@@ -374,6 +374,30 @@ Desarrollo web|Web development|Sviluppo web
 Soluciones para mejorar tu negocio.|Solutions to improve your business.|Soluzioni per migliorare la tua impresa.
 Creamos páginas web dinámicas y aplicaciones web a medida para tu negocio.|We create dynamic websites and custom web applications for your business.|Creiamo siti web dinamici e applicazioni web su misura per la tua impresa.
 Consultar mi proyecto web →|Discuss my web project →|Parliamo del mio progetto web →
+Asistentes digitales que realizan tareas para tu empresa dentro del presupuesto establecido.|Digital assistants that carry out tasks for your business within your set budget.|Assistenti digitali che svolgono attività per la tua impresa nel rispetto del budget stabilito.
+Conocer DPIA Agents →|Explore DPIA Agents →|Scopri DPIA Agents →
+Tu equipo de asistentes digitales|Your team of digital assistants|Il tuo team di assistenti digitali
+Imaginá tener un equipo de asistentes que trabajan para tu empresa, incluso cuando no estás conectado.|Imagine a team of assistants working for your business, even when you are offline.|Immagina un team di assistenti che lavora per la tua impresa anche quando non sei online.
+Vos les decís qué necesitás, cuándo lo necesitás y cuánto querés gastar. Ellos se encargan de realizar el trabajo.|You tell them what you need, when you need it and how much you want to spend. They take care of the work.|Tu dici loro cosa ti serve, quando ti serve e quanto vuoi spendere. Loro si occupano del lavoro.
+Quiero conocer DPIA Agents →|Ask about DPIA Agents →|Chiedi informazioni su DPIA Agents →
+Tu negocio|Your business|La tua impresa
+Define qué necesita|Defines what it needs|Definisce le proprie esigenze
+Busca clientes|Finds customers|Cerca clienti
+Investiga el mercado|Researches the market|Analizza il mercato
+Crea publicidad|Creates advertising|Crea pubblicità
+Recibís los resultados|You receive the results|Ricevi i risultati
+UN EJEMPLO PRÁCTICO|A PRACTICAL EXAMPLE|UN ESEMPIO PRATICO
+Una tienda de bolsos quiere aumentar sus ventas.|A handbag store wants to increase its sales.|Un negozio di borse vuole aumentare le vendite.
+Configura un asistente para que todas las semanas:|It sets up an assistant to do the following every week:|Configura un assistente affinché ogni settimana:
+Investigue qué bolsos están de moda.|Research trending handbags.|Cerchi le borse di tendenza.
+Busque nuevos proveedores.|Find new suppliers.|Trovi nuovi fornitori.
+Compare los precios de la competencia.|Compare competitors’ prices.|Confronti i prezzi della concorrenza.
+Genere videos promocionales.|Create promotional videos.|Crei video promozionali.
+Identifique potenciales clientes.|Identify potential customers.|Individui potenziali clienti.
+Todo esto automáticamente, dentro del presupuesto establecido.|All automatically, within the set budget.|Tutto automaticamente, nel rispetto del budget stabilito.
+¿Qué vendemos?|What do we offer?|Cosa offriamo?
+No vendemos un chatbot que responde preguntas. Ofrecemos asistentes digitales que realizan tareas concretas para las empresas.|We offer more than a chatbot that answers questions: digital assistants that carry out concrete business tasks.|Offriamo più di un chatbot che risponde alle domande: assistenti digitali che svolgono attività concrete per le imprese.
+Menos trabajo repetitivo. Más tiempo para hacer crecer tu negocio.|Less repetitive work. More time to grow your business.|Meno lavoro ripetitivo. Più tempo per far crescere la tua impresa.
 `.trim().split('\n');
   const dictionaries = { en: Object.create(null), it: Object.create(null) };
   rows.forEach(function (row) {
